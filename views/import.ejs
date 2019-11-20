@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>台大計算機中心</title>
+  </head>
+  <body>
+    <input type="file" name="filename" id="files">
+    <button id="upload">upload</button>
+    <div class="csv"></div>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/javascript">  
+    $(document).ready(function() {
+var fileInput = $('#files');
+var uploadButton = $('#upload');
+
+uploadButton.on('click', function() {
+    if (!window.FileReader) {
+        alert('Your browser is not supported');
+        return false;
+    }
+    var input = fileInput.get(0);
+
+    // Create a reader object
+    var reader = new FileReader();
+    if (input.files.length) {
+        var textFile = input.files[0];
+        // Read the file
+        reader.readAsText(textFile);
+        // When it's loaded, process it
+        $(reader).on('load', processFile);
+    } else {
+        alert('Please upload a file before continuing')
+    } 
+});
+
+function processFile(e) {
+    var file = e.target.result,
+        results;
+    if (file && file.length) {
+        results = file.split("\n");
+        var a = results[0].split("\t");
+        console.log(a);
+    }
+}
+    });
+</script>
+</html>

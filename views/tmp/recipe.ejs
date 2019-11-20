@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include head %>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <!-- SIDEBAR -->
+        <% include sidebar %>
+
+        <!-- PAGE CONTAINER-->
+        <div class="page-container">
+            <!-- HEADER DESKTOP-->
+            <% include header %>
+
+            <!-- MAIN CONTENT-->
+            <div class="main-content">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        
+                    </div>
+                </div>
+            </div>
+            <!-- END MAIN CONTENT-->
+            <!-- END PAGE CONTAINER-->
+        </div>
+
+    </div>
+
+    <!-- INCLUDE JS FILE -->
+    <% include scriptJs %>
+
+    <script type="text/javascript">
+        jQuery('#ingredSys').addClass('active');
+        jQuery('#recipe').addClass('active');
+        document.getElementById('titleTxt').innerHTML = '食譜';
+    </script>
+
+</body>
+
+</html>
+<!-- end document-->

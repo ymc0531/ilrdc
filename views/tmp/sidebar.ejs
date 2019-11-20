@@ -1,0 +1,279 @@
+<!-- HEADER MOBILE-->
+<header class="header-mobile d-block d-lg-none">
+    <div class="header-mobile__bar">
+        <div class="container-fluid">
+            <div class="header-mobile-inner">
+                <a class="logo" href="index">
+                    <img src="/images/icons/logo.png" alt="CoolAdmin" />
+                </a>
+                <button class="hamburger hamburger--slider" type="button">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar-mobile">
+        <div class="container-fluid">
+            <ul class="navbar-mobile__list list-unstyled">
+                <li>
+                    <a href="statistic">
+                        <i class="fas fa-chart-bar"></i>統計</a>
+                </li>
+                <li class="has-sub">
+                    <a class="js-arrow" href="#">
+                        <i class="fas fa-tachometer-alt"></i>食譜系統管理</a>
+                    <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                        <li>
+                            <a href="materialCategory.ejs">食材與器具</a>
+                        </li>
+                        <li>
+                            <a href="recipe">食譜</a>
+                        </li>
+                        <li>
+                            <a href="category">分類</a>
+                        </li>
+                        <li>
+                            <a href="product">產品</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="chart">
+                        <i class="fas fa-chart-bar"></i>Charts</a>
+                </li>
+                <li>
+                    <a href="table">
+                        <i class="fas fa-table"></i>Tables</a>
+                </li>
+                <li>
+                    <a href="form">
+                        <i class="far fa-check-square"></i>Forms</a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-calendar-alt"></i>Calendar</a>
+                </li>
+                <li>
+                    <a href="map">
+                        <i class="fas fa-map-marker-alt"></i>Maps</a>
+                </li>
+                <li class="has-sub">
+                    <a class="js-arrow" href="#">
+                        <i class="fas fa-copy"></i>Pages</a>
+                    <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                        <li>
+                            <a href="login">Login</a>
+                        </li>
+                        <li>
+                            <a href="register">Register</a>
+                        </li>
+                        <li>
+                            <a href="forget-pass">Forget Password</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="has-sub">
+                    <a class="js-arrow" href="#">
+                        <i class="fas fa-desktop"></i>UI Elements</a>
+                    <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                        <li>
+                            <a href="button">Button</a>
+                        </li>
+                        <li>
+                            <a href="badge">Badges</a>
+                        </li>
+                        <li>
+                            <a href="tab">Tabs</a>
+                        </li>
+                        <li>
+                            <a href="card">Cards</a>
+                        </li>
+                        <li>
+                            <a href="alert">Alerts</a>
+                        </li>
+                        <li>
+                            <a href="progress-bar">Progress Bars</a>
+                        </li>
+                        <li>
+                            <a href="modal">Modals</a>
+                        </li>
+                        <li>
+                            <a href="switch">Switchs</a>
+                        </li>
+                        <li>
+                            <a href="grid">Grids</a>
+                        </li>
+                        <li>
+                            <a href="fontawesome">Fontawesome Icon</a>
+                        </li>
+                        <li>
+                            <a href="typo">Typography</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<!-- END HEADER MOBILE-->
+
+<!-- MENU SIDEBAR-->
+<aside class="menu-sidebar d-none d-lg-block">
+    <div class="user title-txt">
+        帳戶：<%= username %>
+    </div>
+    <div class="menu-sidebar__content js-scrollbar1">
+        <nav class="navbar-sidebar">
+            <ul class="list-unstyled navbar__list">
+            <!--
+                <li id="statistic">
+                    <a href="statistic">
+                        <i class="fas fa-chart-bar"></i>統計</a>
+                </li>
+            -->
+                <li id="branchList">
+                    <a href="branch-list">
+                        <i class="fas fa-home"></i>分店管理
+                    </a>
+                </li>
+                <li id="ingredSys" class="has-sub">
+                    <a class="js-arrow" href="#">
+                        <i class="fas fa-utensils"></i>食譜系統管理</a>
+                    <ul class="list-unstyled navbar__sub-list js-sub-list">
+                        <li id="material">
+                            <a href="material">食材與器具</a>
+                        </li>
+                        <li id="recipe">
+                            <a href="recipe">食譜</a>
+                        </li>
+
+                        <li id="category">
+                            <a href="category">分類</a>
+                        </li>
+                        <!--
+                        <li id="product">
+                            <a href="product">產品</a>
+                        </li>
+                        -->
+                    </ul>
+                </li>
+                <li id="reserveSys" class="has-sub">
+                    <a class="js-arrow" href="#">
+                        <i class="far fa-edit"></i>訂位管理</a>
+                    <ul class="list-unstyled navbar__sub-list js-sub-list">
+                        <li id="reserveRec">
+                            <a href="reserveRec">訂位紀錄</a>
+                        </li>
+                        <li id="newReserve">
+                            <a href="newReserve">新增訂位</a>
+                        </li>
+                    </ul>
+                </li>
+                <li id="memberSys" class="has-sub">
+                    <a class="js-arrow" href="#">
+                        <i class="fas fa-user"></i>帳號管理</a>
+                    <ul class="list-unstyled navbar__sub-list js-sub-list">
+                        <li id="memberList">
+                            <a href="memberList">會員列表</a>
+                        </li>
+                        <li id="adminList">
+                            <a href="adminList">管理員列表</a>
+                        </li>
+                        <li id="memberPriv">
+                            <a href="memberPriv">權限分配</a>
+                        </li>
+                    </ul>
+                </li>
+                <li id="systemManage" class="has-sub">
+                    <a class="js-arrow" href="#">
+                        <i class="fas fa-cogs"></i>系統管理</a>
+                    <ul class="list-unstyled navbar__sub-list js-sub-list">
+                        <li id="langNcoun">
+                            <a href="countries-and-languages">地區及語言</a>
+                        </li>
+                    </ul>
+                </li>
+                <br><br>
+                <!--
+                <li>
+                    <a href="chart">
+                        <i class="fas fa-chart-bar"></i>Charts</a>
+                </li>
+                <li>
+                    <a href="table">
+                        <i class="fas fa-table"></i>Tables</a>
+                </li>
+                <li>
+                    <a href="form">
+                        <i class="far fa-check-square"></i>Forms</a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-calendar-alt"></i>Calendar</a>
+                </li>
+                <li>
+                    <a href="map">
+                        <i class="fas fa-map-marker-alt"></i>Maps</a>
+                </li>
+                <li class="has-sub">
+                    <a class="js-arrow" href="#">
+                        <i class="fas fa-copy"></i>Pages</a>
+                    <ul class="list-unstyled navbar__sub-list js-sub-list">
+                        <li>
+                            <a href="login">Login</a>
+                        </li>
+                        <li>
+                            <a href="register">Register</a>
+                        </li>
+                        <li>
+                            <a href="forget-pass">Forget Password</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="has-sub">
+                    <a class="js-arrow" href="#">
+                        <i class="fas fa-desktop"></i>UI Elements</a>
+                    <ul class="list-unstyled navbar__sub-list js-sub-list">
+                        <li>
+                            <a href="button">Button</a>
+                        </li>
+                        <li>
+                            <a href="badge">Badges</a>
+                        </li>
+                        <li>
+                            <a href="tab">Tabs</a>
+                        </li>
+                        <li>
+                            <a href="card">Cards</a>
+                        </li>
+                        <li>
+                            <a href="alert">Alerts</a>
+                        </li>
+                        <li>
+                            <a href="progress-bar">Progress Bars</a>
+                        </li>
+                        <li>
+                            <a href="modal">Modals</a>
+                        </li>
+                        <li>
+                            <a href="switch">Switchs</a>
+                        </li>
+                        <li>
+                            <a href="grid">Grids</a>
+                        </li>
+                        <li>
+                            <a href="fontawesome">Fontawesome Icon</a>
+                        </li>
+                        <li>
+                            <a href="typo">Typography</a>
+                        </li>
+                    </ul>
+                </li>
+                -->
+            </ul>
+        </nav>
+    </div>
+</aside>
+<!-- END MENU SIDEBAR-->

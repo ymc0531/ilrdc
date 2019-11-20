@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include head %>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <!-- SIDEBAR -->
+        <% include sidebar %>
+
+        <!-- PAGE CONTAINER-->
+        <div class="page-container">
+            <!-- HEADER DESKTOP-->
+            <% include header %>
+
+            <!-- MAIN CONTENT-->
+            <div class="main-content">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <div class="table-title-row">
+                            <h2 class="title-1">會員列表</h2>
+                            <button type="button" class="btn btn-light" onclick="addAccount()">新增</button>
+                        </div>
+                        <table id="accountTable" class="table bordered table-striped" width="100%">
+                            <thead>
+                                <tr>
+                                    <th width="18%">手機</th>
+                                    <th width="17%">姓名</th>
+                                    <th width="15%">性別</th>
+                                    <th width="15">會員級別</th>
+                                    <th width="15%">黑名單</th>
+                                    <th width="20%">編輯 / 刪除</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- END MAIN CONTENT-->
+            <!-- END PAGE CONTAINER-->
+        </div>
+
+    <!-- Modal -->
+    <!-- Add Branch Modal -->
+    <div class="modal fade" id="accountModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="title-1">編輯</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input class="hide" type="text" id="account_id" name="account_id" readonly>
+                    <table class="modal-table">
+                        <tr>
+                            <th>姓</th>
+                            <th>名</th>
+                        </tr>
+                        <tr>
+                            <th><input class="modal-input" type="text" id="last_name" name="last_name"></th>
+                            <th><input class="modal-input" type="text" id="first_name" name="first_name"></th>
+                        </tr>
+                        <tr>
+                            <th>性別</th>
+                        </tr>
+                        <tr>
+                            <th >
+                                <label><input type="checkbox" id="male" class="radio" value="1" name="">男</label>
+                                <label><input type="checkbox" id="female" class="radio" value="2" name="">女</label>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>手機</th>
+                            <th>生日</th>
+                        </tr>
+                        <tr>
+                            <th><input class="modal-input" type="text" id="username" name="username"></input></th>
+                            <th><input class="modal-input" type="text" id="dob" name="dob"></input></th>
+                        </tr>
+                        </tr>
+                        <tr>
+                            <th>郵箱</th>
+                        </tr>
+                        <tr>
+                            <th colspan="2"><input class="modal-input" type="text" id="email" name="email"></input></th>
+                        </tr>
+
+                        <tr>
+                            <th>會員級別</th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <div id="member_lvl" class="dropdown" tabindex="1">
+                                    <div class="select">
+                                        <span id="memberlvl">選擇</span>
+                                        <i class="fa fa-chevron-left"></i>
+                                    </div>
+                                    <ul class="dropdown-menu" style="display: none;">
+                                        <li onclick="" value="1">lvl 1</li>
+                                        <li onclick="" value="2">lvl 2</li>
+                                        <li onclick="" value="3">lvl 3</li>
+                                    </ul>
+                                </div>
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                    <button type="button" class="btn btn-primary" id="modalSubmit">更改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INCLUDE JS FILE -->
+    <% include scriptJs %>
+
+    <script type="text/javascript" src="/dashboard/js/memberList.js"></script>
+
+</body>
+
+</html>
+<!-- end document-->

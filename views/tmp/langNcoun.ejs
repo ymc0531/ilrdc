@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <% include head %>
+</head>
+
+<body>
+  <div class="page-wrapper">
+    <!-- SIDEBAR -->
+    <% include sidebar %>
+
+    <!-- PAGE CONTAINER-->
+    <div class="page-container">
+      <!-- HEADER DESKTOP-->
+      <% include header %>
+
+      <!-- MAIN CONTENT-->
+      <div class="main-content" style="background-color: white">
+        <div class="section__content section__content--p30">
+          <div class="container-fluid">
+            <div class="table-title-row">
+              <h2 class="title-1">地區</h2>
+              <button type="button" class="btn btn-light" onclick="addCoun()">新增</button>
+            </div>
+            <!-- Country Table -->
+            <table id="counTable" class="table bordered table-striped" width="100%">
+              <thead>
+                <tr>
+                  <th width="20%">序號</th>
+                  <th width="30%">國家</th>
+                  <th width="30%">國碼</th>
+                  <th width="20%">編輯 / 刪除</th>
+                </tr>
+              </thead>
+            </table>
+            <br>
+            <div class="table-title-row">
+              <h2 class="title-1">語言</h2>
+              <button type="button" class="btn btn-light" onclick="addLang()">新增</button>
+            </div>
+            <!-- Language Table -->
+            <table id="langTable" class="table bordered table-striped" width="100%">
+              <thead>
+                <tr>
+                  <th width="20%">序號</th>
+                  <th width="60%">語言</th>
+                  <th width="20%">編輯 / 刪除</th>
+                </tr>
+              </thead>
+            </table>
+            <br><br>
+          </div>
+        </div>
+      </div>
+      <!-- END MAIN CONTENT-->
+      <!-- END PAGE CONTAINER-->
+    </div>
+
+  </div>
+
+  <!-- Modal -->
+  <!-- Add Language Modal -->
+  <div class="modal fade" id="addLangModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="title-1">新增</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table class="modal-table">
+            <thead>
+              <tr>
+                <th>語言</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th><input class="modal-input" type="text" id="addLang" name="addLang"></th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+          <button type="button" class="btn btn-primary" onclick="addLangFormSubmit()">新增</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Country Modal -->
+  <div class="modal fade" id="addCounModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="title-1">新增</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table class="modal-table">
+            <thead>
+              <tr>
+                <th width="50%">國家</th>
+                <th width="50%">國碼</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th><input class="modal-input" type="text" id="addCoun" name="addCoun"></th>
+                <th><input class="modal-input" type="text" id="addCounCode" name="addCounCode"></th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+          <button type="button" class="btn btn-primary" onclick="addCounFormSubmit()">新增</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Language Modal -->
+  <div class="modal fade" id="editLangModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="title-1">編輯</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input class="hide" type="text" id="modalLangId" name="modalLangId" readonly>
+          <table class="modal-table">
+            <thead>
+              <tr>
+                <th>語言</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th><input class="modal-input" type="text" id="modalLang" name="modalLang"></th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+          <button type="button" class="btn btn-primary" onclick="editLangFormSubmit()">更改</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Country Modal -->
+  <div class="modal fade" id="editCounModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="title-1">編輯</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input class="hide" type="text" id="modalCounId" name="modalCounId" readonly>
+          <table class="modal-table">
+            <thead>
+              <tr>
+                <th width="34%">國家</th>
+                <th width="33%">國碼</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th><input class="modal-input" type="text" id="modalCoun" name="modalCoun"></th>
+                <th><input class="modal-input" type="text" id="modalCounCode" name="modalCounCode"></th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+          <button type="button" class="btn btn-primary" onclick="editCounFormSubmit()">更改</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Language Modal -->
+  <div class="modal fade" id="delLangModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="title-1">確認刪除？</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input class="hide" type="text" id="delLangId" name="delLangId" readonly>
+          <table class="modal-table">
+            <thead>
+              <tr>
+                <th>語言</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th><input class="modal-input-disabled" type="text" id="delLang" name="delLang" disabled></th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+          <button type="button" class="btn btn-primary" onclick="delLangFormSubmit()">刪除</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Country Modal -->
+  <div class="modal fade" id="delCounModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="title-1">確認刪除？</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input class="hide" type="text" id="delCounId" name="modalCounId" readonly>
+          <table class="modal-table">
+            <thead>
+              <tr>
+                <th width="50%">國家</th>
+                <th width="50%">國碼</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th><input class="modal-input-disabled" type="text" id="delCoun" name="delCoun" disabled></th>
+                <th><input class="modal-input-disabled" type="text" id="delCounCode" name="delCounCode" disabled></th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+          <button type="button" class="btn btn-primary" onclick="delCounFormSubmit()">刪除</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INCLUDE JS FILE -->
+  <% include scriptJs %>
+
+  <script type="text/javascript" src="/dashboard/js/langNcoun.js"></script>
+
+</body>
+
+</html>
+<!-- end document-->

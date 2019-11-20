@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <% include head %>
+  <link href='/dashboard/fullcalendar/core/main.css' rel='stylesheet' />
+  <link href='/dashboard/fullcalendar/daygrid/main.css' rel='stylesheet' />
+
+  <script src='/dashboard/fullcalendar/core/main.js'></script>
+  <script src='/dashboard/fullcalendar/core/locales-all.js'></script>
+  <script src='/dashboard/fullcalendar/daygrid/main.js'></script>
+  <script src='/dashboard/fullcalendar/interaction/main.min.js'></script>
+</head>
+
+<body>
+  <div class="page-wrapper">
+    <!-- SIDEBAR -->
+    <% include sidebar %>
+
+    <!-- PAGE CONTAINER-->
+    <div class="page-container">
+      <!-- HEADER DESKTOP-->
+      <% include header %>
+
+      <!-- MAIN CONTENT-->
+      <div class="main-content">
+        <div class="section__content section__content--p30">
+          <div class="container-fluid">
+            <div id="calendar"></div>
+          </div>
+        </div>
+      </div>
+      <!-- END MAIN CONTENT-->
+      <!-- END PAGE CONTAINER-->
+    </div>
+
+  </div>
+
+  <!-- INCLUDE JS FILE -->
+  <% include scriptJs %>
+
+  <script type="text/javascript" src="/dashboard/js/newReserve.js"></script>
+
+</body>
+
+</html>
+<!-- end document-->

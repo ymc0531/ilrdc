@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>詞表</title>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="/newSentence/main.css">
+</head>
+<body>
+  <div style="width: 100%;margin:auto;text-align: center;">
+    <img src="/images/title.png" style="width: 100%;margin-bottom: 10px;">
+  </div>
+  <div id="suggestModal" class="modal" data-id="">
+    <div class="modal-content">
+      <div class="close-row">
+        <span class="close" onclick="closeModal()">&times;</span>
+      </div>
+      <div class="modalhead">
+        <table class="tables">
+          <tr>
+            <td>
+              <p class="td1 rmspace" id="ftws"></p>
+            </td>
+            <td>
+              <p class="td2 td3 rmspace" id="ctws"></p>
+            </td>
+          </tr>
+        </table>
+        <table class="tables">
+          <tr>
+            <td>
+              <p class="tdf rmspace" id="fexam"></p>
+            </td>
+            <td>
+              <p class="td2 tdc rmspace" id="cexam"></p>
+            </td>
+          </tr>
+        </table>
+        <table class="tables bottomhead1">
+          <tr>
+            <td>
+              <p class="tds rmspace">分類：</p>
+            </td>
+            <td>
+              <p class="tds rmspace" id="category"></p>
+            </td>
+          </tr>
+        </table>
+        <table class="tables bottomhead2">
+          <tr>
+            <td>
+              <p class="tds rmspace">級別：</p>
+            </td>
+            <td>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div style="text-align: center;">
+        <p class="modaltitle">您的建議</p>
+      </div>
+      <div class="modalbody">
+        <table class="ctables">
+          <tr>
+            <td class="c1 ctitle">
+              詞彙
+            </td>
+            <td class="c2">
+              <p class="td2 rmspace" id="ftws1"></p>
+            </td>
+            <td class="c2">
+              <p class="td2 tdc rmspace" id="ctws1"></p>
+            </td>
+          </tr>
+          <tr>
+            <td class="c1"></td>
+            <td class="c2">
+              <textarea class="tx1" id="textftws" name="textftws" cols="20" rows="3"></textarea>
+            </td>
+            <td class="c2">
+              <textarea class="tx1" id="textctws" name="textctws" cols="20" rows="3"></textarea>
+            </td>
+          </tr>
+            <td class="c1 ctitle secrow">
+              例句
+            </td>
+            <td class="c2 secrow">
+              <p class="td2 rmspace" id="fexam1"></p>
+            </td>
+            <td class="c2 secrow">
+              <p class="td2 tdc rmspace" id="cexam1"></p>
+            </td>
+          </tr>
+          <tr>
+            <td class="c1"></td>
+            <td class="c2">
+              <textarea class="tx1" id="textfexam" name="textfexam" cols="20" rows="3"></textarea>
+            </td>
+            <td class="c2">
+              <textarea class="tx1" id="textcexam" name="textcexam" cols="20" rows="3"></textarea>
+            </td>
+          </tr>
+        </table>
+        <div style="padding-left: 10px; padding-right: 20px;">
+          <p class="ctitle">意見與說明</p>
+          <textarea class="tx1" id="textsuggestion" name="textsuggestion" rows="4"></textarea>
+        </div>
+        <div class="modalfooter">
+          <input type="button" name="submit" value="送出" onclick="confirmChecker()">
+        </div>
+        <div id="confirmModal" class="modal modal1">
+          <div class="modal-content1">
+          <p>確認送出</p>
+          <br><br>
+          <button onclick="suggestSubmit()">
+            確認
+          </button>
+          <input type="button" onclick="cancelSubmit()" value="取消">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="feedback" class="modal modal2">
+    <div class="modal-content mc-background">
+      <span class="close" onclick="closeFeedback()">&times;</span>
+      <p class="ctitle" style="font-size: 16px;padding-left: 15px;">審查結果說明</p>
+      <p id="fbResult" style="font-size: 15px;"></p>
+    </div>
+  </div>
+  
+  <input class="hide" type="text" id="cpage1" name="cpage1" value="1" readonly>
+  <div class="header">
+    <div class="language">
+      <table>
+        <tr>
+          <td class="beginRow">
+            目前語言：
+          </td>
+          <td>
+            <input class="currlang" type="text" name="currlang" id="currlang" value="全語言" readonly>
+          </td>
+          <td>
+            <input class="switch" type="button" onclick="selectAllLang()" value="全語言">
+          </td>
+          <td>
+            <input class="switch" type="button" onclick="showLang()" value="切換">
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="langbox">
+      <div class="langtype1" id="langtype">
+        
+      </div>
+      <div class="sublang" id="sublang">
+      </div>
+      <div class="langtype1 langtype2" id="langtype1">
+        
+      </div>
+    </div>
+    <div class="language1">
+      <table>
+        <tr>
+          <td class="beginRow">
+            目前分類：
+          </td>
+          <td>
+            <input class="currcate" type="text" name="currcate" id="currcate" value="全分類" readonly>
+          </td>
+          <td>
+            <input class="switch" type="button" onclick="selectAllCate()" value="全分類">
+          </td>
+          <td>
+            <input class="switch" type="button" onclick="showCate()" value="切換">
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="cate" id="cate">
+      <table style="width: 100%">
+      </table>
+    </div>      
+
+    <br>
+    <div class="sb1">
+      <div class="sb4">
+        <div class="sb2">
+          <input type="text" class="sb3" id="keyword" name="keyword">
+          <i class="material-icons" style="vertical-align: middle;cursor: pointer;" onclick="searchSub()">search</i>
+        </div>
+        <div class="sb5">
+          <p class="symbol" onclick="insSymbol('^')">^</p>
+          <p class="symbol" onclick="insSymbol('é')">é</p>
+          <p class="symbol" onclick="insSymbol('ṟ')">ṟ</p>
+          <p class="symbol" onclick="insSymbol('ɨ')">ɨ</p>
+          <p class="symbol" onclick="insSymbol('ʉ')">ʉ</p>
+          <p class="symbol" onclick="insSymbol('’')">’</p>
+          <input type="checkbox" id="blurSearch" value="ok">模糊搜尋
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <input class="learn l1 float" type="button" onclick="showLearn()" value="學習" id="lbtn">
+    <input class="learn l2 float" type="button" onclick="showDownload()" value="下載" id="dbtn">
+    <input class="learn l2" type="button" onclick="showSuggest()" value="意見回饋列表" id="sbtn">
+    <br>
+
+    <div id="learn">
+      <div class="title">
+        <p id="title-p"></p>
+        <div class="select01">
+          <i class="material-icons prev" onclick="prevpage()">navigate_before</i>第
+          <select id="page1" onchange="changepage()">
+          </select>頁
+          <i class="material-icons next" onclick="nextpage()">navigate_next</i>
+        </div>
+        <div class="select02">每頁顯示
+          <select id="rowPerPage" onchange="changeRowPerPage()">
+            <option value="10">10</option>
+            <option value="25" selected>25</option>
+            <option value="50">50</option>
+          </select>筆
+        </div>
+      </div>
+      <div style="background-color: #dcc9cb">
+        <table style="width: 100%;font-size: 20px;text-align: center;" id="ltab">
+          <tr>
+            <td style="width: 10%;">
+              語言別
+            </td>
+            <td style="width: 10%;">
+              序號
+            </td>
+            <td style="width: 20%;">
+              詞彙
+            </td>
+            <td style="width: 40%;">
+              例句
+            </td>
+            <td style="width: 10%;">
+              級別
+            </td>
+            <td style="width: 10%;">
+              意見回饋
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="wordsResult">
+      </div>
+    </div>
+
+    <div class="divhide" id="download">
+      <div class="title" style="height: 28px;">
+      </div>
+      <div>
+        <div class="rmspace dlcontent">
+          <p></p>詞表下載
+          <i class="material-icons dlbtn" id="cmd">vertical_align_bottom</i>
+        </div>
+      </div>
+    </div>
+
+    <div class="divhide" id="suggest">
+      <div class="title" style="height: 28px;">
+      </div>
+      <div style="background-color: #dcc9cb">
+        <table style="width: 100%;font-size: 20px;text-align: center;">
+          <tr>
+            <td style="width: 5%;">
+              序號
+            </td>
+            <td style="width: 10%;">
+              回饋日期
+            </td>
+            <td style="width: 10%;">
+              詞彙
+            </td>
+            <td style="width: 25%;">
+              例句
+            </td>
+            <td style="width: 5%;">
+              級別
+            </td>
+            <td style="width: 25%;">
+              意見回饋
+            </td>
+            <td style="width: 10%;">
+              回饋者
+            </td>
+            <td style="width: 10%;">
+              處理情形
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="suggestResult">
+      </div>
+    </div>
+
+
+  </div>
+  <div style="width: 100%;margin-top: 55px;background-color: #d5dfe3;display: inline-block;padding-bottom: 15px;">
+    <table style="width: 30%;float: left;background-color: #d5dfe3;padding-top: 15px;border-spacing: 0;">
+      <tr>
+        <td style="margin-top: 0px;margin-bottom: 0px;padding-left: 40px;font-size: 14px;color: #595757;">
+          原住民族語言研究發展中心
+        </td>
+      </tr>
+      <tr>
+        <td style="margin-top: 0px;margin-bottom: 0px;padding-left: 40px;padding-right: 35px;font-size: 15px;color: #595757;">
+          Indigenous Languages Research<br>and Development Center
+        </td>
+      </tr>
+    </table>
+    <table style="width: 40%;float: left;background-color: #d5dfe3;padding-top: 15px;border-spacing: 0;">
+      <tr>
+        <td width="50px" style="padding-left: 65px;font-size: 14px;color: #595757;">
+          地址：
+        </td>
+        <td style="font-size: 14px;color: #595757;">
+          10093台北市中正區羅斯福路一段63號 8F-10F
+        </td>
+      </tr>
+      <tr>
+        <td width="50px" style="padding-left: 65px;font-size: 14px;color: #595757;">
+          電話：
+        </td>
+        <td style="font-size: 15px;color: #595757;">
+          (02) 2341-8508
+        </td>
+      </tr>
+      <tr>
+        <td width="50px" style="padding-left: 65px;font-size: 14px;color: #595757;">
+          傳真：
+        </td>
+        <td style="font-size: 15px;color: #595757;">
+          (02) 2341-8256
+        </td>
+      </tr>
+      <tr>
+        <td width="50px" style="padding-left: 65px;font-size: 14px;color: #595757;">
+          郵箱：
+        </td>
+        <td style="font-size: 15px;color: #595757;">
+          ilrdc63@gmail.com
+        </td>
+      </tr>
+    </table>
+    <table style="width: 30%;padding-top: 15px;border-spacing: 0;">
+      <tr>
+        <td style="margin-top: 0px;margin-bottom: 0px;padding-left: 70px;font-size: 14px;color: #595757;">
+          原住民族委員會&copy; 版權所有
+        </td>
+      </tr>
+      <tr>
+        <td style="margin-top: 0px;margin-bottom: 0px;padding-left: 70px;padding-right: 25px;font-size: 15px;color: #595757;">
+          Copyright &copy; 2018 Council of Indigenous Peoples.
+        </td>
+      </tr>
+      <tr>
+        <td style="margin-top: 0px;margin-bottom: 0px;padding-left: 70px;font-size: 15px;color: #595757;">
+          All Right Reserved.
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+
+  <!--   Core JS Files   -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="/newSentence/main.js"></script>
+</html>

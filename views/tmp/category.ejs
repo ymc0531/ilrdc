@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include head %>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <!-- SIDEBAR -->
+        <% include sidebar %>
+
+        <!-- PAGE CONTAINER-->
+        <div class="page-container">
+            <!-- HEADER DESKTOP-->
+            <% include header %>
+
+            <!-- MAIN CONTENT-->
+            <div class="main-content">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <div id="selectCoun" class="dropdown">
+                            <div class="select">
+                                <span id="selectedCoun">選擇地區</span>
+                                <i class="fa fa-chevron-left"></i>
+                            </div>
+                            <ul class="dropdown-menu"></ul>
+                        </div>
+                        <div class="table-title-row">
+                            <h2 class="title-1">分類</h2>
+                            <button type="button" class="btn btn-light" onclick="addCat()">新增</button>
+                        </div>
+                        <!-- Material Category Table -->
+                        <table id="catTable" class="table bordered table-striped" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>分類名稱(現在是id)</th>
+                                    <th>adsa分類</th>
+                                    <th>使用狀態</th>
+                                    <th>編輯/刪除</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- END MAIN CONTENT-->
+            <!-- END PAGE CONTAINER-->
+        </div>
+
+    </div>
+    <!-- Modal -->
+    <!-- Add Material Modal -->
+    <div class="modal fade" id="addCatModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="title-1">新增</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div>
+                            <h4>分類名稱:</h4>
+                        </div>
+                    </div>
+                    <div id="catNameBlock" style="margin:0 auto;">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                        <button type="button" class="btn btn-primary" onclick="addCatFormSubmit()">新增</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</body>
+<!-- INCLUDE JS FILE -->
+<% include scriptJs %>
+
+<script type="text/javascript">
+    jQuery('#ingredSys').addClass('active');
+    jQuery('#category').addClass('active');
+    document.getElementById('titleTxt').innerHTML = '食材與器具-分類';
+    getCounAjax();
+    var nowCountry = "";
+    var ori_url = "/api/materials/categories?country_id=";
+
+    //Create Language Datatable
+    var catTable = $('#catTable').DataTable({
+        paging: false,
+        searching: false,
+        order: [],
+        language: {
+            "info": "",
+            "infoEmpty": "",
+            "paginate": {
+                "next": "下一頁",
+                "previous": "上一頁"
+            },
+            "emptyTable": "",
+            "zeroRecords": "",
+            "loadingRecords": "",
+        },
+        ajax: {
+            type: "GET",
+            url: "/api/materials/categories?country_id=xx",
+            dataSrc: ""
+        },
+        columns: [
+            { "data": null,
+              "render": function (data, type, row) {
+                    if (row.language_id == 1) {
+                        return row.category;
+                    }
+                }
+            },
+            { "data": null,
+              "render": function (data, type, row) {
+                    if (row.language_id != 1) {
+                        return row.category;
+                    }
+                }
+            },
+            {
+                "data": null,
+                "render": function (data, type, row) {
+                    if (row.status == 1) {
+                        return '<input class="status act-btn" type="button" value="啟用">';
+                    } else {
+                        return '<input class="status inact-btn" type="button" value="停用" >';
+                    }
+                }
+            },
+            {
+                "data": null, "defaultContent": "<i class='click-btn far fa-edit'></i> / <i class='click-btn far fa-trash-alt'></i>"
+            }
+        ]
+    });
+
+    //Ajex get Categories
+    /*
+    async function getCateAjex() {
+        let result;
+        try {
+            result = await $.ajax({
+                url: `/api/materials/categories?country_id=${nowCountry}`,
+                type: 'GET'
+            });
+        } catch (error){
+            
+        }
+    }*/
+
+    //Ajex get Contries
+    async function getCounAjax() {
+        let result;
+        try {
+            result = await $.ajax({
+                url: '/api/region/countries',
+                type: 'GET'
+            });
+            for (var i = 0; i < result.length; i++) {
+                $("#selectCoun ul").append(`<li id="${result[i].country_id}" onclick="selectCoun(this.id,'${result[i].country}',this.innerHTML)">${result[i].country}</li>`);
+            }
+        } catch (error) {
+            return false;
+        }
+    }
+
+    //Ajex get languages
+    async function getLangAjex() {
+        let result;
+        try {
+            result = await $.ajax({
+                url: '/api/region/languages',
+                type: 'GET'
+            });
+            nameLength = result.length;
+            for (var i = 0; i < result.length; i++) {
+                $("#catNameBlock").append(`<div"><input class="modal-input" type="text" placeholder="${result[i].language}" id="addCatName${i}" name="${result[i].language_id}" ></div>`);
+            }
+        } catch (error) {
+
+        }
+    }
+
+    //Add Button Onclick
+    function addCat() {
+        getLangAjex();
+        document.getElementById('catNameBlock').innerHTML = '';
+        $('#addCatModal').modal('toggle');
+    }
+    //Add Submit
+    function addCatFormSubmit() {
+        var catName = [];
+        var checkEmptyName = true;
+        for (var i = 0; i < nameLength; i++) {
+            var name = document.getElementById(`addCatName${i}`).value;
+            var lang_id = document.getElementById(`addCatName${i}`).name;
+            (name != "") ? checkEmptyName = false : name = "null";
+            var pair = `${name}:${lang_id}`;
+            catName.push(pair);
+        }
+        const obj = new Object();
+        obj.category = catName.toString();
+        obj.country_id = nowCountry;
+        console.log(obj);
+        if (checkEmptyName) {
+            alert('請填好分類名稱');
+        } else {
+            doAddCatAjax(obj);
+        }
+    }
+    //Ajax Add
+    async function doAddCatAjax(obj) {
+        let result;
+        console.log(obj);
+        try {
+            result = await $.ajax({
+                url: '/api/materials/categories',
+                type: 'POST',
+                data: obj
+            });
+            catTable.ajax.reload(null, false);
+            $('#addCatModal').modal('toggle');
+        } catch (error) {
+            //do something.
+        }
+    }
+
+    /*Dropdown Menu*/
+    $('.dropdown').click(function () {
+        $(this).attr('tabindex', 1).focus();
+        $(this).toggleClass('active');
+        $(this).find('.dropdown-menu').slideToggle(300);
+    });
+    $('.dropdown').focusout(function () {
+        $(this).removeClass('active');
+        $(this).find('.dropdown-menu').slideUp(300);
+    });
+    $('.dropdown .dropdown-menu li').click(function () {
+        $(this).parents('.dropdown').find('span').text($(this).text());
+        $(this).parents('.dropdown').find('input').attr('value', $(this).attr('id'));
+        console.log($(this).attr('id'));
+    });
+
+    function selectCoun(country_id, country, val) {
+        var m_url = ori_url + `${country_id}`;
+        nowCountry = country_id;
+        catTable.ajax.url(m_url).load();
+        document.getElementById('selectedCoun').innerHTML = val;
+    }
+
+</script>
+
+
+
+</html>
+<!-- end document-->
