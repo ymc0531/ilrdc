@@ -1,13 +1,13 @@
 const mysql = require('mysql');
 
-var con1 = mysql.createConnection({
+var con2 = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "1qazxsw2",
-  database: "ThousandsOfWords",
+  password: "123",
+  database: "ilrdc",
   multipleStatements: true
 });
 
 module.exports = {
-  con1: con1
+  con2: con2
 }
