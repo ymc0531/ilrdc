@@ -1,13 +1,24 @@
 $(document).ready(function(){
-  $('#btn1').css('background-color', '#ACACAC');
-  $('#7').css('display', 'block');
+  $('#btn2').css('background-color', '#ACACAC');
+  $('#2').css('display', 'block');
+  $('#a-o-family').val('阿美');
   
+  sidebarToggle();
   initLanguage();
   initCategory();
+  initOperator();
   initSuggest();
   initWords();
+  initAddOperatorFamily();
+  initAddOperatorDialect();
+
+  $('#searchBtn4').click(function(){
+    $('#page4').val('1');
+    initWords();
+  });
 
   $('#searchBtn7').click(function(){
+    $('#page7').val('1');
     initSuggest();
   });
 
@@ -15,6 +26,35 @@ $(document).ready(function(){
     $('#confirmModal').css('display', 'block');
   });
 })
+
+function initAddOperatorFamily() {
+  (async () => {
+    let tmp;
+    let result = await getFamilyAjax();
+
+    for(let i=0;i<result.length;i++){
+      if(i==0) tmp = `<option value='${result[i].family}'>${result[i].family}</option>`
+      $('#a-o-family').append(`
+        <option value='${result[i].family}'>${result[i].family}</option>
+      `);
+    }
+  })()
+}
+
+function initAddOperatorDialect() {
+  let data = {family: $('#a-o-family').val()};
+  
+  (async () => {
+    let result = await getDialectAjax(data);
+
+    $('#a-o-dialect').html('');
+    for(let i=0;i<result.length;i++){
+      $('#a-o-dialect').append(`
+        <option value='${result[i].language}'>${result[i].language}</option>
+      `);
+    }
+  })()
+}
 
 function initLanguage() {
   (async () => {
@@ -81,6 +121,79 @@ function initCategory() {
   })()
 }
 
+function initOperator() {
+  (async () => {
+    let result = await getOperatorAjax();
+    let status;
+
+    $('#workTable').html('');    
+    for(let i=0;i<result.length;i++){
+      if(result[i].status==100){
+        status = `<p class="nm done">已完成</p>`
+      }else{
+        status = `<p class="nm undone">未完成 ${result[i].status}%</p>`
+      }
+      $('#workTable').append(`
+        <tr>
+          <td style="width: 5%">
+            <p class="nm">${i+1}</p>
+          </td>
+          <td style="width: 10%">
+            <p class="nm">${result[i].family}</p>
+          </td>
+          <td style="width: 10%">
+            <p class="nm">${result[i].dialect}</p>
+          </td>
+          <td style="width: 10%">
+            <p class="nm">${result[i].username}</p>
+          </td>
+          <td style="width: 15%">
+            ${status}
+          </td>
+          <td style="width: 15%">
+            <p class="nm clickable" onclick="goPlatform()">${result[i].dialect}詞表平台</p>
+          </td>
+          <td style="width: 25%">
+            <p class="nm">${result[i].last_edit}</p>
+          </td>
+          <td style="width: 10%">
+            <p class="nm clickable" onclick="applyOperator('${result[i].id}')">編輯</p>
+          </td>
+        </tr>
+      `);
+    }
+  })()
+}
+
+async function getFamilyAjax() {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newSentEnd/getFamily',
+      type: 'GET'
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+async function getDialectAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newSentEnd/dialect',
+      type: 'POST',
+      data: data
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
 async function getLanguageAjax() {
   let result;
   try {
@@ -100,6 +213,20 @@ async function getCategoryAjax() {
   try {
     result = await $.ajax({
       url: '/newSentEnd/getCategory',
+      type: 'GET'
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+async function getOperatorAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newSentEnd/operator',
       type: 'GET'
     });
     return result;
@@ -154,11 +281,41 @@ async function deleteSuggestAjax(data) {
   }
 }
 
+async function deleteWordsAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newSentEnd/words',
+      type: 'DELETE',
+      data: data
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
 async function getWordsAjax(data) {
   let result;
   try {
     result = await $.ajax({
       url: '/newSentEnd/getWords',
+      type: 'POST',
+      data: data
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+async function addOperatorAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newSentEnd/operator',
       type: 'POST',
       data: data
     });
@@ -221,7 +378,8 @@ function initSuggest() {
     let currpage = $('#page7').val();
     if(!currpage) currpage = 1;
     let rowPerPage = $('#rowPerPage7').val();
-    data = {lang: JSON.stringify(langList), cate: JSON.stringify(cateList), level: JSON.stringify(levelList), currpage: currpage, rowPerPage: rowPerPage};
+    let keyword = $('#keyword7').val();
+    data = {lang: JSON.stringify(langList), cate: JSON.stringify(cateList), keyword: keyword, level: JSON.stringify(levelList), currpage: currpage, rowPerPage: rowPerPage};
     (async () => {
       result = await getSuggestAjax(data);
       let page = Math.ceil(parseInt(result[0][0]['COUNT(*)'], 10)/rowPerPage);
@@ -327,7 +485,8 @@ function initWords() {
     let currpage = $('#page4').val();
     if(!currpage) currpage = 1;
     let rowPerPage = $('#rowPerPage4').val();
-    data = {lang: JSON.stringify(langList), cate: JSON.stringify(cateList), level: JSON.stringify(levelList), currpage: currpage, rowPerPage: rowPerPage};
+    let keyword = $('#keyword4').val();
+    data = {lang: JSON.stringify(langList), cate: JSON.stringify(cateList), keyword: keyword, level: JSON.stringify(levelList), currpage: currpage, rowPerPage: rowPerPage};
     (async () => {
       result = await getWordsAjax(data);
       
@@ -351,8 +510,8 @@ function initWords() {
         $('#wTable').append(`
           <tr style="background-color: ${bgColor}">
             <td class="sTable-td-edit" style="width: 7.5%;">
-              <a class="confirm-btn" onclick="showConfirmModal4('${result[1][i].tsid}', this)">確認</a>&nbsp;/
-              <a class="delete-btn" onclick="showDeleteModal4('${result[1][i].tsid}')">刪除</a>
+              <a class="confirm-btn" onclick="showConfirmModal4('${result[1][i].id}', this)">確認</a>&nbsp;/
+              <a class="delete-btn" onclick="showDeleteModal4('${result[1][i].id}')">刪除</a>
             </td>
             <td style="width: 5%">
               <p class="nm">${i+1}</p>
@@ -392,6 +551,21 @@ function initWords() {
       }
     })()
   });
+}
+
+function addOppConfirm() {
+  if($('#a-o-dialect').val()) {
+    let data = {family: $('#a-o-family').val(), dialect: $('#a-o-dialect').val()};
+    (async () => {
+      await addOperatorAjax(data);
+      $('#addOperatorModal').css('display', 'none');
+      initOperator();
+    })()
+  }
+}
+
+function addOppCancel() {
+  $('#addOperatorModal').css('display', 'none');
 }
 
 function sidebarToggle() {
@@ -577,8 +751,15 @@ function showConfirmModal7(id, val) {
   }
 }
 
+function showDeleteModal4(id) {
+  $('#deleteModal').attr('data-id', id);
+  $('#deleteModal').attr('data-mode', '4');
+  $('#deleteModal').css('display', 'block');
+}
+
 function showDeleteModal7(id) {
   $('#deleteModal').attr('data-id', id);
+  $('#deleteModal').attr('data-mode', '7');
   $('#deleteModal').css('display', 'block');
 }
 
@@ -597,14 +778,28 @@ function suggestCancel() {
   $('#confirmModal').css('display', 'none');
 }
 
-function deleteSuggest() {
+function deleteConfirm() {
   (async () => {
     let id = $('#deleteModal').attr('data-id');
+    let mode = $('#deleteModal').attr('data-mode');
     let data = {id: id};
-    let result = await deleteSuggestAjax(data);
+    let result;
+    switch(mode){
+      case '4':
+        result = await deleteWordsAjax(data);
+        initWords();
+        break;
+      case '7':
+        result = await deleteSuggestAjax(data);
+        initSuggest();
+        break;
+    }
     $('#deleteModal').css('display', 'none');
-    initSuggest();
   })()
+}
+
+function deleteCancel() {
+  $('#deleteModal').css('display', 'none');
 }
 
 function changeRowPerPage(num) {
@@ -666,6 +861,26 @@ function openEdit(num) {
   }else{
     $(`#${num} .sTable-td-edit`).css('display', 'none');
   } 
+}
+
+function goPlatform() {
+  window.open('http://tow.ilrdc.tw/login/login.php', '_blank');
+}
+
+function openAddOperator() {
+  $('#addOperatorModal').css('display', 'block');
+}
+
+function closeAddOperator() {
+  $('#addOperatorModal').css('display', 'none');
+}
+
+function applyOperator(id) {
+  $('#applyOperatorModal').css('display', 'block');
+}
+
+function closeApplyOperator() {
+  $('#applyOperatorModal').css('display', 'none');
 }
 
 function suggestDownload() {

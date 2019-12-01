@@ -87,6 +87,16 @@ p {
 .sb2:focus {
     outline: 0;
 }
+.sb3 {
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  width: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
 .f1 {
   width: 5vw;
   font-size: 1.3vw;
@@ -139,6 +149,15 @@ p {
 .modal1 {
     text-align: center;
 }
+.modal-content2 {
+  border-radius: 10px;
+  background-color: white;
+  margin: auto;
+  margin-top: 125px;
+  padding: 10px;
+  width: 30%;
+  position: relative;
+}
 .modal-content1 {
   border-radius: 10px;
   border-color: black;
@@ -147,7 +166,6 @@ p {
   background-color: white;
   margin: auto;
   margin-top: 125px;
-  padding: 20px;
   width: 25%;
 }
 .pbtm {
@@ -297,4 +315,85 @@ button {
   width: 30px;
   height: 30px;
   background: black;
+}
+
+#workTable {
+  width: 100%;
+  text-align: center;
+}
+
+.workTable {
+  width: 100%;
+  text-align: center;
+  border-style: solid;
+  border-width: 0;
+  border-top-width: 1px;
+  border-top-color: #E1E0E0;
+  border-spacing: 0;
+}
+
+.workTable td,
+#workTable td {
+  padding-top: 0.4vw;
+  padding-bottom: 0.4vw;
+  border-style: solid;
+  border-width: 0;
+  border-bottom-width: 1px;
+  border-bottom-color: #E1E0E0; 
+}
+
+.add-btn-row {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 5px;
+}
+
+.add-btn-row button {
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 6px;
+  font-size: 1.3vw;
+  width: 5vw;
+  height: 2.5vw;
+}
+
+.wt-1st-row td {
+  border-style: solid;
+  border-width: 0;
+  border-bottom-width: 2px !important;
+  border-color: black !important;
+}
+
+.done {
+  color: green;
+}
+
+.undone {
+  color: red;
+}
+
+.clickable {
+  color: blue;
+  cursor: pointer;
+}
+
+#applyOperatorModal span,
+#addOperatorModal span {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  cursor: pointer;
+}
+
+.modal-row {
+  width: 100%;
+  display: flex;
+  font-size: 1.5vw;
+}
+
+.modal-row select {
+  width: 15vw;
+  font-size: 1.5vw;
 }

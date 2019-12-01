@@ -9,8 +9,8 @@
 </head>
 <body>
 	<i class="material-icons sidebar-icon" onclick="sidebarToggle()">subject</i>
-   <div id="sidebar" data-current-btn="btn1">
-  	<input id="btn1" class="sidebarBtn" type="button" onclick="show('1')" value="學系詞表系統管理">
+   <div id="sidebar" data-current-btn="btn2">
+  	<!--<input id="btn1" class="sidebarBtn" type="button" onclick="show('1')" value="學系詞表系統管理">-->
 		<input id="btn2" class="sidebarBtn" type="button" onclick="show('2')" value="詞表作業者管理">
 		<input id="btn3" class="sidebarBtn" type="button" onclick="show('3')" value="詞表資料總管理">
 		<input id="btn4" class="sidebarBtn" type="button" onclick="show('4')" value="詞表資料內容管理">
@@ -18,12 +18,45 @@
 		<input id="btn6" class="sidebarBtn" type="button" onclick="show('6')" value="詞表研究管理">-->
 		<input id="btn7" class="sidebarBtn" type="button" onclick="show('7')" value="意見回饋與勘誤修正管理">
 	</div>
-	<div id="content" data-current-content="1">
+	<div id="content" data-current-content="2">
 		<div class="hide" id="1">
 			1
 		</div>
 		<div class="hide" id="2">
-			2
+			<div class="add-btn-row">
+				<button onclick="openAddOperator()">新增</button>
+			</div>
+			<table class="workTable">
+				<tr class="wt-1st-row">
+					<td style="width: 5%">
+						<p class="nm">序號</p>
+					</td>
+					<td style="width: 10%">
+						<p class="nm">族別</p>
+					</td>
+					<td style="width: 10%">
+						<p class="nm">方言</p>
+					</td>
+					<td style="width: 10%">
+						<p class="nm">作業員</p>
+					</td>
+					<td style="width: 15%">
+						<p class="nm">作業情形</p>
+					</td>
+					<td style="width: 15%">
+						<p class="nm">作業平台</p>
+					</td>
+					<td style="width: 25%">
+						<p class="nm">最新編輯時間</p>
+					</td>
+					<td style="width: 10%">
+						<p class="nm">操作</p>
+					</td>
+				</tr>
+			</table>
+			<table id="workTable">
+				
+			</table>
 		</div>
 		<div class="hide" id="3">
 			3
@@ -34,11 +67,11 @@
 					<p class="title">詞表資料內容管理</p>
 				</div>
 				<div class="select-box">
-					<p class="f1">語言<i class="material-icons downBtn" id="btn1" onclick="show4('lang')">details</i></p>
-					<p class="f1">類別<i class="material-icons downBtn" id="btn2" onclick="show4('cate')">details</i></p>
-					<p class="f1">級別<i class="material-icons downBtn" id="btn3" onclick="show4('level')">details</i></p>
+					<p class="f1">語言<i class="material-icons downBtn" onclick="show4('lang')">details</i></p>
+					<p class="f1">類別<i class="material-icons downBtn" onclick="show4('cate')">details</i></p>
+					<p class="f1">級別<i class="material-icons downBtn" onclick="show4('level')">details</i></p>
           <div class="sb1">
-            <input type="text" class="sb2" name="keyword4">
+            <input type="text" class="sb2" id="keyword4">
             <i class="material-icons" id="searchBtn4">search</i>
           </div>
 	       </div>
@@ -139,9 +172,9 @@
 						<p class="title">詞表統計管理</p>
 					</div>
 					<div style="padding-left: 10px;">
-						<p class="floatL f1">語言<i class="material-icons downBtn" id="btn1" onclick="showLang5()">details</i></p>
-						<p class="floatL f1">類別<i class="material-icons downBtn" id="btn2" onclick="showCate5()">details</i></p>
-						<p class="floatL f1">級別<i class="material-icons downBtn" id="btn3" onclick="showLevel5()">details</i></p>
+						<p class="floatL f1">語言<i class="material-icons downBtn" onclick="showLang5()">details</i></p>
+						<p class="floatL f1">類別<i class="material-icons downBtn" onclick="showCate5()">details</i></p>
+						<p class="floatL f1">級別<i class="material-icons downBtn" onclick="showLevel5()">details</i></p>
 		                <div class="sb1">
 	                        <input type="text" class="sb2" name="keyword5" required>
 	                        <i class="material-icons" id="searchBtn5" style="vertical-align: middle;font-size: 1.5vw;cursor: pointer;">search</i>
@@ -196,9 +229,9 @@
 						<p class="title">詞表研究管理</p>
 					</div>
 					<div style="padding-left: 10px;">
-						<p class="floatL f1">語言<i class="material-icons downBtn" id="btn1" onclick="showLang6()">details</i></p>
-						<p class="floatL f1">類別<i class="material-icons downBtn" id="btn2" onclick="showCate6()">details</i></p>
-						<p class="floatL f1">級別<i class="material-icons downBtn" id="btn3" onclick="showLevel6()">details</i></p>
+						<p class="floatL f1">語言<i class="material-icons downBtn" onclick="showLang6()">details</i></p>
+						<p class="floatL f1">類別<i class="material-icons downBtn" onclick="showCate6()">details</i></p>
+						<p class="floatL f1">級別<i class="material-icons downBtn" onclick="showLevel6()">details</i></p>
 		                <div class="sb1">
 	                        <input type="text" class="sb2" name="keyword6">
 	                        <i class="material-icons" id="searchBtn6" style="vertical-align: middle;font-size: 1.5vw;cursor: pointer;">search</i>
@@ -283,11 +316,11 @@
 					<p class="title">意見回饋與勘誤修正管理</p>
 				</div>
 				<div class="select-box">
-					<p class="f1">語言<i class="material-icons downBtn" id="btn1" onclick="show7('lang')">details</i></p>
-					<p class="f1">類別<i class="material-icons downBtn" id="btn2" onclick="show7('cate')">details</i></p>
-					<p class="f1">級別<i class="material-icons downBtn" id="btn3" onclick="show7('level')">details</i></p>
+					<p class="f1">語言<i class="material-icons downBtn" onclick="show7('lang')">details</i></p>
+					<p class="f1">類別<i class="material-icons downBtn" onclick="show7('cate')">details</i></p>
+					<p class="f1">級別<i class="material-icons downBtn" onclick="show7('level')">details</i></p>
           <div class="sb1">
-            <input type="text" class="sb2" name="keyword7">
+            <input type="text" class="sb2" id="keyword7">
             <i class="material-icons" id="searchBtn7">search</i>
           </div>
 	       </div>
@@ -314,7 +347,6 @@
 				</div>
 			</div>
 			<div class="sTitle">
-				<!--<p style="font-size: 1.3vw">檢視結果共&nbsp;<a style="color: red;"></a>&nbsp;筆資料</p>-->
 				<p id="sTitle-p"></p>
         <div class="select01">
           <i class="material-icons prev" onclick="prevpage(7)">navigate_before</i>第
@@ -394,12 +426,45 @@
 	    <input type="button" onclick="suggestCancel()" value="取消">
     </div>
   </div>
-  <div id="deleteModal" class="modal modal1" data-id="">
+  <div id="deleteModal" class="modal modal1" data-id="" data-mode="">
     <div class="modal-content1">
 	    <p>確認刪除</p>
 	    <br><br>
-	    <input type="button" onclick="deleteSuggest()" value="確認">
+	    <input type="button" onclick="deleteConfirm()" value="確認">
 	    <input type="button" onclick="deleteCancel()" value="取消">
+    </div>
+  </div>
+  <div id="addOperatorModal" class="modal modal1">
+    <div class="modal-content2">
+    	<span onclick="closeAddOperator()">&times;</span>
+    	<div class="modal-row">
+    		族別：
+    		<select onchange="initAddOperatorDialect()" id="a-o-family">
+    			<option></option>
+    		</select>
+    	</div>
+    	<br>
+    	<div class="modal-row">
+    		方言：
+    		<select id="a-o-dialect">
+    			
+    		</select>
+    	</div>
+    	<br>
+    	<br>
+    	<div>
+    		<input type="button" onclick="addOppConfirm()" value="確認">
+	    	<input type="button" onclick="addOppCancel()" value="取消">
+    	</div>
+    </div>
+  </div>
+  <div id="applyOperatorModal" class="modal modal1">
+    <div class="modal-content2">
+    	<span onclick="closeApplyOperator()">&times;</span>
+    	<div class="sb3">
+        <input type="text" class="sb2" id="keyword7">
+        <i class="material-icons" id="searchBtn7">search</i>
+      </div>
     </div>
   </div>
 </body>
