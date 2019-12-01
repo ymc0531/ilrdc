@@ -1,79 +1,160 @@
 var express = require('express');
 var router = express.Router();
-let database = require('../database/database1');
+let database = require('../database/database');
 
 router.get('/', async function(req, res) {
 	res.render('newSentEnd');
 });
 
-router.get('/test', async function(req, res) {
-	var qry = `SELECT * FROM family`;
-  database.con1.query(qry, function (err1, result) {
-  	if(err1) console.log(err1);
-  	res.send(result);
-  })
-});
-
-router.get('/getFamily', async function(req, res) {
-	var qry = `SELECT * FROM family`;
-  database.con1.query(qry, function (err, result) {
-  	res.send(result);
-  })
-});
-
 router.get('/getLanguage', async function(req, res) {
 	var qry = `SELECT * FROM language`;
-  database.con1.query(qry, function (err, result) {
+  database.conn.query(qry, function (err, result) {
   	res.send(result);
   })
 });
 
 router.get('/getCategory', async function(req, res) {
-	var qry = `SELECT * FROM category`;
-  database.con1.query(qry, function (err, result) {
+	var qry = `SELECT cate FROM tow_category`;
+  database.conn.query(qry, function (err, result) {
   	res.send(result);
   })
 });
 
 router.get('/getSuggest', async function(req, res) {
 	var qry = `SELECT * FROM suggest`;
-  database.con1.query(qry, function (err, result) {
+  database.conn.query(qry, function (err, result) {
   	res.send(result);
   })
 });
 
 router.post('/getWords', async function(req, res) {
-	var tmp = ' ';
-	var limit = 0;
-	var {lang, cate, keyword, blurSearch, pages} = req.body;
-	if(lang&&lang!='全語言') tmp = `${tmp}AND dialect = '${lang}' `;
-	if(cate&&cate!='全分類') tmp = `${tmp}AND category = '${cate}' `;
-	if(keyword&&keyword!='') {
-		if(blurSearch=='false') {
-			tmp = `${tmp}AND (ftws = '${keyword}' OR ctws = '${keyword}') `;
-		}else{
-			tmp = `${tmp}AND (ftws LIKE '%${keyword}%' OR ctws LIKE '%${keyword}%') `;
-		}
-	}
-	if(pages>0) limit = (pages-1)*50;
-	var qry = `SELECT COUNT(*) FROM words WHERE 1${tmp};SELECT * FROM words WHERE 1${tmp} ORDER BY sid ASC LIMIT ${limit},50`;
-  database.con1.query(qry, function (err1, result) {
-  	if(err1) console.log(err1);
+	var {lang, cate, level, currpage, rowPerPage} = req.body;
+  var limit = 0;
+  if(lang.substr(1, lang.length-2)){
+    lang = `AND tw.dialect IN (${lang.substr(1, lang.length-2)})`;
+  }else{
+    lang = '';
+  }
+  if(cate.substr(1, cate.length-2)){
+    cate = `AND tw.category IN (${cate.substr(1, cate.length-2)})`;
+  }else{
+    cate = '';
+  }
+  //level = ` AND tw.dialect IN (${level.substr(1, level.length-2)})`;
+  currpage = parseInt(currpage, 10);
+  rowPerPage = parseInt(rowPerPage, 10);
+  if(currpage>0) limit = (currpage-1)*rowPerPage;
+  var qry = `
+              SELECT COUNT(*)
+              FROM tow_words tw
+              LEFT JOIN language lg ON tw.dialect = lg.language
+              WHERE 1
+              ${lang}
+              ${cate};
+            `;
+  var qry1 = `
+              SELECT tw.*, lg.family
+              FROM tow_words tw
+              LEFT JOIN language lg ON tw.dialect = lg.language
+              WHERE 1
+              ${lang}
+              ${cate}
+              ORDER BY tw.id ASC LIMIT ${limit},${rowPerPage};
+            `;
+  database.conn.query(qry+qry1, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.post('/suggest', async function(req, res) {
+  var {lang, cate, level, currpage, rowPerPage} = req.body;
+  var limit = 0;
+  if(lang.substr(1, lang.length-2)){
+    lang = `AND tw.dialect IN (${lang.substr(1, lang.length-2)})`;
+  }else{
+    lang = '';
+  }
+  if(cate.substr(1, cate.length-2)){
+    cate = `AND tw.category IN (${cate.substr(1, cate.length-2)})`;
+  }else{
+    cate = '';
+  }
+  //level = ` AND tw.dialect IN (${level.substr(1, level.length-2)})`;
+  currpage = parseInt(currpage, 10);
+  rowPerPage = parseInt(rowPerPage, 10);
+  if(currpage>0) limit = (currpage-1)*rowPerPage;
+  var qry = `
+              SELECT COUNT(*)
+              FROM tow_suggest ts
+              LEFT JOIN tow_words tw ON ts.words_id = tw.id
+              LEFT JOIN language lg ON tw.dialect = lg.language
+              WHERE 1
+              ${lang}
+              ${cate};
+            `;
+  var qry1 = `
+              SELECT tw.*, ts.admin_feedback, ts.suggestion, lg.family, ts.id tsid
+              FROM tow_suggest ts
+              LEFT JOIN tow_words tw ON ts.words_id = tw.id
+              LEFT JOIN language lg ON tw.dialect = lg.language
+              WHERE 1
+              ${lang}
+              ${cate}
+              ORDER BY ts.id ASC LIMIT ${limit},${rowPerPage};
+            `;
+  database.conn.query(qry+qry1, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.post('/suggestDownload', async function(req, res) {
+  var {lang, cate, level} = req.body;
+  if(lang.substr(1, lang.length-2)){
+    lang = `AND tw.dialect IN (${lang.substr(1, lang.length-2)})`;
+  }else{
+    lang = '';
+  }
+  if(cate.substr(1, cate.length-2)){
+    cate = `AND tw.category IN (${cate.substr(1, cate.length-2)})`;
+  }else{
+    cate = '';
+  }
+  //level = ` AND tw.dialect IN (${level.substr(1, level.length-2)})`;
+
+  var qry = `
+              SELECT tw.sid, lg.family, tw.dialect, tw.category, tw.ftws, tw.ctws, tw.fexam, tw.cexam, ts.suggestion, ts.admin_feedback
+              FROM tow_suggest ts
+              LEFT JOIN tow_words tw ON ts.words_id = tw.id
+              LEFT JOIN language lg ON tw.dialect = lg.language
+              WHERE 1
+              ${lang}
+              ${cate}
+            `;
+  database.conn.query(qry, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.put('/feedback', async function(req, res) {
+	var {id, fb} = req.body;
+	var qry = `
+							UPDATE tow_suggest
+              SET admin_feedback = '${fb}', reply_time = CURRENT_TIMESTAMP
+              WHERE id = ${id}
+						`;
+  database.conn.query(qry, function (err, result) {
   	res.send(result);
   })
 });
 
-router.put('/suggest', async function(req, res) {
-	var {words_id, ftws, ctws, fexam, cexam, suggestion} = req.body;
-	console.log(req.body);
-	var qry = `
-							INSERT INTO 
-							suggest (words_id, ftws, ctws, fexam, cexam, suggestion) 
-						 	VALUES 
-						 	('${words_id}', '${ftws}', '${ctws}', '${fexam}', '${cexam}', '${suggestion}')
-						`;
-  database.con1.query(qry, function (err, result) {
-  	res.send(result);
+router.delete('/suggest', async function(req, res) {
+  var {id} = req.body;
+  var qry = `
+              DELETE FROM tow_suggest
+              WHERE id = ${id}
+            `;
+  database.conn.query(qry, function (err, result) {
+    res.send(result);
   })
 });
 

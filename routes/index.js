@@ -3,9 +3,9 @@ let router = express.Router();
 let jwt = require('jsonwebtoken');
 let config = require('./config');
 let middleware = require('./middleware');
-let database = require('./database/database2');
+let database = require('./database/database');
 
-database.con2.connect(function(err){
+database.conn.connect(function(err){
   if(err) console.log(`database connect error: ${err}`);
 });
 
@@ -26,7 +26,7 @@ router.get('/test', middleware.checkToken, async function(req, res) {
 router.post('/login', async function(req, res) {
   let {username, password} = req.body;
   let qry = `SELECT * FROM users_info WHERE username = '${username}' AND password = '${password}'`
-  database.con2.query(qry, function (err, result) {
+  database.conn.query(qry, function (err, result) {
     if(result.length>0){
       let token = jwt.sign({username: username},
         config.secret,

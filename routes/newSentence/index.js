@@ -1,44 +1,42 @@
 var express = require('express');
 var router = express.Router();
-let database = require('../database/database1');
+let database = require('../database/database');
 
 router.get('/', async function(req, res) {
 	res.render('newSentence');
 });
 
-router.get('/test', async function(req, res) {
-	var qry = `SELECT * FROM family`;
-  database.con1.query(qry, function (err1, result) {
-  	if(err1) console.log(err1);
-  	res.send(result);
-  })
-});
-
 router.get('/getFamily', async function(req, res) {
 	var qry = `SELECT * FROM family`;
-  database.con1.query(qry, function (err, result) {
+  database.conn.query(qry, function (err, result) {
   	res.send(result);
   })
 });
 
 router.get('/getLanguage', async function(req, res) {
 	var qry = `SELECT * FROM language`;
-  database.con1.query(qry, function (err, result) {
+  database.conn.query(qry, function (err, result) {
   	res.send(result);
   })
 });
 
 router.get('/getCategory', async function(req, res) {
-	var qry = `SELECT * FROM category`;
-  database.con1.query(qry, function (err, result) {
+	var qry = `SELECT * FROM tow_category`;
+  database.conn.query(qry, function (err, result) {
   	res.send(result);
   })
 });
 
-router.get('/getSuggest', async function(req, res) {
-	var qry = `SELECT * FROM suggest`;
-  database.con1.query(qry, function (err, result) {
+router.post('/getSuggest', async function(req, res) {
+  var limit = 0;
+  var {pages, rowPerPage} = req.body;
+  pages = parseInt(pages, 10);
+  rowPerPage = parseInt(rowPerPage, 10);
+  if(pages>0) limit = (pages-1)*rowPerPage;
+	var qry = `SELECT COUNT(*) FROM tow_suggest;SELECT * FROM tow_suggest ORDER BY id ASC LIMIT ${limit},${rowPerPage}`;
+  database.conn.query(qry, function (err, result) {
   	res.send(result);
+    //console.log(err);
   })
 });
 
@@ -56,10 +54,34 @@ router.post('/getWords', async function(req, res) {
 		}
 	}
 	if(pages>0) limit = (pages-1)*rowPerPage;
-	var qry = `SELECT COUNT(*) FROM words WHERE 1${tmp};SELECT * FROM words WHERE 1${tmp} ORDER BY id ASC LIMIT ${limit},${rowPerPage}`;
-  database.con1.query(qry, function (err1, result) {
+	var qry = `SELECT COUNT(*) FROM tow_words WHERE 1${tmp};SELECT * FROM tow_words WHERE 1${tmp} ORDER BY id ASC LIMIT ${limit},${rowPerPage}`;
+  database.conn.query(qry, function (err1, result) {
   	if(err1) console.log(err1);
   	res.send(result);
+  })
+});
+
+router.post('/wordsDownload', async function(req, res) {
+  var {lang, cate} = req.body;
+  if(lang!='全語言'){
+    lang = `AND dialect = '${lang}'`;
+  }else{
+    lang = '';
+  }
+  if(cate!='全分類'){
+    cate = `AND category = '${cate}'`;
+  }else{
+    cate = '';
+  }
+  var qry = `
+              SELECT dialect, category, ftws, ctws, fexam, cexam, memo 
+              FROM tow_words
+              WHERE 1
+              ${lang}
+              ${cate}
+            `;
+  database.conn.query(qry, function (err, result) {
+    res.send(result);
   })
 });
 
@@ -67,11 +89,11 @@ router.put('/suggest', async function(req, res) {
 	var {words_id, ftws, ctws, fexam, cexam, suggestion} = req.body;
 	var qry = `
 							INSERT INTO 
-							suggest (words_id, ftws, ctws, fexam, cexam, suggestion) 
+							tow_suggest (words_id, ftws, ctws, fexam, cexam, suggestion) 
 						 	VALUES 
 						 	('${words_id}', '${ftws}', '${ctws}', '${fexam}', '${cexam}', '${suggestion}')
 						`;
-  database.con1.query(qry, function (err, result) {
+  database.conn.query(qry, function (err, result) {
   	res.send(result);
   })
 });

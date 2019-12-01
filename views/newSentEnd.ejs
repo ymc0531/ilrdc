@@ -4,264 +4,21 @@
 	<meta charset="utf-8" />
 	<title>詞表後台</title>
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!--<style type="text/css">
-    	html, body {
-		    width: 100%;
-		    height: 100%;
-		    margin: 0;
-		    padding-top: 18px;
-		}
-    	.sidebar {
-    		width: 20%;
-    		height: 100%;
-    		float: left;
-    		padding-left: 15px;
-    		padding-right: 15px;
-    	}
-    	.content {
-    		width: 70%;
-    		padding-right: 15px;
-    	}
-    	.hide {
-    		display: none;
-    	}
-    	.sidebarBtn {
-    		font-size: 1.5vw;
-    		width: 100%;
-    		margin-bottom: 10px;
-    		padding: 6px 0 6px 0;
-    		background-color: #D6D6D6;
-    		border-style: none;
-    		border-radius: 5px;
-    	}
-    	.sidebarBtn:hover {
-    		cursor: pointer;
-    		background-color: #ACACAC;
-    	}
-    	.sidebarBtn:focus {
-    		outline: 0;
-    		background-color: #ACACAC;
-    	}
-    	.header {
-    		width: 100%;
-    		border-style: solid;
-    	}
-    </style>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/newSentEnd/main.css">
 </head>
 <body>
-	<div>
-	<div class="sidebar">
-		<input class="sidebarBtn" type="button" onclick="show1()" value="學系詞表系統管理">
-		<input class="sidebarBtn" type="button" onclick="show2()" value="詞表作業者管理">
-		<input class="sidebarBtn" type="button" onclick="show3()" value="詞表資料總管理">
-		<input class="sidebarBtn" type="button" onclick="show4()" value="詞表資料內容管理">
-		<input class="sidebarBtn" type="button" onclick="show5()" value="詞表統計管理">
-		<input class="sidebarBtn" type="button" onclick="show6()" value="詞表研究管理">
-		<input class="sidebarBtn" type="button" onclick="show7()" value="意見回饋與勘誤修正管理">
+	<i class="material-icons sidebar-icon" onclick="sidebarToggle()">subject</i>
+   <div id="sidebar" data-current-btn="btn1">
+  	<input id="btn1" class="sidebarBtn" type="button" onclick="show('1')" value="學系詞表系統管理">
+		<input id="btn2" class="sidebarBtn" type="button" onclick="show('2')" value="詞表作業者管理">
+		<input id="btn3" class="sidebarBtn" type="button" onclick="show('3')" value="詞表資料總管理">
+		<input id="btn4" class="sidebarBtn" type="button" onclick="show('4')" value="詞表資料內容管理">
+		<!--<input id="btn5" class="sidebarBtn" type="button" onclick="show('5')" value="詞表統計管理">
+		<input id="btn6" class="sidebarBtn" type="button" onclick="show('6')" value="詞表研究管理">-->
+		<input id="btn7" class="sidebarBtn" type="button" onclick="show('7')" value="意見回饋與勘誤修正管理">
 	</div>
-	<div class="content">
-		<div id="1">
-			1
-		</div>
-		<div class="hide" id="2">
-			2
-		</div>
-		<div class="hide" id="3">
-			3
-		</div>
-		<div class="hide" id="4">
-			4
-		</div>
-		<div class="hide" id="5">
-			5
-		</div>
-		<div class="hide" id="6">
-			6
-		</div>
-		<div class="hide" id="7">
-			<div class="header">
-				<p>語言</p>
-				<p>類別</p>
-				<p>級別</p>
-			</div>
-		</div>
-	</div>
-	</div>
-</body>-->
-<style type="text/css">
-html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-}
-p {
-	margin: 0;
-	padding: 0;
-}
-
-#sidebar, #content {
-  height: 100%;
-  overflow:visible;
-  float:left;
-  transition: width .35s;
-}
-#sidebar {
-  background:white;
-  width: 0%;
-  margin: 2vw 2vw 0 2vw;
-}
-
-#sidebar.collapsed {
-  width: 0;
-}
-
-#sidebar.collapsed + #content {
-  width: 100%;
-}
-
-#content {
-  width: 90%;
-  margin: 2vw 0 0 2vw;
-}
-.sidebarBtn {
-	font-size: 1.5vw;
-	width: 100%;
-	margin-bottom: 10px;
-	padding: 6px 0 6px 0;
-	background-color: #D6D6D6;
-	border-style: none;
-	border-radius: 5px;
-}
-.sidebarBtn:hover {
-	cursor: pointer;
-	background-color: #ACACAC;
-}
-.sidebarBtn:focus {
-	outline: 0;
-	background-color: #ACACAC;
-}
-.title {
-	font-size: 1.5vw;
-	padding-left: 10px;
-	padding-bottom: 5px;
-}
-.hide {
-	display: none;
-}
-.floatL {
-	float: left;
-}
-.searchbar {
-    width: 100%;
-    text-align: center;
-}
-.sb1 {
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
-    width: 30%;
-    text-align: center;
-    display: inline-block;
-    height: 1.8vw;
-    background-color: white;
-}
-.sb2 {
-	width: 85%;
-    font-size: 1.3vw;
-    border-style: none;
-}
-.sb2:focus {
-    outline: 0;
-}
-.f1 {
-	font-size: 1.3vw;
-	padding-right: 5%;
-}
-.header {
-	width: 100%;
-	padding: 8px 0 8px 0;
-	border-style: none;
-	background-color: #D6D6D6;
-}
-.downBtn {
-	vertical-align: middle;
-	font-size: 1.5vw;
-	cursor: pointer;
-}
-.cbox {
-	padding: 1% 2% 1% 2%;
-	font-size: 1.3vw;
-}
-.nm {
-	margin: 0;
-	font-size: 1.1vw;
-}
-.tn {
-	font-size: 0.01px;
-	color: transparent;
-	position: absolute;
-	border-style: none;
-	background-color: transparent;
-	cursor: default;
-}
-.tn:focus {
-	outline: 0;
-}
-.modal {
-  display: none; 
-  position: fixed; 
-  z-index: 1; 
-  padding-top: 100px; 
-  left: 0;
-  top: 0;
-  width: 100%; 
-  height: 100%; 
-  overflow: auto; 
-  background-color: rgb(0,0,0); 
-  background-color: rgba(0,0,0,0.4); 
-}
-.modal1 {
-    text-align: center;
-}
-.modal-content1 {
-  border-radius: 10px;
-  border-color: black;
-  border-style: solid;
-  border-width: 1px;
-  background-color: white;
-  margin: auto;
-  margin-top: 125px;
-  padding: 20px;
-  width: 25%;
-}
-.pbtm {
-	padding-bottom: 30px;
-}
-.card {
-	width: 40%;
-	padding: 0 1.5vw 0 1.5vw;
-	margin: 10px 0 0 40%;
-	display: none;
-}
-button {
-  width: 30px;
-  height: 30px;
-  background: black;
-}
-</style>
-<body>
-	<i class="material-icons" style="font-size: 2vw; cursor: pointer;position: absolute;" onclick="sidebarToggle()">subject</i>
-    <div id="sidebar">
-  		<input class="sidebarBtn" type="button" onclick="show1()" value="學系詞表系統管理">
-		<input class="sidebarBtn" type="button" onclick="show2()" value="詞表作業者管理">
-		<input class="sidebarBtn" type="button" onclick="show3()" value="詞表資料總管理">
-		<input class="sidebarBtn" type="button" onclick="show4()" value="詞表資料內容管理">
-		<input class="sidebarBtn" type="button" onclick="show5()" value="詞表統計管理">
-		<input class="sidebarBtn" type="button" onclick="show6()" value="詞表研究管理">
-		<input class="sidebarBtn" type="button" onclick="show7()" value="意見回饋與勘誤修正管理">
-	</div>
-	<div id="content">
+	<div id="content" data-current-content="1">
 		<div class="hide" id="1">
 			1
 		</div>
@@ -272,53 +29,74 @@ button {
 			3
 		</div>
 		<div class="hide" id="4">
-			<form id="contentForm" method="POST" action="/newSentEnd/contentSearch">
-				<div class="header">
-					<div>
-						<p class="title">詞表資料內容管理</p>
-					</div>
-					<div style="padding-left: 10px;">
-						<p class="floatL f1">語言<i class="material-icons downBtn" id="btn1" onclick="showLang4()">details</i></p>
-						<p class="floatL f1">類別<i class="material-icons downBtn" id="btn2" onclick="showCate4()">details</i></p>
-						<p class="floatL f1">級別<i class="material-icons downBtn" id="btn3" onclick="showLevel4()">details</i></p>
-		                <div class="sb1">
-	                        <input type="text" class="sb2" name="keyword4">
-	                        <i class="material-icons" id="searchBtn4" style="vertical-align: middle;font-size: 1.5vw;cursor: pointer;">search</i>
-		                </div>
-		            </div>
+			<div class="header">
+				<div>
+					<p class="title">詞表資料內容管理</p>
 				</div>
-				<div class="hide cbox" id="lang4">
-					<input type="checkbox" name="langAP4" value="1" checked onclick="flangAP4()">全選&nbsp;
-					<%for(var i=0;i < language.length;i++){%>
-						<input type="checkbox" name="language4[]" value="<%=language[i].language%>" onclick="checkLangAP4()" checked><%=language[i].language%>&nbsp;
-					<%}%>
+				<div class="select-box">
+					<p class="f1">語言<i class="material-icons downBtn" id="btn1" onclick="show4('lang')">details</i></p>
+					<p class="f1">類別<i class="material-icons downBtn" id="btn2" onclick="show4('cate')">details</i></p>
+					<p class="f1">級別<i class="material-icons downBtn" id="btn3" onclick="show4('level')">details</i></p>
+          <div class="sb1">
+            <input type="text" class="sb2" name="keyword4">
+            <i class="material-icons" id="searchBtn4">search</i>
+          </div>
+	       </div>
+			</div>
+			<div id="lang4" class="select-item-box">
+				<div class="select-item">
+					<input type="checkbox" id="langAP4" value="1" checked onclick="langAP(4)">全選
 				</div>
-				<div class="hide cbox" id="cate4">
-					<input type="checkbox" name="cateAP4" value="1" checked onclick="fcateAP4()">全選&nbsp;
-					<%for(var i=0;i < category.length;i++){%>
-						<input type="checkbox" name="category4[]" value="<%=category[i].cate%>" onclick="checkCateAP4()" checked><%=category[i].cate%>&nbsp;
-					<%}%>
+			</div>
+			<div id="cate4" class="select-item-box">
+				<div class="select-item">
+					<input type="checkbox" id="cateAP4" value="1" checked onclick="cateAP(4)">全選
 				</div>
-				<div class="hide cbox" id="level4">
-					<input type="checkbox" name="levelAP4" value="1" checked onclick="flevelAP4()">全選&nbsp;
-					<input type="checkbox" name="level4[]" value="初級" onclick="checkLevelAP4()" checked>初級&nbsp;
-					<input type="checkbox" name="level4[]" value="中級" onclick="checkLevelAP4()" checked>中級&nbsp;
-					<input type="checkbox" name="level4[]" value="中高級" onclick="checkLevelAP4()" checked>中高級&nbsp;
-					<input type="checkbox" name="level4[]" value="高級" onclick="checkLevelAP4()" checked>高級
+			</div>
+			<div id="level4" class="select-item-box">
+				<div class="select-item">
+					<input type="checkbox" id="levelAP4" value="1" checked onclick="levelAP(4)">全選
 				</div>
-			</form>
-			<div style="margin: 10px 0 10px 0;background-color: #D6D6D6; padding-left: 10px;">
-				<p style="font-size: 1.3vw">檢視結果共&nbsp;<a style="color: red;"><%=contentResult.length%></a>&nbsp;筆資料</p>
+				<div class="select-item">
+					<input type="checkbox" name="level4[]" value="初級" checked>初級&nbsp;
+					<input type="checkbox" name="level4[]" value="中級" checked>中級&nbsp;
+					<input type="checkbox" name="level4[]" value="中高級" checked>中高級&nbsp;
+					<input type="checkbox" name="level4[]" value="高級" checked>高級
+				</div>
+			</div>
+			<div class="sTitle">
+				<!--<p style="font-size: 1.3vw">檢視結果共&nbsp;<a style="color: red;"></a>&nbsp;筆資料</p>-->
+				<p id="sTitle-p"></p>
+        <div class="select01">
+          <i class="material-icons prev" onclick="prevpage(4)">navigate_before</i>第
+          <select id="page4" onchange="changepage(4)">
+          </select>頁
+          <i class="material-icons next" onclick="nextpage(4)">navigate_next</i>
+        </div>
+        <div class="select02">每頁顯示
+          <select id="rowPerPage4" onchange="changeRowPerPage(4)">
+            <option value="10">10</option>
+            <option value="25" selected>25</option>
+            <option value="50">50</option>
+          </select>筆
+        </div>
+			</div>
+			<div class="sub-sTitle">
+				<input type="checkbox" id="sEdit" onclick="openEdit(4)" value="ok">編輯
+				&nbsp;
+				<div onclick="wordsDownload()">
+					<i class="material-icons">get_app</i>下載
+				</div>
 			</div>
 			<div>
-				<table style="width: 100%;font-size: 18px;text-align: center;border-spacing: 0">
+				<table class="sTable">
 					<tr style="background-color: #A6A5A5;">
-						<td style="width: 2.5%">
+						<td class="sTable-td-edit" style="width: 7.5%">
 						</td>
-						<td style="width: 3%">
+						<td style="width: 5%">
 							<p class="nm">序號</p>
 						</td>
-						<td style="width: 4%">
+						<td style="width: 5%">
 							<p class="nm">族別</p>
 						</td>
 						<td style="width: 8%">
@@ -327,116 +105,30 @@ button {
 						<td style="width: 8%">
 							<p class="nm">類別</p>
 						</td>
-						<td style="width: 5%">
+						<td style="width: 8%">
 							<p class="nm">編號</p>
 						</td>
-						<td style="width: 8%">
+						<td style="width: 10%">
 							<p class="nm">族語詞彙</p>
 						</td>
-						<td style="width: 8%">
+						<td style="width: 10%">
 							<p class="nm">中文詞彙</p>
 						</td>
-						<td style="width: 10%">
+						<td style="width: 15%">
 							<p class="nm">族語例句</p>
 						</td>
-						<td style="width: 10%">
+						<td style="width: 15%">
 							<p class="nm">中文例句</p>
 						</td>
-						<td style="width: 4%">
+						<td style="width: 5%">
 							<p class="nm">級別</p>
 						</td>
-						<td style="width: 3%">
+						<td>
 							<p class="nm">備註</p>
 						</td>
-						<td style="width: 10%">
-							<p class="nm">意見回饋</p>
-						</td>
-						<!--
-						<td>
-							<p class="nm">處理情形</p>
-						</td>
-						<td style="width: 3%">	
-						</td>
-						-->
 					</tr>
-					<%for(var i=0;i < contentResult.length;i++){%>
-						<%if(i%2==1){%>
-						<tr style="background-color: #E1E0E0;">
-						<%}else{%>
-						<tr style="background-color: white">
-						<%}%>
-							<td style="width: 2.5%">
-								<form id="delCont<%=i%>" method="POST" action="/newSentEnd/deleteResearch">
-									<div id="confirmModal4<%=i%>" class="modal modal1">
-				                      <div class="modal-content1">
-				                        <p>確認刪除？</p>
-				                        <br><br>
-				                        <input type="button" onclick="delSubmit4('<%=i%>')" value="確認">
-				                        <input type="button" onclick="cancelSubmit4('<%=i%>')" value="取消">
-				                      </div>
-				                    </div>
-									<input class="tn" type="text" name="delId4" value="<%=contentResult[i].id%>" readonly>
-								</form>
-								<i class="material-icons" style="vertical-align: middle;cursor: pointer;font-size: 1.1vw;" onclick="confirmChecker4('<%=i%>')">remove_circle_outline</i>
-							</td>
-							<td style="width: 5%">
-								<p class="nm"><%=i+1%></p>
-							</td>
-							<td style="width: 5%">
-								<p class="nm"><%=contentResult[i].family%></p>
-							</td>
-							<td style="width: 5%">
-								<p class="nm"><%=contentResult[i].dialect%></p>
-							</td>
-							<td style="width: 5%">
-								<p class="nm"><%=contentResult[i].category.substring(2)%></p>
-							</td>
-							<td style="width: 6%">
-								<p class="nm"><%=contentResult[i].num%></p>
-							</td>
-							<td style="width: 8%">
-								<p class="nm"><%=contentResult[i].ftws%></p>
-							</td>
-							<td style="width: 8%">
-								<p class="nm"><%=contentResult[i].ctws%></p>
-							</td>
-							<td style="width: 10%">
-								<p class="nm"><%=contentResult[i].fexam%></p>
-							</td>
-							<td style="width: 10%">
-								<p class="nm"><%=contentResult[i].cexams%></p>
-							</td>
-							<td style="width: 5%">
-								<p class="nm">中級</p>
-							</td>
-							<td style="width: 5%">
-								<p class="nm"></p>
-							</td>
-							<td style="width: 10%">
-								<p class="nm"><%=contentResult[i].suggestion%></p>
-							</td>
-							<!--
-							<td>
-								<form id="adminFb<%=i%>" method="POST" action="/newSentEnd/adminFb">
-									<div id="confirmFbModal6<%=i%>" class="modal modal1">
-				                      <div class="modal-content1">
-				                        <p>確認送出</p>
-				                        <br><br>
-				                        <input type="button" onclick="fbSubmit('<%=i%>')" value="確認">
-				                        <input type="button" onclick="cancelSubmitE('<%=i%>')" value="取消">
-				                      </div>
-				                    </div>
-									////<input type="text" name="adminFb" value="<%=contentResult[i].admin_feedback%>">
-									<textarea class="tx1" id="fbtext" name="fbtext" rows="4"><%=contentResult[i].admin_feedback%></textarea>
-									<input class="tn" type="text" name="fbId" value="<%=contentResult[i].sid%>" readonly>
-								</form>
-							</td>
-							<td style="width: 3%">
-								<i class="material-icons" style="vertical-align: middle;cursor: pointer;font-size: 1.3vw;" onclick="confirmCheckerE('<%=i%>')">edit</i>
-							</td>
-							-->
-						</tr>
-					<%}%>
+				</table>
+				<table id="wTable" class="sTable">
 				</table>
 			</div>
 		</div>
@@ -458,15 +150,11 @@ button {
 				</div>
 				<div class="hide cbox" id="lang5">
 					<input type="checkbox" name="langAP5" value="1" checked onclick="flangAP5()">全選&nbsp;
-					<%for(var i=0;i < language.length;i++){%>
-						<input type="checkbox" name="language5[]" value="<%=language[i].language%>" onclick="checkLangAP5()" checked><%=language[i].language%>&nbsp;
-					<%}%>
+					<input type="checkbox" name="language5[]" value="" onclick="checkLangAP5()" checked>&nbsp;
 				</div>
 				<div class="hide cbox" id="cate5">
 					<input type="checkbox" name="cateAP5" value="1" checked onclick="fcateAP5()">全選&nbsp;
-					<%for(var i=0;i < category.length;i++){%>
-						<input type="checkbox" name="category5[]" value="<%=category[i].cate%>" onclick="checkCateAP5()" checked><%=category[i].cate%>&nbsp;
-					<%}%>
+					<input type="checkbox" name="category5[]" value="" onclick="checkCateAP5()" checked>&nbsp;
 				</div>
 				<div class="hide cbox" id="level5">
 					<input type="checkbox" name="levelAP5" value="1" checked onclick="flevelAP5()">全選&nbsp;
@@ -490,63 +178,15 @@ button {
 								例句
 							</td>
 						</tr>
-						<%for(var i=0;i < statResult.length;i++){%>
-						<%if(i%2==0){%>
-							<tr style="background-color: white">
-						<%}else{%>
-							<tr style="background-color: #E1E0E0;">
-						<%}%>
-							<td width="33%">
-								<%=statResult[i].dialect%>
-							</td>
-							<td width="33%">
-								<%=statResult[i].word.length%>
-							</td>
-							<td width="33%">
-								<p onclick="showCard('showExam<%=i%>')" style="cursor: pointer;"><%=statResult[i].example.length%></p>
-							</td>
-						</tr>
-						<%}%>
 					</table>
 				</div>
-				<%for(var i=0;i < statResult.length;i++){%>
-					<div class="card" id="showExam<%=i%>">
-						<div style="border-style: solid;border-top-width: 0;border-left-width: 0;border-right-width: 0;padding-bottom: 0.2vw;font-size: 2.5vw;">
-							<%=keyword%>
-						</div>
-						<table width="100%" style="font-size: 1.3vw;border-spacing: 0">
-						<%for(var j=0;j < statResult[i].example.length;j++){%>
-							<%if(j%2==1){%>
-							<tr style="background-color: #E1E0E0">
-							<%}else{%>
-							<tr style="background-color: white">
-							<%}%>
-								<td rowspan="2" style="padding-top: 5px;padding-left: 5px;">
-									<%=j+1%>
-								</td>
-								<td style="padding-top: 5px">
-									<%=statResult[i].example[j].ftws%>
-								</td>
-								<td style="padding-top: 5px;padding-right: 5px;">
-									<%=statResult[i].example[j].fexam%>
-								</td>
-							</tr>
-							<%if(j%2==1){%>
-							<tr style="background-color: #E1E0E0">
-							<%}else{%>
-							<tr style="background-color: white">
-							<%}%>
-								<td>
-									<%=statResult[i].example[j].ctws%>
-								</td>
-								<td>
-									<%=statResult[i].example[j].cexams%>
-								</td>
-							</tr>
-						<%}%>
-						</table>
+				<div class="card" id="">
+					<div style="border-style: solid;border-top-width: 0;border-left-width: 0;border-right-width: 0;padding-bottom: 0.2vw;font-size: 2.5vw;">
 					</div>
-				<%}%>	
+					<table width="100%" style="font-size: 1.3vw;border-spacing: 0">
+						
+					</table>
+				</div>
 			</div>
 		</div>
 		<div class="hide pbtm" id="6">
@@ -567,15 +207,11 @@ button {
 				</div>
 				<div class="hide cbox" id="lang6">
 					<input type="checkbox" name="langAP6" value="1" checked onclick="flangAP6()">全選&nbsp;
-					<%for(var i=0;i < language.length;i++){%>
-						<input type="checkbox" name="language6[]" value="<%=language[i].language%>" onclick="checkLangAP6()" checked><%=language[i].language%>&nbsp;
-					<%}%>
+					<input type="checkbox" name="language6[]" value="" onclick="checkLangAP6()" checked>&nbsp;
 				</div>
 				<div class="hide cbox" id="cate6">
 					<input type="checkbox" name="cateAP6" value="1" checked onclick="fcateAP6()">全選&nbsp;
-					<%for(var i=0;i < category.length;i++){%>
-						<input type="checkbox" name="category6[]" value="<%=category[i].cate%>" onclick="checkCateAP6()" checked><%=category[i].cate%>&nbsp;
-					<%}%>
+					<input type="checkbox" name="category6[]" value="" onclick="checkCateAP6()" checked>&nbsp;
 				</div>
 				<div class="hide cbox" id="level6">
 					<input type="checkbox" name="levelAP6" value="1" checked onclick="flevelAP6()">全選&nbsp;
@@ -586,7 +222,7 @@ button {
 				</div>
 			</form>
 			<div style="margin: 10px 0 10px 0;background-color: #D6D6D6; padding-left: 10px;">
-				<p style="font-size: 1.3vw">檢視結果共&nbsp;<a style="color: red;"><%=researchResult.length%></a>&nbsp;筆資料</p>
+				<p style="font-size: 1.3vw">檢視結果共&nbsp;<a style="color: red;"></a>&nbsp;筆資料</p>
 			</div>
 			<div>
 				<table style="width: 100%;font-size: 18px;text-align: center;border-spacing: 0">
@@ -637,130 +273,74 @@ button {
 						</td>
 						-->
 					</tr>
-					<%for(var i=0;i < researchResult.length;i++){%>
-						<%if(i%2==1){%>
-						<tr style="background-color: #E1E0E0;">
-						<%}else{%>
-						<tr style="background-color: white">
-						<%}%>
-							<td style="width: 2.5%">
-								<form id="delResh<%=i%>" method="POST" action="/newSentEnd/deleteResearch">
-									<div id="confirmModal6<%=i%>" class="modal modal1">
-				                      <div class="modal-content1">
-				                        <p>確認刪除？</p>
-				                        <br><br>
-				                        <input type="button" onclick="delSubmit6('<%=i%>')" value="確認">
-				                        <input type="button" onclick="cancelSubmit6('<%=i%>')" value="取消">
-				                      </div>
-				                    </div>
-									<input class="tn" type="text" name="delId6" value="<%=researchResult[i].id%>" readonly>
-								</form>
-								<i class="material-icons" style="vertical-align: middle;cursor: pointer;font-size: 1.1vw;" onclick="confirmChecker6('<%=i%>')">remove_circle_outline</i>
-							</td>
-							<td style="width: 5%">
-								<p class="nm"><%=i+1%></p>
-							</td>
-							<td style="width: 5%">
-								<p class="nm"><%=researchResult[i].family%></p>
-							</td>
-							<td style="width: 5%">
-								<p class="nm"><%=researchResult[i].dialect%></p>
-							</td>
-							<td style="width: 5%">
-								<p class="nm"><%=researchResult[i].category.substring(2)%></p>
-							</td>
-							<td style="width: 6%">
-								<p class="nm"><%=researchResult[i].num%></p>
-							</td>
-							<td style="width: 8%">
-								<p class="nm"><%=researchResult[i].ftws%></p>
-							</td>
-							<td style="width: 8%">
-								<p class="nm"><%=researchResult[i].ctws%></p>
-							</td>
-							<td style="width: 10%">
-								<p class="nm"><%=researchResult[i].fexam%></p>
-							</td>
-							<td style="width: 10%">
-								<p class="nm"><%=researchResult[i].cexams%></p>
-							</td>
-							<td style="width: 5%">
-								<p class="nm">中級</p>
-							</td>
-							<td style="width: 5%">
-								<p class="nm"></p>
-							</td>
-							<td style="width: 10%">
-								<p class="nm"><%=researchResult[i].suggestion%></p>
-							</td>
-							<!--
-							<td>
-								<form id="adminFb<%=i%>" method="POST" action="/newSentEnd/adminFb">
-									<div id="confirmFbModal6<%=i%>" class="modal modal1">
-				                      <div class="modal-content1">
-				                        <p>確認送出</p>
-				                        <br><br>
-				                        <input type="button" onclick="fbSubmit('<%=i%>')" value="確認">
-				                        <input type="button" onclick="cancelSubmitE('<%=i%>')" value="取消">
-				                      </div>
-				                    </div>
-									////<input type="text" name="adminFb" value="<%=researchResult[i].admin_feedback%>">
-									<textarea class="tx1" id="fbtext" name="fbtext" rows="4"><%=researchResult[i].admin_feedback%></textarea>
-									<input class="tn" type="text" name="fbId" value="<%=researchResult[i].sid%>" readonly>
-								</form>
-							</td>
-							<td style="width: 3%">
-								<i class="material-icons" style="vertical-align: middle;cursor: pointer;font-size: 1.3vw;" onclick="confirmCheckerE('<%=i%>')">edit</i>
-							</td>
-							-->
-						</tr>
-					<%}%>
+					
 				</table>
 			</div>
 		</div>
 		<div class="hide pbtm" id="7">
-			<form id="suggestForm" method="POST" action="/newSentEnd/suggestSearch">
-				<div class="header">
-					<div>
-						<p class="title">意見回饋與勘誤修正管理</p>
-					</div>
-					<div style="padding-left: 10px;">
-						<p class="floatL f1">語言<i class="material-icons downBtn" id="btn1" onclick="showLang7()">details</i></p>
-						<p class="floatL f1">類別<i class="material-icons downBtn" id="btn2" onclick="showCate7()">details</i></p>
-						<p class="floatL f1">級別<i class="material-icons downBtn" id="btn3" onclick="showLevel7()">details</i></p>
-		                <div class="sb1">
-	                        <input type="text" class="sb2" name="keyword7">
-	                        <i class="material-icons" id="searchBtn7" style="vertical-align: middle;font-size: 1.5vw;cursor: pointer;">search</i>
-		                </div>
-		            </div>
+			<div class="header">
+				<div>
+					<p class="title">意見回饋與勘誤修正管理</p>
 				</div>
-				<div class="hide cbox" id="lang7">
-					<input type="checkbox" name="langAP7" value="1" checked onclick="flangAP7()">全選&nbsp;
-					<%for(var i=0;i < language.length;i++){%>
-						<input type="checkbox" name="language7[]" value="<%=language[i].language%>" onclick="checkLangAP7()" checked><%=language[i].language%>&nbsp;
-					<%}%>
+				<div class="select-box">
+					<p class="f1">語言<i class="material-icons downBtn" id="btn1" onclick="show7('lang')">details</i></p>
+					<p class="f1">類別<i class="material-icons downBtn" id="btn2" onclick="show7('cate')">details</i></p>
+					<p class="f1">級別<i class="material-icons downBtn" id="btn3" onclick="show7('level')">details</i></p>
+          <div class="sb1">
+            <input type="text" class="sb2" name="keyword7">
+            <i class="material-icons" id="searchBtn7">search</i>
+          </div>
+	       </div>
+			</div>
+			<div id="lang7" class="select-item-box">
+				<div class="select-item">
+					<input type="checkbox" id="langAP7" value="1" checked onclick="langAP(7)">全選
 				</div>
-				<div class="hide cbox" id="cate7">
-					<input type="checkbox" name="cateAP7" value="1" checked onclick="fcateAP7()">全選&nbsp;
-					<%for(var i=0;i < category.length;i++){%>
-						<input type="checkbox" name="category7[]" value="<%=category[i].cate%>" onclick="checkCateAP7()" checked><%=category[i].cate%>&nbsp;
-					<%}%>
+			</div>
+			<div id="cate7" class="select-item-box">
+				<div class="select-item">
+					<input type="checkbox" id="cateAP7" value="1" checked onclick="cateAP(7)">全選
 				</div>
-				<div class="hide cbox" id="level7">
-					<input type="checkbox" name="levelAP7" value="1" checked onclick="flevelAP7()">全選&nbsp;
-					<input type="checkbox" name="level7[]" value="初級" onclick="checkLevelAP7()" checked>初級&nbsp;
-					<input type="checkbox" name="level7[]" value="中級" onclick="checkLevelAP7()" checked>中級&nbsp;
-					<input type="checkbox" name="level7[]" value="中高級" onclick="checkLevelAP7()" checked>中高級&nbsp;
-					<input type="checkbox" name="level7[]" value="高級" onclick="checkLevelAP7()" checked>高級
+			</div>
+			<div id="level7" class="select-item-box">
+				<div class="select-item">
+					<input type="checkbox" id="levelAP7" value="1" checked onclick="levelAP(7)">全選
 				</div>
-			</form>
-			<div style="margin: 10px 0 10px 0;background-color: #D6D6D6; padding-left: 10px;">
-				<p style="font-size: 1.3vw">檢視結果共&nbsp;<a style="color: red;"><%=suggestResult.length%></a>&nbsp;筆資料</p>
+				<div class="select-item">
+					<input type="checkbox" name="level7[]" value="初級" checked>初級&nbsp;
+					<input type="checkbox" name="level7[]" value="中級" checked>中級&nbsp;
+					<input type="checkbox" name="level7[]" value="中高級" checked>中高級&nbsp;
+					<input type="checkbox" name="level7[]" value="高級" checked>高級
+				</div>
+			</div>
+			<div class="sTitle">
+				<!--<p style="font-size: 1.3vw">檢視結果共&nbsp;<a style="color: red;"></a>&nbsp;筆資料</p>-->
+				<p id="sTitle-p"></p>
+        <div class="select01">
+          <i class="material-icons prev" onclick="prevpage(7)">navigate_before</i>第
+          <select id="page7" onchange="changepage(7)">
+          </select>頁
+          <i class="material-icons next" onclick="nextpage(7)">navigate_next</i>
+        </div>
+        <div class="select02">每頁顯示
+          <select id="rowPerPage7" onchange="changeRowPerPage(7)">
+            <option value="10">10</option>
+            <option value="25" selected>25</option>
+            <option value="50">50</option>
+          </select>筆
+        </div>
+			</div>
+			<div class="sub-sTitle">
+				<input type="checkbox" id="sEdit" onclick="openEdit(7)" value="ok">編輯
+				&nbsp;
+				<div onclick="suggestDownload()">
+					<i class="material-icons">get_app</i>下載
+				</div>
 			</div>
 			<div>
-				<table style="width: 100%;font-size: 18px;text-align: center;border-spacing: 0">
+				<table class="sTable">
 					<tr style="background-color: #A6A5A5;">
-						<td style="width: 2.5%">
+						<td class="sTable-td-edit" style="width: 7.5%">
 						</td>
 						<td style="width: 5%">
 							<p class="nm">序號</p>
@@ -768,13 +348,13 @@ button {
 						<td style="width: 5%">
 							<p class="nm">族別</p>
 						</td>
-						<td style="width: 5%">
+						<td style="width: 7.5%">
 							<p class="nm">方言</p>
 						</td>
-						<td style="width: 5%">
+						<td style="width: 7.5%">
 							<p class="nm">類別</p>
 						</td>
-						<td style="width: 6%">
+						<td style="width: 8%">
 							<p class="nm">編號</p>
 						</td>
 						<td style="width: 8%">
@@ -792,656 +372,40 @@ button {
 						<td style="width: 5%">
 							<p class="nm">級別</p>
 						</td>
-						<td style="width: 5%">
-							<p class="nm">備註</p>
-						</td>
 						<td style="width: 10%">
 							<p class="nm">意見回饋</p>
 						</td>
-						<td>
+						<td class="feedback">
 							<p class="nm">處理情形</p>
 						</td>
-						<td style="width: 3%">	
-						</td>
 					</tr>
-					<%for(var i=0;i < suggestResult.length;i++){%>
-						<%if(i%2==1){%>
-						<tr style="background-color: #E1E0E0;">
-						<%}else{%>
-						<tr style="background-color: white">
-						<%}%>
-							<td style="width: 2.5%">
-								<form id="delSug<%=i%>" method="POST" action="/newSentEnd/deleteSuggest">
-									<div id="confirmModal7<%=i%>" class="modal modal1">
-				                      <div class="modal-content1">
-				                        <p>確認刪除？</p>
-				                        <br><br>
-				                        <input type="button" onclick="delSubmit7('<%=i%>')" value="確認">
-				                        <input type="button" onclick="cancelSubmit7('<%=i%>')" value="取消">
-				                      </div>
-				                    </div>
-									<input class="tn" type="text" name="delId7" value="<%=suggestResult[i].sid%>" readonly>
-								</form>
-								<i class="material-icons" style="vertical-align: middle;cursor: pointer;font-size: 1.1vw;" onclick="confirmChecker7('<%=i%>')">remove_circle_outline</i>
-							</td>
-							<td style="width: 5%">
-								<p class="nm"><%=i+1%></p>
-							</td>
-							<td style="width: 5%">
-								<p class="nm"><%=suggestResult[i].family%></p>
-							</td>
-							<td style="width: 5%">
-								<p class="nm"><%=suggestResult[i].dialect%></p>
-							</td>
-							<td style="width: 5%">
-								<p class="nm"><%=suggestResult[i].category.substring(2)%></p>
-							</td>
-							<td style="width: 6%">
-								<p class="nm"><%=suggestResult[i].num%></p>
-							</td>
-							<td style="width: 8%">
-								<p class="nm"><%=suggestResult[i].ftws%></p>
-							</td>
-							<td style="width: 8%">
-								<p class="nm"><%=suggestResult[i].ctws%></p>
-							</td>
-							<td style="width: 10%">
-								<p class="nm"><%=suggestResult[i].fexam%></p>
-							</td>
-							<td style="width: 10%">
-								<p class="nm"><%=suggestResult[i].cexams%></p>
-							</td>
-							<td style="width: 5%">
-								<p class="nm">中級</p>
-							</td>
-							<td style="width: 5%">
-								<p class="nm"></p>
-							</td>
-							<td style="width: 10%">
-								<p class="nm"><%=suggestResult[i].suggestion%></p>
-							</td>
-							<td>
-								<form id="adminFb<%=i%>" method="POST" action="/newSentEnd/adminFb">
-									<div id="confirmFbModal<%=i%>" class="modal modal1">
-				                      <div class="modal-content1">
-				                        <p>確認送出</p>
-				                        <br><br>
-				                        <input type="button" onclick="fbSubmit('<%=i%>')" value="確認">
-				                        <input type="button" onclick="cancelSubmitE('<%=i%>')" value="取消">
-				                      </div>
-				                    </div>
-									<!--<input type="text" name="adminFb" value="<%=suggestResult[i].admin_feedback%>">-->
-									<textarea class="tx1" id="fbtext" name="fbtext" rows="4"><%=suggestResult[i].admin_feedback%></textarea>
-									<input class="tn" type="text" name="fbId" value="<%=suggestResult[i].sid%>" readonly>
-								</form>
-							</td>
-							<td style="width: 3%">
-								<i class="material-icons" style="vertical-align: middle;cursor: pointer;font-size: 1.3vw;" onclick="confirmCheckerE('<%=i%>')">edit</i>
-							</td>
-						</tr>
-					<%}%>
+				</table>
+				<table id="sTable" class="sTable">
 				</table>
 			</div>
 		</div>
 	</div>
+	<!-- modal -->
+	<div id="confirmModal" class="modal modal1" data-id="" data-fb="">
+    <div class="modal-content1">
+	    <p>確認送出</p>
+	    <br><br>
+	    <input type="button" onclick="suggestSubmit()" value="確認">
+	    <input type="button" onclick="suggestCancel()" value="取消">
+    </div>
+  </div>
+  <div id="deleteModal" class="modal modal1" data-id="">
+    <div class="modal-content1">
+	    <p>確認刪除</p>
+	    <br><br>
+	    <input type="button" onclick="deleteSuggest()" value="確認">
+	    <input type="button" onclick="deleteCancel()" value="取消">
+    </div>
+  </div>
 </body>
-<script src="/dashboardAssets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="/newSentEnd/main.js" type="text/javascript"></script>
 
-<%for(var i=0;i < tabOpen.length;i++){%>
-	<%if(tabOpen[i]==1){%>
-		<script type="text/javascript">document.getElementById("<%=i+1%>").style.display = "block";</script>
-		<%break;%>
-	<%}%>
-<%}%>
-<script type="text/javascript">
-	/*const sidebar = document.getElementById('sidebar');
-	const button = document.getElementById('toggle');
-
-	button.addEventListener('click', _ => {
-	  sidebar.classList.toggle('collapsed');
-	});*/
-
-	var srlen = <%=suggestResult.length%>;
-	for(var i=0;i<srlen;i++){
-
-	}
-
-	$( "#searchBtn4" ).click(function() {
-	    $( "#contentForm" ).submit();
-	});
-	$( "#searchBtn6" ).click(function() {
-	    $( "#researchForm" ).submit();
-	});
-	$( "#searchBtn7" ).click(function() {
-	    $( "#suggestForm" ).submit();
-	});
-
-	function showCard(card) {
-		for(var i=0;i< <%=statResult.length%>;i++){
-			document.getElementById(`showExam${i}`).style.display = "none";
-		}
-		document.getElementById(card).style.display = "block";
-	}
-
-	function delSubmit4(i) {
-	    $( `#delCont${i}` ).submit();
-	}
-	function delSubmit6(i) {
-	    $( `#delResh${i}` ).submit();
-	}
-	function delSubmit7(i) {
-	    $( `#delSug${i}` ).submit();
-	}
-
-	function fbSubmit(i) {
-	    $( `#adminFb${i}` ).submit();
-	}
-
-	function sidebarToggle() {
-		var sidebar = document.getElementById("sidebar");
-		var content = document.getElementById("content");
-		var sbStyle = window.getComputedStyle(sidebar);
-		var sbWidth = sbStyle.getPropertyValue('width');
-		if(sbWidth!="0px"){
-			$("#sidebar").animate({width: '0%'}, "fast");
-			content.style.width = "90%";
-		}else{
-			$("#sidebar").animate({width: '20%'}, "fast");
-			content.style.width = "70%";
-		}
-	}
-
-	function confirmChecker4(i){
-      document.getElementById(`confirmModal4${i}`).style.display = "block";
-    };
-
-    function cancelSubmit4(i){
-      document.getElementById(`confirmModal4${i}`).style.display = "none";
-    };
-
-	function confirmChecker6(i){
-      document.getElementById(`confirmModal6${i}`).style.display = "block";
-    };
-
-    function cancelSubmit6(i){
-      document.getElementById(`confirmModal6${i}`).style.display = "none";
-    };
-
-	function confirmChecker7(i){
-      document.getElementById(`confirmModal7${i}`).style.display = "block";
-    };
-
-    function cancelSubmit7(i){
-      document.getElementById(`confirmModal7${i}`).style.display = "none";
-    };
-
-    function confirmCheckerE(i){
-      document.getElementById(`confirmFbModal${i}`).style.display = "block";
-    };
-
-    function cancelSubmitE(i){
-      document.getElementById(`confirmFbModal${i}`).style.display = "none";
-    };
-
-    function checkLangAP4() {
-	    var lang=document.getElementsByName("language4[]");
-	    var isAP = true;
-	    for(var i=0;i<lang.length;i++){
-	    	if(lang[i].checked==false){
-	    		isAP = false;
-	    	}
-		}
-		document.getElementsByName("langAP4")[0].checked = isAP;
-	}
-	function checkCateAP4() {
-	    var cate=document.getElementsByName("category4[]");
-	    var isAP = true;
-	    for(var i=0;i<cate.length;i++){
-	    	if(cate[i].checked==false){
-	    		isAP = false;
-	    	}
-		}
-		document.getElementsByName("cateAP4")[0].checked = isAP;
-	}
-	function checkLevelAP4() {
-	    var level=document.getElementsByName("level4[]");
-	    var isAP = true;
-	    for(var i=0;i<level.length;i++){
-	    	if(level[i].checked==false){
-	    		isAP = false;
-	    	}
-		}
-		document.getElementsByName("levelAP4")[0].checked = isAP;
-	}
-	function flangAP4(){
-		var ap=document.getElementsByName("langAP4")[0].checked;
-		var lang=document.getElementsByName("language4[]");
-		if(ap==true){
-			for(var i=0;i<lang.length;i++){
-				lang[i].checked = true;
-			}
-		}else{
-			for(var i=0;i<lang.length;i++){
-				lang[i].checked = false;
-			}
-		}
-	}
-	function fcateAP4(){
-		var ap=document.getElementsByName("cateAP4")[0].checked;
-		var cate=document.getElementsByName("category4[]");
-		if(ap==true){
-			for(var i=0;i<cate.length;i++){
-				cate[i].checked = true;
-			}
-		}else{
-			for(var i=0;i<cate.length;i++){
-				cate[i].checked = false;
-			}
-		}
-	}
-	function flevelAP4(){
-		var ap=document.getElementsByName("levelAP4")[0].checked;
-		var level=document.getElementsByName("level4[]");
-		if(ap==true){
-			for(var i=0;i<level.length;i++){
-				level[i].checked = true;
-			}
-		}else{
-			for(var i=0;i<level.length;i++){
-				level[i].checked = false;
-			}
-		}
-	}
-	function showLang4(){
-		if(document.getElementById("lang4").style.display == "block"){
-			document.getElementById("lang4").style.display = "none";
-		}else{
-			document.getElementById("lang4").style.display = "block";
-			document.getElementById("cate4").style.display = "none";
-			document.getElementById("level4").style.display = "none";
-		}
-	}
-	function showCate4(){
-		if(document.getElementById("cate4").style.display == "block"){
-			document.getElementById("cate4").style.display = "none";
-		}else{
-			document.getElementById("lang4").style.display = "none";
-			document.getElementById("cate4").style.display = "block";
-			document.getElementById("level4").style.display = "none";
-		}
-	}
-	function showLevel4(){
-		if(document.getElementById("level4").style.display == "block"){
-			document.getElementById("level4").style.display = "none";
-		}else{
-			document.getElementById("lang4").style.display = "none";
-			document.getElementById("cate4").style.display = "none";
-			document.getElementById("level4").style.display = "block";
-		}
-	}
-
-	function checkLangAP5() {
-	    var lang=document.getElementsByName("language5[]");
-	    var isAP = true;
-	    for(var i=0;i<lang.length;i++){
-	    	if(lang[i].checked==false){
-	    		isAP = false;
-	    	}
-		}
-		document.getElementsByName("langAP5")[0].checked = isAP;
-	}
-	function checkCateAP5() {
-	    var cate=document.getElementsByName("category5[]");
-	    var isAP = true;
-	    for(var i=0;i<cate.length;i++){
-	    	if(cate[i].checked==false){
-	    		isAP = false;
-	    	}
-		}
-		document.getElementsByName("cateAP5")[0].checked = isAP;
-	}
-	function checkLevelAP5() {
-	    var level=document.getElementsByName("level5[]");
-	    var isAP = true;
-	    for(var i=0;i<level.length;i++){
-	    	if(level[i].checked==false){
-	    		isAP = false;
-	    	}
-		}
-		document.getElementsByName("levelAP5")[0].checked = isAP;
-	}
-	function flangAP5(){
-		var ap=document.getElementsByName("langAP5")[0].checked;
-		var lang=document.getElementsByName("language5[]");
-		if(ap==true){
-			for(var i=0;i<lang.length;i++){
-				lang[i].checked = true;
-			}
-		}else{
-			for(var i=0;i<lang.length;i++){
-				lang[i].checked = false;
-			}
-		}
-	}
-	function fcateAP5(){
-		var ap=document.getElementsByName("cateAP5")[0].checked;
-		var cate=document.getElementsByName("category5[]");
-		if(ap==true){
-			for(var i=0;i<cate.length;i++){
-				cate[i].checked = true;
-			}
-		}else{
-			for(var i=0;i<cate.length;i++){
-				cate[i].checked = false;
-			}
-		}
-	}
-	function flevelAP5(){
-		var ap=document.getElementsByName("levelAP5")[0].checked;
-		var level=document.getElementsByName("level5[]");
-		if(ap==true){
-			for(var i=0;i<level.length;i++){
-				level[i].checked = true;
-			}
-		}else{
-			for(var i=0;i<level.length;i++){
-				level[i].checked = false;
-			}
-		}
-	}
-	function showLang5(){
-		if(document.getElementById("lang5").style.display == "block"){
-			document.getElementById("lang5").style.display = "none";
-		}else{
-			document.getElementById("lang5").style.display = "block";
-			document.getElementById("cate5").style.display = "none";
-			document.getElementById("level5").style.display = "none";
-		}
-	}
-	function showCate5(){
-		if(document.getElementById("cate5").style.display == "block"){
-			document.getElementById("cate5").style.display = "none";
-		}else{
-			document.getElementById("lang5").style.display = "none";
-			document.getElementById("cate5").style.display = "block";
-			document.getElementById("level5").style.display = "none";
-		}
-	}
-	function showLevel5(){
-		if(document.getElementById("level5").style.display == "block"){
-			document.getElementById("level5").style.display = "none";
-		}else{
-			document.getElementById("lang5").style.display = "none";
-			document.getElementById("cate5").style.display = "none";
-			document.getElementById("level5").style.display = "block";
-		}
-	}
-
-    function checkLangAP6() {
-	    var lang=document.getElementsByName("language6[]");
-	    var isAP = true;
-	    for(var i=0;i<lang.length;i++){
-	    	if(lang[i].checked==false){
-	    		isAP = false;
-	    	}
-		}
-		document.getElementsByName("langAP6")[0].checked = isAP;
-	}
-	function checkCateAP6() {
-	    var cate=document.getElementsByName("category6[]");
-	    var isAP = true;
-	    for(var i=0;i<cate.length;i++){
-	    	if(cate[i].checked==false){
-	    		isAP = false;
-	    	}
-		}
-		document.getElementsByName("cateAP6")[0].checked = isAP;
-	}
-	function checkLevelAP6() {
-	    var level=document.getElementsByName("level6[]");
-	    var isAP = true;
-	    for(var i=0;i<level.length;i++){
-	    	if(level[i].checked==false){
-	    		isAP = false;
-	    	}
-		}
-		document.getElementsByName("levelAP6")[0].checked = isAP;
-	}
-	function flangAP6(){
-		var ap=document.getElementsByName("langAP6")[0].checked;
-		var lang=document.getElementsByName("language6[]");
-		if(ap==true){
-			for(var i=0;i<lang.length;i++){
-				lang[i].checked = true;
-			}
-		}else{
-			for(var i=0;i<lang.length;i++){
-				lang[i].checked = false;
-			}
-		}
-	}
-	function fcateAP6(){
-		var ap=document.getElementsByName("cateAP6")[0].checked;
-		var cate=document.getElementsByName("category6[]");
-		if(ap==true){
-			for(var i=0;i<cate.length;i++){
-				cate[i].checked = true;
-			}
-		}else{
-			for(var i=0;i<cate.length;i++){
-				cate[i].checked = false;
-			}
-		}
-	}
-	function flevelAP6(){
-		var ap=document.getElementsByName("levelAP6")[0].checked;
-		var level=document.getElementsByName("level6[]");
-		if(ap==true){
-			for(var i=0;i<level.length;i++){
-				level[i].checked = true;
-			}
-		}else{
-			for(var i=0;i<level.length;i++){
-				level[i].checked = false;
-			}
-		}
-	}
-	function showLang6(){
-		if(document.getElementById("lang6").style.display == "block"){
-			document.getElementById("lang6").style.display = "none";
-		}else{
-			document.getElementById("lang6").style.display = "block";
-			document.getElementById("cate6").style.display = "none";
-			document.getElementById("level6").style.display = "none";
-		}
-	}
-	function showCate6(){
-		if(document.getElementById("cate6").style.display == "block"){
-			document.getElementById("cate6").style.display = "none";
-		}else{
-			document.getElementById("lang6").style.display = "none";
-			document.getElementById("cate6").style.display = "block";
-			document.getElementById("level6").style.display = "none";
-		}
-	}
-	function showLevel6(){
-		if(document.getElementById("level6").style.display == "block"){
-			document.getElementById("level6").style.display = "none";
-		}else{
-			document.getElementById("lang6").style.display = "none";
-			document.getElementById("cate6").style.display = "none";
-			document.getElementById("level6").style.display = "block";
-		}
-	}
-
-	function checkLangAP7() {
-	    var lang=document.getElementsByName("language7[]");
-	    var isAP = true;
-	    for(var i=0;i<lang.length;i++){
-	    	if(lang[i].checked==false){
-	    		isAP = false;
-	    	}
-		}
-		document.getElementsByName("langAP7")[0].checked = isAP;
-	}
-	function checkCateAP7() {
-	    var cate=document.getElementsByName("category7[]");
-	    var isAP = true;
-	    for(var i=0;i<cate.length;i++){
-	    	if(cate[i].checked==false){
-	    		isAP = false;
-	    	}
-		}
-		document.getElementsByName("cateAP7")[0].checked = isAP;
-	}
-	function checkLevelAP7() {
-	    var level=document.getElementsByName("level7[]");
-	    var isAP = true;
-	    for(var i=0;i<level.length;i++){
-	    	if(level[i].checked==false){
-	    		isAP = false;
-	    	}
-		}
-		document.getElementsByName("levelAP7")[0].checked = isAP;
-	}
-	function flangAP7(){
-		var ap=document.getElementsByName("langAP7")[0].checked;
-		var lang=document.getElementsByName("language7[]");
-		if(ap==true){
-			for(var i=0;i<lang.length;i++){
-				lang[i].checked = true;
-			}
-		}else{
-			for(var i=0;i<lang.length;i++){
-				lang[i].checked = false;
-			}
-		}
-	}
-	function fcateAP7(){
-		var ap=document.getElementsByName("cateAP7")[0].checked;
-		var cate=document.getElementsByName("category7[]");
-		if(ap==true){
-			for(var i=0;i<cate.length;i++){
-				cate[i].checked = true;
-			}
-		}else{
-			for(var i=0;i<cate.length;i++){
-				cate[i].checked = false;
-			}
-		}
-	}
-	function flevelAP7(){
-		var ap=document.getElementsByName("levelAP7")[0].checked;
-		var level=document.getElementsByName("level7[]");
-		if(ap==true){
-			for(var i=0;i<level.length;i++){
-				level[i].checked = true;
-			}
-		}else{
-			for(var i=0;i<level.length;i++){
-				level[i].checked = false;
-			}
-		}
-	}
-	function showLang7(){
-		if(document.getElementById("lang7").style.display == "block"){
-			document.getElementById("lang7").style.display = "none";
-		}else{
-			document.getElementById("lang7").style.display = "block";
-			document.getElementById("cate7").style.display = "none";
-			document.getElementById("level7").style.display = "none";
-		}
-	}
-	function showCate7(){
-		if(document.getElementById("cate7").style.display == "block"){
-			document.getElementById("cate7").style.display = "none";
-		}else{
-			document.getElementById("lang7").style.display = "none";
-			document.getElementById("cate7").style.display = "block";
-			document.getElementById("level7").style.display = "none";
-		}
-	}
-	function showLevel7(){
-		if(document.getElementById("level7").style.display == "block"){
-			document.getElementById("level7").style.display = "none";
-		}else{
-			document.getElementById("lang7").style.display = "none";
-			document.getElementById("cate7").style.display = "none";
-			document.getElementById("level7").style.display = "block";
-		}
-	}
-
-	function show1(){
-		document.getElementById("1").style.display = "block";
-		document.getElementById("2").style.display = "none";
-		document.getElementById("3").style.display = "none";
-		document.getElementById("4").style.display = "none";
-		document.getElementById("5").style.display = "none";
-		document.getElementById("6").style.display = "none";
-		document.getElementById("7").style.display = "none";
-	}
-	function show2(){
-		document.getElementById("1").style.display = "none";
-		document.getElementById("2").style.display = "block";
-		document.getElementById("3").style.display = "none";
-		document.getElementById("4").style.display = "none";
-		document.getElementById("5").style.display = "none";
-		document.getElementById("6").style.display = "none";
-		document.getElementById("7").style.display = "none";
-	}
-	function show3(){
-		document.getElementById("1").style.display = "none";
-		document.getElementById("2").style.display = "none";
-		document.getElementById("3").style.display = "block";
-		document.getElementById("4").style.display = "none";
-		document.getElementById("5").style.display = "none";
-		document.getElementById("6").style.display = "none";
-		document.getElementById("7").style.display = "none";
-	}
-	function show4(){
-		document.getElementById("1").style.display = "none";
-		document.getElementById("2").style.display = "none";
-		document.getElementById("3").style.display = "none";
-		document.getElementById("4").style.display = "block";
-		document.getElementById("5").style.display = "none";
-		document.getElementById("6").style.display = "none";
-		document.getElementById("7").style.display = "none";
-	}
-	function show5(){
-		document.getElementById("1").style.display = "none";
-		document.getElementById("2").style.display = "none";
-		document.getElementById("3").style.display = "none";
-		document.getElementById("4").style.display = "none";
-		document.getElementById("5").style.display = "block";
-		document.getElementById("6").style.display = "none";
-		document.getElementById("7").style.display = "none";
-	}
-	function show6(){
-		document.getElementById("1").style.display = "none";
-		document.getElementById("2").style.display = "none";
-		document.getElementById("3").style.display = "none";
-		document.getElementById("4").style.display = "none";
-		document.getElementById("5").style.display = "none";
-		document.getElementById("6").style.display = "block";
-		document.getElementById("7").style.display = "none";
-	}
-	function show7(){
-		document.getElementById("1").style.display = "none";
-		document.getElementById("2").style.display = "none";
-		document.getElementById("3").style.display = "none";
-		document.getElementById("4").style.display = "none";
-		document.getElementById("5").style.display = "none";
-		document.getElementById("6").style.display = "none";
-		document.getElementById("7").style.display = "block";
-	}
-
-	/*$('#suggestForm').on('keyup keypress', function(e) {
-      var keyCode = e.keyCode || e.which;
-      if (keyCode === 13) { 
-        e.preventDefault();
-        return false;
-      }
-    });*/
-</script>
 </html>

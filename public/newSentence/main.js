@@ -65,8 +65,8 @@ function initWords(lang, cate, keyword, pages) {
     }
     if(pages) $('#page1').val(pages);
 
-    $('#title-p').html('');
-    $('#title-p').append(`主題：${$('#currcate').val()}，&nbsp;共 ${result[0][0]['COUNT(*)']} 筆`);
+    $('#learn #title-p').html('');
+    $('#learn #title-p').append(`主題：${$('#currcate').val()}，&nbsp;共 ${result[0][0]['COUNT(*)']} 筆`);
 
     var tmp = '';
     var levelNum = 0;
@@ -124,17 +124,33 @@ function initWords(lang, cate, keyword, pages) {
 }
 
 function initSuggest() {
+  let pages = $('#page2').val();
+  if(!pages) pages = 1;
+  let rowPerPage = $('#rowPerPage2').val();
+  let data = {pages: pages, rowPerPage: rowPerPage};
   (async () => {
-    let result = await getSuggestAjax();
+    let result = await getSuggestAjax(data);
+
+    let page = Math.ceil(parseInt(result[0][0]['COUNT(*)'], 10)/rowPerPage);
+    $('#page2').html('');
+    for(var i=1;i<=page;i++){
+      $('#page2').append(`
+        <option value="${i}">${i}</option>
+      `);
+    }
+    if(pages) $('#page2').val(pages);
+
+    $('#suggest #title-p').html('');
+    $('#suggest #title-p').append(`主題：${$('#currcate').val()}，&nbsp;共 ${result[0][0]['COUNT(*)']} 筆`);
 
     var tmp = '';
     var dateObj, month, day, year, newdate, tmpFeedback;
-    for(var i=0;i < result.length;i++){
-      newdate = result[i].time.substr(0, 10);
-      if(result[i].admin_feedback==""){
+    for(var i=0;i < result[1].length;i++){
+      newdate = result[1][i].time.substr(0, 10);
+      if(result[1][i].admin_feedback==""){
         tmpFeedback = `<p>審查中</p>`;
       }else{
-        tmpFeedback = `<p class="btn2" onclick="showFeedback(this)" data-result="${result[i].admin_feedback}">審查完成</p>`
+        tmpFeedback = `<p class="btn2" onclick="showFeedback(this)" data-result="${result[1][i].admin_feedback}">審查完成</p>`
       }
 
       if(i%2==0){
@@ -153,19 +169,19 @@ function initSuggest() {
               ${newdate}
             </td>
             <td class="scol3">
-              ${result[i].ftws}
+              ${result[1][i].ftws}
             </td>
             <td class="scol4">
-              ${result[i].fexam}
+              ${result[1][i].fexam}
             </td>
             <td rowspan = "2" class="scol5">
               <p>初級</p>
             </td>
             <td rowspan = "2" class="scol6">
-              ${result[i].suggestion}
+              ${result[1][i].suggestion}
             </td>
             <td rowspan = "2" class="scol7">
-              ${result[i].user}
+              ${result[1][i].user}
             </td>
             <td rowspan = "2" class="scol8">
               ${tmpFeedback}
@@ -173,10 +189,10 @@ function initSuggest() {
           </tr>
           <tr>
             <td class="scol3">
-              ${result[i].ctws}
+              ${result[1][i].ctws}
             </td>
             <td class="scol4">
-              ${result[i].cexam}
+              ${result[1][i].cexam}
             </td>
           </tr>
         </table>
@@ -246,12 +262,28 @@ async function getWordsAjax(lang, cate, keyword, blurSearch, pages, rowPerPage) 
   }
 }
 
-async function getSuggestAjax() {
+async function getSuggestAjax(data) {
   let result;
   try {
     result = await $.ajax({
       url: '/newSentence/getSuggest',
-      type: 'GET'
+      type: 'POST',
+      data: data
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+async function wordsDownloadAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newSentence/wordsDownload',
+      type: 'POST',
+      data: data
     });
     return result;
   } catch (error) {
@@ -281,7 +313,18 @@ for(var i=0;i < Math.ceil(parseInt("<%=tpage%>", 10)/50);i++){
 }
 
 $('#cmd').click(function () {
-  window.open("http://localhost:3030/newSentence/download/<%=deflang%>+<%=defcate%>");
+  let lang = $('#currlang').val();
+  let cate = $('#currcate').val();
+  let data = {lang: lang, cate: cate};
+  let result, tmpResult;
+  result = [{dialect: '方言', category: '分類', ftws: '族語詞彙', ctws: '中文詞彙', fexam: '族語例句', cexam: '中文例句', memo: '備註'}];
+  (async () => {
+    tmpResult = await wordsDownloadAjax(data);
+    for(let i=0;i<tmpResult.length;i++){
+      result.push(tmpResult[i]);
+    }
+    JSONToCSVConvertor(result, '下載', false);
+  })()
 });
 
 var suggestModal = document.getElementById("suggestModal");
@@ -354,6 +397,7 @@ function showSuggest(){
   $('#lbtn').css({'background-color': '#f1f5f6'});
   $('#sbtn').css({'background-color': '#d5dfe3'});
   $('#dbtn').css({'background-color': '#f1f5f6'});
+  initSuggest();
 }
 
 function showSuggestModal(id, ftws, ctws, fexam, cexam, category){
@@ -451,6 +495,31 @@ function changeRowPerPage() {
   initWords($('#currlang').val(), $('#currcate').val(), $('#keyword').val(), '1');
 }
 
+function changepage2() {
+  initSuggest();
+}
+
+function prevpage2() {
+  let currpage = parseInt($('#page').val(), 10);
+  if(currpage>1){
+    $('#page2').val(currpage-1);
+    initSuggest();
+  }
+}
+function nextpage2() {
+  let currpage = parseInt($('#page2').val(), 10);
+  let maxpage = $('#page2').children().length;
+  if(currpage < maxpage){
+    $('#page2').val(currpage+1);
+    initSuggest();
+  }
+}
+
+function changeRowPerPage2() {
+  $('#page2').val('1');
+  initSuggest();
+}
+
 function closeLang() {
   $('.sublang').css('display', 'none');
   $('.langbox').css('display', 'none');
@@ -480,4 +549,74 @@ $("#keyword").keypress(function(e) {
     }
 });
 
+function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
+  var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+    
+  var CSV = '';    
+  //Set Report title in first row or line    
+  CSV += ReportTitle + '\r\n\n';
+
+  //This condition will generate the Label/Header
+  if (ShowLabel) {
+    var row = "";
+    
+    //This loop will extract the label from 1st index of on array
+    for (var index in arrData[0]) {
+      
+      //Now convert each value to string and comma-seprated
+      row += index + ',';
+    }
+
+    row = row.slice(0, -1);
+    
+    //append Label row with line break
+    CSV += row + '\r\n';
+  }
+  
+  //1st loop is to extract each row
+  for (var i = 0; i < arrData.length; i++) {
+    var row = "";
+    
+    //2nd loop will extract each column and convert it in string comma-seprated
+    for (var index in arrData[i]) {
+      row += '"' + arrData[i][index] + '",';
+    }
+
+    row.slice(0, row.length - 1);
+    
+    //add a line break after each row
+    CSV += row + '\r\n';
+  }
+
+  if (CSV == '') {        
+    alert("Invalid data");
+    return;
+  }   
+  
+  //Generate a file name
+  var fileName = "詞表_";
+  //this will remove the blank-spaces from the title and replace it with an underscore
+  fileName += ReportTitle.replace(/ /g,"_");   
+  
+  //Initialize file format you want csv or xls
+  var uri = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURI(CSV);
+  
+  // Now the little tricky part.
+  // you can use either>> window.open(uri);
+  // but this will not work in some browsers
+  // or you will not get the correct file extension    
+  
+  //this trick will generate a temp <a /> tag
+  var link = document.createElement("a");    
+  link.href = uri;
+  
+  //set the visibility hidden so it will not effect on your web-layout
+  link.style = "visibility:hidden";
+  link.download = fileName + ".csv";
+  
+  //this part will append the anchor tag and remove it after automatic click
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 

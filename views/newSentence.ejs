@@ -113,9 +113,7 @@
           <div class="modal-content1">
           <p>確認送出</p>
           <br><br>
-          <button onclick="suggestSubmit()">
-            確認
-          </button>
+          <input type="button" onclick="suggestSubmit()" value="確認">
           <input type="button" onclick="cancelSubmit()" value="取消">
           </div>
         </div>
@@ -269,6 +267,20 @@
 
     <div class="divhide" id="suggest">
       <div class="title" style="height: 28px;">
+        <p id="title-p"></p>
+        <div class="select01">
+          <i class="material-icons prev" onclick="prevpage2()">navigate_before</i>第
+          <select id="page2" onchange="changepage2()">
+          </select>頁
+          <i class="material-icons next" onclick="nextpage2()">navigate_next</i>
+        </div>
+        <div class="select02">每頁顯示
+          <select id="rowPerPage2" onchange="changeRowPerPage2()">
+            <option value="10">10</option>
+            <option value="25" selected>25</option>
+            <option value="50">50</option>
+          </select>筆
+        </div>
       </div>
       <div style="background-color: #dcc9cb">
         <table style="width: 100%;font-size: 20px;text-align: center;">
