@@ -199,18 +199,17 @@ router.post('/suggest', async function(req, res) {
 
 router.post('/wordsDownload', async function(req, res) {
   var {lang, cate, level} = req.body;
-  if(lang.substr(1, lang.length-2)){
+  if(lang&&lang.substr(1, lang.length-2)){
     lang = `AND tw.dialect IN (${lang.substr(1, lang.length-2)})`;
   }else{
     lang = '';
   }
-  if(cate.substr(1, cate.length-2)){
+  if(cate&&cate.substr(1, cate.length-2)){
     cate = `AND tw.category IN (${cate.substr(1, cate.length-2)})`;
   }else{
     cate = '';
   }
   //level = ` AND tw.dialect IN (${level.substr(1, level.length-2)})`;
-
   var qry = `
               SELECT * FROM tow_words tw
               WHERE 1
@@ -219,6 +218,7 @@ router.post('/wordsDownload', async function(req, res) {
             `;
   database.conn.query(qry, function (err, result) {
     res.send(result);
+    console.log(result);
   })
 });
 

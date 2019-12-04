@@ -195,13 +195,13 @@ function initStatusOperator() {
             <input class="nm1" type="text" value="${result[i].sid}">
           </td>
           <td style="width: 15%">
-            <p class="nm clickable">${result[i].dialect}語詞表資料</p>
+            <p class="nm clickable" onclick="allDataDownload('${result[i].dialect}')">${result[i].dialect}語詞表資料</p>
           </td>
           <td style="width: 10%">
             <p class="nm">${result[i].username}</p>
           </td>
           <td style="width: 15%">
-            <p class="nm clickable">${result[i].dialect}語詞表平台</p>
+            <p class="nm clickable" onclick="goPlatform()">${result[i].dialect}語詞表平台</p>
           </td>
           <td class="op-pw" style="width: 10%">
             <input class="nm1" type="text" value="${result[i].password}">
@@ -675,6 +675,19 @@ function initWords() {
       }
     })()
   });
+}
+
+function allDataDownload(dialect) {
+  let tmpResult;
+  let data = {lang: `"'${dialect}'"`};
+  let result = [{id: '序號', sid: '編號', dialect: '方言', category: '分類', snum: 'snum', ftws: '族語詞彙', ctws: '中文詞彙', fexam: '族語例句', cexam: '中文例句', LanLevelE: '初級', LanLevelM: '中級', LanLevelMH: '中高級', LanLevelH: '高級', workcheck: '審查', memo: '備註'}];
+  (async () => {
+    tmpResult = await wordsDownloadAjax(data);
+    for(let i=0;i<tmpResult.length;i++){
+      result.push(tmpResult[i]);
+    }
+    JSONToCSVConvertor(result, '詞表資料', false);
+  })()
 }
 
 function operatorSearch() {
