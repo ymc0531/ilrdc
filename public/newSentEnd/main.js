@@ -7,6 +7,7 @@ $(document).ready(function(){
   initLanguage();
   initCategory();
   initOperator();
+  initStatusOperator();
   initSuggest();
   initWords();
   initAddOperatorFamily();
@@ -23,9 +24,15 @@ $(document).ready(function(){
   });
 
   $('.confirm-btn').click(function(){
-    $('#confirmModal').css('display', 'block');
+    $('#confirmModal').css('display', 'flex');
   });
+
+  //test();
 })
+
+function test() {
+  $('#applyOperatorModal').css('display', 'flex');
+}
 
 function initAddOperatorFamily() {
   (async () => {
@@ -129,9 +136,9 @@ function initOperator() {
     $('#workTable').html('');    
     for(let i=0;i<result.length;i++){
       if(result[i].status==100){
-        status = `<p class="nm done">已完成</p>`
+        status = `<p class="nm done" onclick="">已完成</p>`
       }else{
-        status = `<p class="nm undone">未完成 ${result[i].status}%</p>`
+        status = `<p class="nm undone" onclick="">未完成 ${result[i].status}%</p>`
       }
       $('#workTable').append(`
         <tr>
@@ -157,12 +164,55 @@ function initOperator() {
             <p class="nm">${result[i].last_edit}</p>
           </td>
           <td style="width: 10%">
-            <p class="nm clickable" onclick="applyOperator('${result[i].id}')">編輯</p>
+            <p class="nm clickable" onclick="applyOperator('${result[i].id}','${result[i].dialect}')">編輯</p>
           </td>
         </tr>
       `);
     }
   })()
+}
+
+function initStatusOperator() {
+  (async () => {
+    let result = await statusOperatorAjax();
+
+    $('#oTable').html('');
+    for(let i=0;i<result.length;i++){
+      if(i%2==0) bgColor = `'white'`;
+      else bgColor = `#E1E0E0`;
+      $('#oTable').append(`
+        <tr style="background-color: ${bgColor}">
+          <td style="width: 7%">
+            <a class="confirm-btn font12vw" onclick="showConfirmModal3('${result[i].id}', this)">確認</a>&nbsp;
+          </td>
+          <td style="width: 10%">
+            <p class="nm">${result[i].family}</p>
+          </td>
+          <td style="width: 10%">
+            <p class="nm">${result[i].dialect}</p>
+          </td>
+          <td class="op-sid" style="width: 8%">
+            <input class="nm1" type="text" value="${result[i].sid}">
+          </td>
+          <td style="width: 15%">
+            <p class="nm clickable">${result[i].dialect}語詞表資料</p>
+          </td>
+          <td style="width: 10%">
+            <p class="nm">${result[i].username}</p>
+          </td>
+          <td style="width: 15%">
+            <p class="nm clickable">${result[i].dialect}語詞表平台</p>
+          </td>
+          <td class="op-pw" style="width: 10%">
+            <input class="nm1" type="text" value="${result[i].password}">
+          </td>
+          <td style="width: 15%">
+            <p class="nm">${result[i].last_edit}</p>
+          </td>
+        </tr>
+      `);
+    }
+  })() 
 }
 
 async function getFamilyAjax() {
@@ -222,7 +272,7 @@ async function getCategoryAjax() {
   }
 }
 
-async function getOperatorAjax(data) {
+async function getOperatorAjax() {
   let result;
   try {
     result = await $.ajax({
@@ -236,11 +286,55 @@ async function getOperatorAjax(data) {
   }
 }
 
+async function statusOperatorAjax() {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newSentEnd/statusOperator',
+      type: 'GET'
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+async function updateOperatorAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newSentEnd/updateOperator',
+      type: 'PUT',
+      data: data
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
 async function getSuggestAjax(data) {
   let result;
   try {
     result = await $.ajax({
       url: '/newSentEnd/suggest',
+      type: 'POST',
+      data: data
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+async function wordsDownloadAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newSentEnd/wordsDownload',
       type: 'POST',
       data: data
     });
@@ -316,6 +410,36 @@ async function addOperatorAjax(data) {
   try {
     result = await $.ajax({
       url: '/newSentEnd/operator',
+      type: 'POST',
+      data: data
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+async function applyOperatorAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newSentEnd/operator',
+      type: 'PUT',
+      data: data
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+async function searchOperatorAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newSentEnd/searchOperator',
       type: 'POST',
       data: data
     });
@@ -553,6 +677,55 @@ function initWords() {
   });
 }
 
+function operatorSearch() {
+  let keyword = $('#operatorSearch').val();
+  if(keyword==""||!keyword) {
+    alert('請填寫搜尋欄位。')
+  }else{
+    let data = {keyword: keyword};
+    (async () => {
+      let result = await searchOperatorAjax(data);
+      $('#applyOppTable').html('');
+      for(let i=0;i<result.length;i++){
+        $('#applyOppTable').append(`
+          <tr>
+            <td style="width: 10%">
+              <p class="nm">${i+1}</p>
+            </td>
+            <td style="width: 15%">
+              <p class="nm">${result[i].name_zh}</p>
+            </td>
+            <td style="width: 15%">
+              <p class="nm">${result[i].name_ind}</p>
+            </td>
+            <td style="width: 15%">
+              <p class="nm">${result[i].ind_dialect}</p>
+            </td>
+            <td style="width: 20%">
+              <p class="nm">${result[i].current_addr}</p>
+            </td>
+            <td style="width: 10%">
+              <p class="nm">${result[i].tribe}</p>
+            </td>
+            <td style="width: 15%">
+              <button class="btn3" onclick="confirmApplyOpp('${result[i].name_zh}')">確認</button>
+            </td>
+          </tr>
+        `);
+      }
+    })()
+  }
+}
+
+function confirmApplyOpp(name) {
+  let data = {id: $('#applyOperatorModal').attr('data-id'), name: name};
+  (async () => {
+    await applyOperatorAjax(data);
+    $('#applyOperatorModal').css('display', 'none');
+    initOperator();
+  })()
+}
+
 function addOppConfirm() {
   if($('#a-o-dialect').val()) {
     let data = {family: $('#a-o-family').val(), dialect: $('#a-o-dialect').val()};
@@ -740,6 +913,31 @@ var waitForAll = function(lang, cate, callback) {
   }
 };
 
+function showConfirmModal3(id, val) {
+  let sid = $(val).parent().parent().find('.op-sid').children('input').val();
+  let pw = $(val).parent().parent().find('.op-pw').children('input').val();
+  $('#confirmModal3').attr('data-id', id);
+  $('#confirmModal3').attr('data-sid', sid);
+  $('#confirmModal3').attr('data-pw', pw);
+  $('#confirmModal3').css('display', 'flex');
+}
+
+function allDataSubmit() {
+  let id = $('#confirmModal3').attr('data-id');
+  let sid = $('#confirmModal3').attr('data-sid');
+  let pw = $('#confirmModal3').attr('data-pw');
+  let data = {id: id, sid: sid, pw: pw};
+  (async () => {
+    let result = await updateOperatorAjax(data);
+    initStatusOperator();
+    $('#confirmModal3').css('display', 'none');
+  })()
+}
+
+function allDataCancel() {
+  $('#confirmModal3').css('display', 'none');
+}
+
 function showConfirmModal7(id, val) {
   let fb = $(val).parent().parent().find('.feedback').children('textarea').val();
   if(fb==''){
@@ -747,20 +945,20 @@ function showConfirmModal7(id, val) {
   }else{
     $('#confirmModal').attr('data-id', id);
     $('#confirmModal').attr('data-fb', fb);
-    $('#confirmModal').css('display', 'block');
+    $('#confirmModal').css('display', 'flex');
   }
 }
 
 function showDeleteModal4(id) {
   $('#deleteModal').attr('data-id', id);
   $('#deleteModal').attr('data-mode', '4');
-  $('#deleteModal').css('display', 'block');
+  $('#deleteModal').css('display', 'flex');
 }
 
 function showDeleteModal7(id) {
   $('#deleteModal').attr('data-id', id);
   $('#deleteModal').attr('data-mode', '7');
-  $('#deleteModal').css('display', 'block');
+  $('#deleteModal').css('display', 'flex');
 }
 
 function suggestSubmit() {
@@ -868,15 +1066,18 @@ function goPlatform() {
 }
 
 function openAddOperator() {
-  $('#addOperatorModal').css('display', 'block');
+  $('#addOperatorModal').css('display', 'flex');
 }
 
 function closeAddOperator() {
   $('#addOperatorModal').css('display', 'none');
 }
 
-function applyOperator(id) {
-  $('#applyOperatorModal').css('display', 'block');
+function applyOperator(id, dialect) {
+  $('#applyOperatorModal').attr('data-id', id);
+  $('.modal-title').html('');
+  $('.modal-title').append(`作業員指派 - ${dialect}語詞表`);
+  $('#applyOperatorModal').css('display', 'flex');
 }
 
 function closeApplyOperator() {
@@ -922,6 +1123,49 @@ function suggestDownload() {
         result.push(tmpResult[i]);
       }
       JSONToCSVConvertor(result, '意見回饋', false);
+    })()
+  });
+}
+
+function wordsDownload() {
+  let result, tmpResult;
+  let lang = document.getElementsByName('language4[]');
+  let cate = document.getElementsByName('category4[]');
+  let level = document.getElementsByName('level4[]');
+  let langList=[];
+  let cateList=[];
+  let levelList=[];
+  let check=[];
+  let data, limit, bgColor;
+
+  for(let i=0;i<level.length;i++){
+    if(level[i].checked){
+      levelList.push(level[i].value);
+    }
+  }
+  waitForEl(lang, function() {
+    for(let i=0;i<lang.length;i++){
+      if(lang[i].checked){
+        langList.push(lang[i].value);
+      }
+    }
+  });
+  waitForEl(cate, function() {
+    for(let i=0;i<cate.length;i++){
+      if(cate[i].checked){
+        cateList.push(cate[i].value);
+      }
+    }
+  });
+  waitForAll(lang, cate, function() {
+    data = {lang: JSON.stringify(langList), cate: JSON.stringify(cateList), level: JSON.stringify(levelList)};
+    result = [{id: '序號', sid: '編號', dialect: '方言', category: '分類', snum: 'snum', ftws: '族語詞彙', ctws: '中文詞彙', fexam: '族語例句', cexam: '中文例句', LanLevelE: '初級', LanLevelM: '中級', LanLevelMH: '中高級', LanLevelH: '高級', workcheck: '審查', memo: '備註'}];
+    (async () => {
+      tmpResult = await wordsDownloadAjax(data);
+      for(let i=0;i<tmpResult.length;i++){
+        result.push(tmpResult[i]);
+      }
+      JSONToCSVConvertor(result, '詞彙', false);
     })()
   });
 }
@@ -996,523 +1240,4 @@ function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
   link.click();
   document.body.removeChild(link);
 }
-
-/*
-function showCard(card) {
-    document.getElementById(card).style.display = "block";
-  }
-
-  function delSubmit4(i) {
-      $( `#delCont${i}` ).submit();
-  }
-  function delSubmit6(i) {
-      $( `#delResh${i}` ).submit();
-  }
-  function delSubmit7(i) {
-      $( `#delSug${i}` ).submit();
-  }
-
-  function fbSubmit(i) {
-      $( `#adminFb${i}` ).submit();
-  }
-
-  function sidebarToggle() {
-    var sidebar = document.getElementById("sidebar");
-    var content = document.getElementById("content");
-    var sbStyle = window.getComputedStyle(sidebar);
-    var sbWidth = sbStyle.getPropertyValue('width');
-    if(sbWidth!="0px"){
-      $("#sidebar").animate({width: '0%'}, "fast");
-      content.style.width = "90%";
-    }else{
-      $("#sidebar").animate({width: '20%'}, "fast");
-      content.style.width = "70%";
-    }
-  }
-
-  function confirmChecker4(i){
-      document.getElementById(`confirmModal4${i}`).style.display = "block";
-    };
-
-    function cancelSubmit4(i){
-      document.getElementById(`confirmModal4${i}`).style.display = "none";
-    };
-
-  function confirmChecker6(i){
-      document.getElementById(`confirmModal6${i}`).style.display = "block";
-    };
-
-    function cancelSubmit6(i){
-      document.getElementById(`confirmModal6${i}`).style.display = "none";
-    };
-
-  function confirmChecker7(i){
-      document.getElementById(`confirmModal7${i}`).style.display = "block";
-    };
-
-    function cancelSubmit7(i){
-      document.getElementById(`confirmModal7${i}`).style.display = "none";
-    };
-
-    function confirmCheckerE(i){
-      document.getElementById(`confirmFbModal${i}`).style.display = "block";
-    };
-
-    function cancelSubmitE(i){
-      document.getElementById(`confirmFbModal${i}`).style.display = "none";
-    };
-
-    function checkLangAP4() {
-      var lang=document.getElementsByName("language4[]");
-      var isAP = true;
-      for(var i=0;i<lang.length;i++){
-        if(lang[i].checked==false){
-          isAP = false;
-        }
-    }
-    document.getElementsByName("langAP4")[0].checked = isAP;
-  }
-  function checkCateAP4() {
-      var cate=document.getElementsByName("category4[]");
-      var isAP = true;
-      for(var i=0;i<cate.length;i++){
-        if(cate[i].checked==false){
-          isAP = false;
-        }
-    }
-    document.getElementsByName("cateAP4")[0].checked = isAP;
-  }
-  function checkLevelAP4() {
-      var level=document.getElementsByName("level4[]");
-      var isAP = true;
-      for(var i=0;i<level.length;i++){
-        if(level[i].checked==false){
-          isAP = false;
-        }
-    }
-    document.getElementsByName("levelAP4")[0].checked = isAP;
-  }
-  function flangAP4(){
-    var ap=document.getElementsByName("langAP4")[0].checked;
-    var lang=document.getElementsByName("language4[]");
-    if(ap==true){
-      for(var i=0;i<lang.length;i++){
-        lang[i].checked = true;
-      }
-    }else{
-      for(var i=0;i<lang.length;i++){
-        lang[i].checked = false;
-      }
-    }
-  }
-  function fcateAP4(){
-    var ap=document.getElementsByName("cateAP4")[0].checked;
-    var cate=document.getElementsByName("category4[]");
-    if(ap==true){
-      for(var i=0;i<cate.length;i++){
-        cate[i].checked = true;
-      }
-    }else{
-      for(var i=0;i<cate.length;i++){
-        cate[i].checked = false;
-      }
-    }
-  }
-  function flevelAP4(){
-    var ap=document.getElementsByName("levelAP4")[0].checked;
-    var level=document.getElementsByName("level4[]");
-    if(ap==true){
-      for(var i=0;i<level.length;i++){
-        level[i].checked = true;
-      }
-    }else{
-      for(var i=0;i<level.length;i++){
-        level[i].checked = false;
-      }
-    }
-  }
-  function showLang4(){
-    if(document.getElementById("lang4").style.display == "block"){
-      document.getElementById("lang4").style.display = "none";
-    }else{
-      document.getElementById("lang4").style.display = "block";
-      document.getElementById("cate4").style.display = "none";
-      document.getElementById("level4").style.display = "none";
-    }
-  }
-  function showCate4(){
-    if(document.getElementById("cate4").style.display == "block"){
-      document.getElementById("cate4").style.display = "none";
-    }else{
-      document.getElementById("lang4").style.display = "none";
-      document.getElementById("cate4").style.display = "block";
-      document.getElementById("level4").style.display = "none";
-    }
-  }
-  function showLevel4(){
-    if(document.getElementById("level4").style.display == "block"){
-      document.getElementById("level4").style.display = "none";
-    }else{
-      document.getElementById("lang4").style.display = "none";
-      document.getElementById("cate4").style.display = "none";
-      document.getElementById("level4").style.display = "block";
-    }
-  }
-
-  function checkLangAP5() {
-      var lang=document.getElementsByName("language5[]");
-      var isAP = true;
-      for(var i=0;i<lang.length;i++){
-        if(lang[i].checked==false){
-          isAP = false;
-        }
-    }
-    document.getElementsByName("langAP5")[0].checked = isAP;
-  }
-  function checkCateAP5() {
-      var cate=document.getElementsByName("category5[]");
-      var isAP = true;
-      for(var i=0;i<cate.length;i++){
-        if(cate[i].checked==false){
-          isAP = false;
-        }
-    }
-    document.getElementsByName("cateAP5")[0].checked = isAP;
-  }
-  function checkLevelAP5() {
-      var level=document.getElementsByName("level5[]");
-      var isAP = true;
-      for(var i=0;i<level.length;i++){
-        if(level[i].checked==false){
-          isAP = false;
-        }
-    }
-    document.getElementsByName("levelAP5")[0].checked = isAP;
-  }
-  function flangAP5(){
-    var ap=document.getElementsByName("langAP5")[0].checked;
-    var lang=document.getElementsByName("language5[]");
-    if(ap==true){
-      for(var i=0;i<lang.length;i++){
-        lang[i].checked = true;
-      }
-    }else{
-      for(var i=0;i<lang.length;i++){
-        lang[i].checked = false;
-      }
-    }
-  }
-  function fcateAP5(){
-    var ap=document.getElementsByName("cateAP5")[0].checked;
-    var cate=document.getElementsByName("category5[]");
-    if(ap==true){
-      for(var i=0;i<cate.length;i++){
-        cate[i].checked = true;
-      }
-    }else{
-      for(var i=0;i<cate.length;i++){
-        cate[i].checked = false;
-      }
-    }
-  }
-  function flevelAP5(){
-    var ap=document.getElementsByName("levelAP5")[0].checked;
-    var level=document.getElementsByName("level5[]");
-    if(ap==true){
-      for(var i=0;i<level.length;i++){
-        level[i].checked = true;
-      }
-    }else{
-      for(var i=0;i<level.length;i++){
-        level[i].checked = false;
-      }
-    }
-  }
-  function showLang5(){
-    if(document.getElementById("lang5").style.display == "block"){
-      document.getElementById("lang5").style.display = "none";
-    }else{
-      document.getElementById("lang5").style.display = "block";
-      document.getElementById("cate5").style.display = "none";
-      document.getElementById("level5").style.display = "none";
-    }
-  }
-  function showCate5(){
-    if(document.getElementById("cate5").style.display == "block"){
-      document.getElementById("cate5").style.display = "none";
-    }else{
-      document.getElementById("lang5").style.display = "none";
-      document.getElementById("cate5").style.display = "block";
-      document.getElementById("level5").style.display = "none";
-    }
-  }
-  function showLevel5(){
-    if(document.getElementById("level5").style.display == "block"){
-      document.getElementById("level5").style.display = "none";
-    }else{
-      document.getElementById("lang5").style.display = "none";
-      document.getElementById("cate5").style.display = "none";
-      document.getElementById("level5").style.display = "block";
-    }
-  }
-
-    function checkLangAP6() {
-      var lang=document.getElementsByName("language6[]");
-      var isAP = true;
-      for(var i=0;i<lang.length;i++){
-        if(lang[i].checked==false){
-          isAP = false;
-        }
-    }
-    document.getElementsByName("langAP6")[0].checked = isAP;
-  }
-  function checkCateAP6() {
-      var cate=document.getElementsByName("category6[]");
-      var isAP = true;
-      for(var i=0;i<cate.length;i++){
-        if(cate[i].checked==false){
-          isAP = false;
-        }
-    }
-    document.getElementsByName("cateAP6")[0].checked = isAP;
-  }
-  function checkLevelAP6() {
-      var level=document.getElementsByName("level6[]");
-      var isAP = true;
-      for(var i=0;i<level.length;i++){
-        if(level[i].checked==false){
-          isAP = false;
-        }
-    }
-    document.getElementsByName("levelAP6")[0].checked = isAP;
-  }
-  function flangAP6(){
-    var ap=document.getElementsByName("langAP6")[0].checked;
-    var lang=document.getElementsByName("language6[]");
-    if(ap==true){
-      for(var i=0;i<lang.length;i++){
-        lang[i].checked = true;
-      }
-    }else{
-      for(var i=0;i<lang.length;i++){
-        lang[i].checked = false;
-      }
-    }
-  }
-  function fcateAP6(){
-    var ap=document.getElementsByName("cateAP6")[0].checked;
-    var cate=document.getElementsByName("category6[]");
-    if(ap==true){
-      for(var i=0;i<cate.length;i++){
-        cate[i].checked = true;
-      }
-    }else{
-      for(var i=0;i<cate.length;i++){
-        cate[i].checked = false;
-      }
-    }
-  }
-  function flevelAP6(){
-    var ap=document.getElementsByName("levelAP6")[0].checked;
-    var level=document.getElementsByName("level6[]");
-    if(ap==true){
-      for(var i=0;i<level.length;i++){
-        level[i].checked = true;
-      }
-    }else{
-      for(var i=0;i<level.length;i++){
-        level[i].checked = false;
-      }
-    }
-  }
-  function showLang6(){
-    if(document.getElementById("lang6").style.display == "block"){
-      document.getElementById("lang6").style.display = "none";
-    }else{
-      document.getElementById("lang6").style.display = "block";
-      document.getElementById("cate6").style.display = "none";
-      document.getElementById("level6").style.display = "none";
-    }
-  }
-  function showCate6(){
-    if(document.getElementById("cate6").style.display == "block"){
-      document.getElementById("cate6").style.display = "none";
-    }else{
-      document.getElementById("lang6").style.display = "none";
-      document.getElementById("cate6").style.display = "block";
-      document.getElementById("level6").style.display = "none";
-    }
-  }
-  function showLevel6(){
-    if(document.getElementById("level6").style.display == "block"){
-      document.getElementById("level6").style.display = "none";
-    }else{
-      document.getElementById("lang6").style.display = "none";
-      document.getElementById("cate6").style.display = "none";
-      document.getElementById("level6").style.display = "block";
-    }
-  }
-
-  function checkLangAP7() {
-      var lang=document.getElementsByName("language7[]");
-      var isAP = true;
-      for(var i=0;i<lang.length;i++){
-        if(lang[i].checked==false){
-          isAP = false;
-        }
-    }
-    document.getElementsByName("langAP7")[0].checked = isAP;
-  }
-  function checkCateAP7() {
-      var cate=document.getElementsByName("category7[]");
-      var isAP = true;
-      for(var i=0;i<cate.length;i++){
-        if(cate[i].checked==false){
-          isAP = false;
-        }
-    }
-    document.getElementsByName("cateAP7")[0].checked = isAP;
-  }
-  function checkLevelAP7() {
-      var level=document.getElementsByName("level7[]");
-      var isAP = true;
-      for(var i=0;i<level.length;i++){
-        if(level[i].checked==false){
-          isAP = false;
-        }
-    }
-    document.getElementsByName("levelAP7")[0].checked = isAP;
-  }
-  function flangAP7(){
-    var ap=document.getElementsByName("langAP7")[0].checked;
-    var lang=document.getElementsByName("language7[]");
-    if(ap==true){
-      for(var i=0;i<lang.length;i++){
-        lang[i].checked = true;
-      }
-    }else{
-      for(var i=0;i<lang.length;i++){
-        lang[i].checked = false;
-      }
-    }
-  }
-  function fcateAP7(){
-    var ap=document.getElementsByName("cateAP7")[0].checked;
-    var cate=document.getElementsByName("category7[]");
-    if(ap==true){
-      for(var i=0;i<cate.length;i++){
-        cate[i].checked = true;
-      }
-    }else{
-      for(var i=0;i<cate.length;i++){
-        cate[i].checked = false;
-      }
-    }
-  }
-  function flevelAP7(){
-    var ap=document.getElementsByName("levelAP7")[0].checked;
-    var level=document.getElementsByName("level7[]");
-    if(ap==true){
-      for(var i=0;i<level.length;i++){
-        level[i].checked = true;
-      }
-    }else{
-      for(var i=0;i<level.length;i++){
-        level[i].checked = false;
-      }
-    }
-  }
-  function showLang7(){
-    if(document.getElementById("lang7").style.display == "block"){
-      document.getElementById("lang7").style.display = "none";
-    }else{
-      document.getElementById("lang7").style.display = "block";
-      document.getElementById("cate7").style.display = "none";
-      document.getElementById("level7").style.display = "none";
-    }
-  }
-  function showCate7(){
-    if(document.getElementById("cate7").style.display == "block"){
-      document.getElementById("cate7").style.display = "none";
-    }else{
-      document.getElementById("lang7").style.display = "none";
-      document.getElementById("cate7").style.display = "block";
-      document.getElementById("level7").style.display = "none";
-    }
-  }
-  function showLevel7(){
-    if(document.getElementById("level7").style.display == "block"){
-      document.getElementById("level7").style.display = "none";
-    }else{
-      document.getElementById("lang7").style.display = "none";
-      document.getElementById("cate7").style.display = "none";
-      document.getElementById("level7").style.display = "block";
-    }
-  }
-
-  function show1(){
-    document.getElementById("1").style.display = "block";
-    document.getElementById("2").style.display = "none";
-    document.getElementById("3").style.display = "none";
-    document.getElementById("4").style.display = "none";
-    document.getElementById("5").style.display = "none";
-    document.getElementById("6").style.display = "none";
-    document.getElementById("7").style.display = "none";
-  }
-  function show2(){
-    document.getElementById("1").style.display = "none";
-    document.getElementById("2").style.display = "block";
-    document.getElementById("3").style.display = "none";
-    document.getElementById("4").style.display = "none";
-    document.getElementById("5").style.display = "none";
-    document.getElementById("6").style.display = "none";
-    document.getElementById("7").style.display = "none";
-  }
-  function show3(){
-    document.getElementById("1").style.display = "none";
-    document.getElementById("2").style.display = "none";
-    document.getElementById("3").style.display = "block";
-    document.getElementById("4").style.display = "none";
-    document.getElementById("5").style.display = "none";
-    document.getElementById("6").style.display = "none";
-    document.getElementById("7").style.display = "none";
-  }
-  function show4(){
-    document.getElementById("1").style.display = "none";
-    document.getElementById("2").style.display = "none";
-    document.getElementById("3").style.display = "none";
-    document.getElementById("4").style.display = "block";
-    document.getElementById("5").style.display = "none";
-    document.getElementById("6").style.display = "none";
-    document.getElementById("7").style.display = "none";
-  }
-  function show5(){
-    document.getElementById("1").style.display = "none";
-    document.getElementById("2").style.display = "none";
-    document.getElementById("3").style.display = "none";
-    document.getElementById("4").style.display = "none";
-    document.getElementById("5").style.display = "block";
-    document.getElementById("6").style.display = "none";
-    document.getElementById("7").style.display = "none";
-  }
-  function show6(){
-    document.getElementById("1").style.display = "none";
-    document.getElementById("2").style.display = "none";
-    document.getElementById("3").style.display = "none";
-    document.getElementById("4").style.display = "none";
-    document.getElementById("5").style.display = "none";
-    document.getElementById("6").style.display = "block";
-    document.getElementById("7").style.display = "none";
-  }
-  function show7(){
-    document.getElementById("1").style.display = "none";
-    document.getElementById("2").style.display = "none";
-    document.getElementById("3").style.display = "none";
-    document.getElementById("4").style.display = "none";
-    document.getElementById("5").style.display = "none";
-    document.getElementById("6").style.display = "none";
-    document.getElementById("7").style.display = "block";
-  }
-*/
-
 

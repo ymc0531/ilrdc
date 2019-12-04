@@ -40,7 +40,56 @@ router.post('/operator', async function(req, res) {
               INSERT INTO tow_operator 
               (family, dialect)
               VALUES ('${family}', '${dialect}');
-             `;
+            `;
+  database.conn.query(qry, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.put('/operator', async function(req, res) {
+  var {id, name} = req.body;
+  var qry = `
+              UPDATE tow_operator
+              SET username = '${name}'
+              WHERE id = ${id}
+            `;
+  database.conn.query(qry, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.put('/updateOperator', async function(req, res) {
+  var {id, sid, pw} = req.body;console.log(pw);
+  var qry = `
+              UPDATE tow_operator
+              SET sid = '${sid}', password = '${pw}'
+              WHERE id = ${id}
+            `;
+  database.conn.query(qry, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.get('/statusOperator', async function(req, res) {
+  var qry = `
+              SELECT * 
+              FROM tow_operator
+              WHERE status = 100
+            `;
+  database.conn.query(qry, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.post('/searchOperator', async function(req, res) {
+  var {keyword} = req.body;
+  var qry = `
+              SELECT id, name_zh, name_ind, ind_dialect, tribe, current_addr
+              FROM users_info
+              WHERE name_zh LIKE '%${keyword}%'
+              OR name_ind LIKE '%${keyword}%'
+              OR identity_num LIKE '%${keyword}%'
+            `;
   database.conn.query(qry, function (err, result) {
     res.send(result);
   })
@@ -144,6 +193,31 @@ router.post('/suggest', async function(req, res) {
               ORDER BY ts.id ASC LIMIT ${limit},${rowPerPage};
             `;
   database.conn.query(qry+qry1, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.post('/wordsDownload', async function(req, res) {
+  var {lang, cate, level} = req.body;
+  if(lang.substr(1, lang.length-2)){
+    lang = `AND tw.dialect IN (${lang.substr(1, lang.length-2)})`;
+  }else{
+    lang = '';
+  }
+  if(cate.substr(1, cate.length-2)){
+    cate = `AND tw.category IN (${cate.substr(1, cate.length-2)})`;
+  }else{
+    cate = '';
+  }
+  //level = ` AND tw.dialect IN (${level.substr(1, level.length-2)})`;
+
+  var qry = `
+              SELECT * FROM tow_words tw
+              WHERE 1
+              ${lang}
+              ${cate}
+            `;
+  database.conn.query(qry, function (err, result) {
     res.send(result);
   })
 });

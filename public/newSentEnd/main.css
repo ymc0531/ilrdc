@@ -3,11 +3,31 @@ html, body {
   margin: 0;
   display: flex;
   min-width: 700px;
+  min-height: 700px;
   padding-bottom: 20px;
 }
 p {
   margin: 0;
   padding: 0;
+}
+
+body::-webkit-scrollbar-track {
+  background-color: black;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: black;
+  opacity: 0.3; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: black;
+  opacity: 0.3;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: black;
+  opacity: 0.3;
 }
 
 #sidebar, #content {
@@ -87,15 +107,33 @@ p {
 .sb2:focus {
     outline: 0;
 }
+.font2vw {
+  font-size: 2vw !important;
+}
+.font12vw {
+  font-size: 1.2vw !important;
+}
+.font15vw {
+  font-size: 1.5vw !important;
+}
 .sb3 {
   border-style: solid;
   border-width: 1px;
   border-radius: 5px;
-  width: 60%;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: white;
+}
+.sb3 i {
+  cursor: pointer;
+}
+.sb4 {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
 }
 .f1 {
   width: 5vw;
@@ -122,6 +160,11 @@ p {
   padding: 0;
   font-size: 1.2vw;
 }
+.nm1 {
+  font-size: 1.2vw;
+  width: 90%;
+  text-align: center;
+}
 .tn {
   font-size: 0.01px;
   color: transparent;
@@ -136,15 +179,16 @@ p {
 .modal {
   display: none; 
   position: fixed; 
-  z-index: 1; 
-  padding-top: 100px; 
+  z-index: 1;
   left: 0;
   top: 0;
   width: 100%; 
-  height: 100%; 
+  height: 100%;
   overflow: auto; 
   background-color: rgb(0,0,0); 
   background-color: rgba(0,0,0,0.4); 
+  align-items: center;
+  justify-content: center;
 }
 .modal1 {
     text-align: center;
@@ -152,11 +196,10 @@ p {
 .modal-content2 {
   border-radius: 10px;
   background-color: white;
-  margin: auto;
-  margin-top: 125px;
-  padding: 10px;
+  padding: 15px;
   width: 30%;
   position: relative;
+  max-height: 60%;
 }
 .modal-content1 {
   border-radius: 10px;
@@ -164,9 +207,13 @@ p {
   border-style: solid;
   border-width: 1px;
   background-color: white;
-  margin: auto;
-  margin-top: 125px;
   width: 25%;
+  padding: 15px;
+}
+.width50 {
+  min-height: 420px;
+  height: 60% !important;
+  width: 50% !important;
 }
 .pbtm {
   padding-bottom: 30px;
@@ -185,10 +232,18 @@ p {
   align-items: center;
   padding: 2px 0 2px 0;
 }
+.sTitle1 {
+  background-color: #D6D6D6;
+  padding-left: 10px;
+  padding: 2px 0 2px 0;
+  margin-bottom: 10px;
+}
+.sTitle1 p,
 .sTitle p {
   width: 33%;
   font-size: 1.3vw;
 }
+.sTitle1 p a,
 .sTitle p a {
   color: red;
 }
@@ -311,7 +366,7 @@ p {
 #sTitle-p {
   padding-left: 10px;
 }
-button {
+.btn4 {
   width: 30px;
   height: 30px;
   background: black;
@@ -332,7 +387,13 @@ button {
   border-spacing: 0;
 }
 
+#applyOppTable {
+  text-align: center;
+  width: 100%;
+}
+
 .workTable td,
+#applyOppTable td,
 #workTable td {
   padding-top: 0.4vw;
   padding-bottom: 0.4vw;
@@ -396,4 +457,52 @@ button {
 .modal-row select {
   width: 15vw;
   font-size: 1.5vw;
+}
+
+.modal-row input {
+  font-size: 1.5vw;
+  width: 5vw;
+}
+
+.modal-title {
+  width: 100%;
+  font-size: 1.5vw;
+  text-align: left;
+  padding: 1vw 0 2vw 0;
+}
+
+.applyOp-content {
+  width: 100%;
+  padding-top: 10px;
+  font-size: 1.3vw;
+  text-align: left;
+}
+
+.applyOp-content p {
+  padding-bottom: 5px;
+}
+
+.scrollable {
+  overflow: scroll;
+}
+
+.btn3 {
+  font-size: 1.3vw;
+  background-color: #C6C6C6;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btn3:hover {
+  background-color: #666666;
+}
+
+.sec-content {
+  height: 100%;
+  overflow: scroll;
+}
+
+.sec-content::-webkit-scrollbar {
+  width: 0;
 }
