@@ -1,7 +1,7 @@
 $(document).ready(function() {
   initDialect();
   initUserInfo();
-  test();
+  //test();
 })
 
 function test() {
