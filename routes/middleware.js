@@ -1,9 +1,24 @@
 let jwt = require('jsonwebtoken');
 const config = require('./config.js');
 
+let checkLogin = (req, res, next) => {
+  let token = req.cookies.loginToken;
+  if (token) {
+    jwt.verify(token, config.secret, (err, decoded) => {
+      if (err) {
+        next();
+      } else {
+        req.decoded = decoded;
+        return res.redirect('/user-dashboard');
+      }
+    });
+  } else {
+    next();
+  }
+};
+
 let checkToken = (req, res, next) => {
   let token = req.cookies.loginToken;
-  console.log(token);
   if (token) {
     jwt.verify(token, config.secret, (err, decoded) => {
       if (err) {
@@ -19,5 +34,6 @@ let checkToken = (req, res, next) => {
 };
 
 module.exports = {
+  checkLogin: checkLogin,
   checkToken: checkToken
 }

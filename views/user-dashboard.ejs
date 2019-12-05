@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/png" href="/dashboardAssets/img/favicon.ico">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>ILRDC</title>
+
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+  <meta name="viewport" content="width=device-width" />
+
+
+  <!-- Bootstrap core CSS     -->
+  <link href="/dashboardAssets/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Animation library for notifications   -->
+  <link href="/dashboardAssets/css/animate.min.css" rel="stylesheet"/>
+
+  <!--  Light Bootstrap Table core CSS    -->
+  <link href="/dashboardAssets/css/light-bootstrap-dashboard.css?v=1.4.0" rel="stylesheet"/>
+
+  <!--     Fonts and icons     -->
+  <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+  <link href="/dashboardAssets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+  <link href="/dashboardAssets/user.css" rel="stylesheet" />
+
+</head>
+<body>
+
+<div class="wrapper">
+  <div class="sidebar" data-color="purple" data-image="/dashboardAssets/img/sidebar-5.jpg">
+
+  <!--
+
+    Tip 1: you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple"
+    Tip 2: you can also add an image using data-image tag
+
+  -->
+
+    <div class="sidebar-wrapper">
+      <div class="logo">
+        <a class="simple-text">
+          歡迎 <%= user %>!
+        </a>
+      </div>
+
+      <ul class="nav">
+        <li>
+          <button class="button-nav" onclick="sysManage()">
+            <i class="pe-7s-graph"></i>
+            <p class="nav-sidebar-text">資訊系統</p>
+          </button>
+        </li>
+        <li>
+          <button class="button-nav" onclick="proManage()">
+            <i class="pe-7s-user"></i>
+            <p class="nav-sidebar-text">個人資料</p>
+          </button>
+        </li>
+        <li>
+          <button class="button-nav" onclick="newWord()">
+            <i class="pe-7s-note2"></i>
+            <p class="nav-sidebar-text">新詞</p>
+          </button>
+        </li>
+        <li>
+          <button class="button-nav" onclick="newSentence()">
+            <i class="pe-7s-note2"></i>
+            <p class="nav-sidebar-text">詞表</p>
+          </button>
+        </li>
+        <li>
+          <button class="button-nav" onclick="dailt()">
+            <i class="pe-7s-note2"></i>
+            <p class="nav-sidebar-text">數位族語資料庫</p>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="main-panel">
+    <nav class="navbar navbar-default navbar-fixed">
+      <div class="container-fluid">
+        <div class="navbar-header">
+    
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+    
+          <a class="navbar-brand" href="#">資訊系統</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a onclick="logout()">
+                <p>登出</p>
+              </a>
+            </li>
+            <li class="separator hidden-lg"></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+  
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <button class="button button1 button2" onclick="window.open('')">創詞後台</button>
+          <button class="button button1 button2" onclick="window.open('/newSentEnd')">詞表後台</button>
+          <button class="button button1 button2" onclick="window.open('https://ilrdc.tw/qBank/')">題庫後台</button>
+          <button class="button button1 button2" onclick="window.open('http://reading.ilrdc.tw/login/')">翻譯後台</button>
+          <button class="button button1 button2" onclick="window.open('https://ilrdc.tw/manpower/search/login/login.php')">族語人才資料庫</button>
+          <button class="button button1 button2" onclick="window.open('http://tow.ilrdc.tw/login/login.php')">學習詞表作業平台</button>
+        </div>
+      </div>
+    </div>
+
+
+    <footer class="footer">
+      <div class="container-fluid">
+        <nav class="pull-left">
+          <ul>
+            <li>
+              <a href="http://ilrdc.tw">
+                首頁
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <p class="copyright pull-right">
+          &copy; 原住民族語言研究發展中心
+    </p>
+      </div>
+    </footer>
+
+  </div>
+</div>
+
+
+</body>
+
+  <!--  Charts Plugin -->
+  <script src="/dashboardAssets/js/chartist.min.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="/js/js-cookie.js"></script>
+  <script src="/dashboardAssets/user.js"></script>
+
+</html>

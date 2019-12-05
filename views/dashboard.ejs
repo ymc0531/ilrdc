@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" type="image/png" href="/dashboardAssets/img/favicon.ico">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+	<title>ILRDC</title>
+
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+
+
+    <!-- Bootstrap core CSS     -->
+    <link href="/dashboardAssets/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Animation library for notifications   -->
+    <link href="/dashboardAssets/css/animate.min.css" rel="stylesheet"/>
+
+    <!--  Light Bootstrap Table core CSS    -->
+    <link href="/dashboardAssets/css/light-bootstrap-dashboard.css?v=1.4.0" rel="stylesheet"/>
+
+
+    <!--  CSS for Demo Purpose, don't include it in your project     -->
+    <link href="/dashboardAssets/css/demo.css" rel="stylesheet" />
+
+
+    <!--     Fonts and icons     -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+    <link href="/dashboardAssets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+    <style>
+    .button {
+	background-color: #E8E8E8;
+	color: #7C7C7C;
+	border: none;
+	border-radius: 4px;
+	height: 50px;
+	margin-left: 8px;
+	padding-left: 15px;
+	padding-right: 15px;
+	margin-bottom: 14px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 16px;
+	cursor: pointer;
+	outline: none;
+    	transition-duration: 0.4s;
+    }
+    .button1:hover {
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 8px 25px 0 rgba(0,0,0,0.19);
+    }
+    .button2:hover {
+	background-color: #DCDCDC;
+    }
+    .line-01 {
+	border-width: 1px;
+	border-color: #F8F8F8;
+    }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="sidebar" data-color="purple" data-image="/dashboardAssets/img/sidebar-5.jpg">
+
+    <!--
+
+        Tip 1: you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple"
+        Tip 2: you can also add an image using data-image tag
+
+    -->
+
+    	<div class="sidebar-wrapper">
+            <div class="logo">
+                <a class="simple-text">
+                    歡迎 <%= user %>!
+                </a>
+            </div>
+
+            <ul class="nav">
+                <li>
+                    <button class="button-nav" onclick="sysManage()">
+                        <i class="pe-7s-graph"></i>
+                        <p class="nav-sidebar-text">資訊系統</p>
+                    </button>
+                </li>
+                <li>
+                    <button class="button-nav" onclick="proManage()">
+                        <i class="pe-7s-user"></i>
+                        <p class="nav-sidebar-text">個人資料</p>
+                    </button>
+                </li>
+                <li>
+                    <button class="button-nav" onclick="newWord()">
+                        <i class="pe-7s-note2"></i>
+                        <p class="nav-sidebar-text">新詞</p>
+                    </button>
+                </li>
+                <li>
+                    <button class="button-nav" onclick="newSentence()">
+                        <i class="pe-7s-note2"></i>
+                        <p class="nav-sidebar-text">詞表</p>
+                    </button>
+                </li>
+                <li>
+                    <button class="button-nav" onclick="dailt()">
+                        <i class="pe-7s-note2"></i>
+                        <p class="nav-sidebar-text">數位族語資料庫</p>
+                    </button>
+                </li>
+            </ul>
+    	</div>
+    </div>
+
+    <div class="main-panel">
+        <nav class="navbar navbar-default navbar-fixed">
+            <div class="container-fluid">
+                <div class="navbar-header">
+		
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+		
+                    <a class="navbar-brand" href="#">資訊系統</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="http://localhost:3030/logout">
+                                <p>登出</p>
+                            </a>
+                        </li>
+			<li class="separator hidden-lg"></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+	
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <% if(systemPriv.system_01=='true') { %>
+    		        <button class="button button1 button2" onclick="window.open('http://localhost:3030/newWordEdit')">創詞後台</button>
+                    <% } %>
+                    <% if(systemPriv.system_02=='true') { %>
+    		        <button class="button button1 button2" onclick="window.open('https://ilrdc.tw/qBank/')">題庫後台</button>
+                    <% } %>
+                    <% if(systemPriv.system_03=='true') { %>
+    		        <button class="button button1 button2" onclick="window.open('http://reading.ilrdc.tw/login/')">翻譯後台</button>
+                    <% } %>
+                    <% if(systemPriv.system_04=='true') { %>
+    		        <button class="button button1 button2" onclick="window.open('https://ilrdc.tw/manpower/search/login/login.php')">族語人才資料庫</button>
+                    <% } %>
+                    <% if(systemPriv.system_05=='true') { %>		        <button class="button button1 button2" onclick="window.open('http://tow.ilrdc.tw/login/login.php')">族語學習詞表後台</button>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+
+        <footer class="footer">
+            <div class="container-fluid">
+                <nav class="pull-left">
+                    <ul>
+                        <li>
+                            <a href="http://ilrdc.tw">
+                                首頁
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <p class="copyright pull-right">
+                    &copy; 原住民族語言研究發展中心
+		</p>
+            </div>
+        </footer>
+
+    </div>
+</div>
+
+
+</body>
+
+    <!--   Core JS Files   -->
+    <script src="/dashboardAssets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+	<script src="/dashboardAssets/js/bootstrap.min.js" type="text/javascript"></script>
+
+	<!--  Charts Plugin -->
+	<script src="/dashboardAssets/js/chartist.min.js"></script>
+
+    <!--  Notifications Plugin    -->
+    <script src="/dashboardAssets/js/bootstrap-notify.js"></script>
+
+    <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+	<script src="/dashboardAssets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
+
+	<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+	<script src="/dashboardAssets/js/demo.js"></script>
+	<script type="text/javascript">
+    	function sysManage () {
+            window.location.href="http://localhost:3030/sysManage";
+        };
+        function proManage () {
+            window.location.href="http://localhost:3030/proManage";
+        };
+        function newWord () {
+            window.open("http://localhost:3030/newWord");
+        };
+        function newSentence () {
+            window.open("http://localhost:3030/newSentence");
+        };
+        function dailt () {
+            window.open("http://dailt.ilrdc.tw");
+        };
+	</script>
+</html>

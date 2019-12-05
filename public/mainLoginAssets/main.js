@@ -5,19 +5,26 @@ $(document).ready(function(){
 });
 
 function login() {
+  let privilege = 0;
+  $("input[name='usertype[]']").each(function (index, obj) {
+    if(obj.checked){
+      privilege = index;
+    }
+  });
   (async () => {
     let username = $('#username').val();
     let password = $('#password').val();
-    let result = await loginAjax(username, password);
+    let data = {username: username, password: password, privilege: privilege};
+    let result = await loginAjax(data);
     if(result) {
       Cookies.set('loginToken', result);
+      window.location.replace('/user-dashboard');
     }
   })()
 }
 
-async function loginAjax(username, password) {
+async function loginAjax(data) {
   let result;
-  let data = {username: username, password: password};
   try {
     result = await $.ajax({
       url: '/login',

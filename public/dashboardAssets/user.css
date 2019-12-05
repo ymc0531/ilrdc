@@ -1,0 +1,30 @@
+.button {
+  background-color: #E8E8E8;
+  color: #7C7C7C;
+  border: none;
+  border-radius: 4px;
+  height: 50px;
+  margin-left: 8px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-bottom: 14px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  outline: none;
+  transition-duration: 0.4s;
+}
+
+.button1:hover {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 8px 25px 0 rgba(0,0,0,0.19);
+}
+
+.button2:hover {
+  background-color: #DCDCDC;
+}
+
+.line-01 {
+  border-width: 1px;
+  border-color: #F8F8F8;
+}
