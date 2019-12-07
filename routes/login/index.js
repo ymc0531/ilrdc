@@ -9,10 +9,6 @@ router.get('/', async function(req, res) {
   res.render('index');
 });
 
-router.get('/test', middleware.checkToken, async function(req, res) {
-  res.render('index1');
-});
-
 router.get('/user-dashboard', middleware.checkToken, async function(req, res) {
   if(req.decoded.privilege==0)
     res.render('user-dashboard', {user: req.decoded.username});
@@ -78,7 +74,6 @@ router.put('/password', middleware.checkToken, async function(req, res) {
             `;
   database.conn.query(qry, function (err, result) {
     res.send(result);
-    console.log(result);
   });
 });
 

@@ -19,6 +19,8 @@ function login() {
     if(result) {
       Cookies.set('loginToken', result);
       window.location.replace('/user-dashboard');
+    }else{
+      alert('帳號或密碼錯誤。');
     }
   })()
 }

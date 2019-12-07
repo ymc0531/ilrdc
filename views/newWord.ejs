@@ -2,133 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>詞表</title>
+  <title>新詞</title>
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="/newSentence/main.css">
+  <link rel="stylesheet" href="/newWord/main.css">
 </head>
 <body>
-  <div style="width: 100%;margin:auto;text-align: center;">
-    <img src="/images/title.png" style="width: 100%;margin-bottom: 10px;">
-  </div>
-  <div id="suggestModal" class="modal" data-id="">
-    <div class="modal-content">
-      <div class="close-row">
-        <span class="close" onclick="closeModal()">&times;</span>
-      </div>
-      <div class="modalhead">
-        <table class="tables">
-          <tr>
-            <td>
-              <p class="td1 rmspace" id="ftws"></p>
-            </td>
-            <td>
-              <p class="td2 td3 rmspace" id="ctws"></p>
-            </td>
-          </tr>
-        </table>
-        <table class="tables">
-          <tr>
-            <td>
-              <p class="tdf rmspace" id="fexam"></p>
-            </td>
-            <td>
-              <p class="td2 tdc rmspace" id="cexam"></p>
-            </td>
-          </tr>
-        </table>
-        <table class="tables bottomhead1">
-          <tr>
-            <td>
-              <p class="tds rmspace">分類：</p>
-            </td>
-            <td>
-              <p class="tds rmspace" id="category"></p>
-            </td>
-          </tr>
-        </table>
-        <table class="tables bottomhead2">
-          <tr>
-            <td>
-              <p class="tds rmspace">級別：</p>
-            </td>
-            <td>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div style="text-align: center;">
-        <p class="modaltitle">您的建議</p>
-      </div>
-      <div class="modalbody">
-        <table class="ctables">
-          <tr>
-            <td class="c1 ctitle">
-              詞彙
-            </td>
-            <td class="c2">
-              <p class="td2 rmspace" id="ftws1"></p>
-            </td>
-            <td class="c2">
-              <p class="td2 tdc rmspace" id="ctws1"></p>
-            </td>
-          </tr>
-          <tr>
-            <td class="c1"></td>
-            <td class="c2">
-              <textarea class="tx1" id="textftws" name="textftws" cols="20" rows="3"></textarea>
-            </td>
-            <td class="c2">
-              <textarea class="tx1" id="textctws" name="textctws" cols="20" rows="3"></textarea>
-            </td>
-          </tr>
-            <td class="c1 ctitle secrow">
-              例句
-            </td>
-            <td class="c2 secrow">
-              <p class="td2 rmspace" id="fexam1"></p>
-            </td>
-            <td class="c2 secrow">
-              <p class="td2 tdc rmspace" id="cexam1"></p>
-            </td>
-          </tr>
-          <tr>
-            <td class="c1"></td>
-            <td class="c2">
-              <textarea class="tx1" id="textfexam" name="textfexam" cols="20" rows="3"></textarea>
-            </td>
-            <td class="c2">
-              <textarea class="tx1" id="textcexam" name="textcexam" cols="20" rows="3"></textarea>
-            </td>
-          </tr>
-        </table>
-        <div style="padding-left: 10px; padding-right: 20px;">
-          <p class="ctitle">意見與說明</p>
-          <textarea class="tx1" id="textsuggestion" name="textsuggestion" rows="4"></textarea>
-        </div>
-        <div class="modalfooter">
-          <input type="button" name="submit" value="送出" onclick="confirmChecker()">
-        </div>
-        <div id="confirmModal" class="modal modal1">
-          <div class="modal-content1">
-          <p>確認送出</p>
-          <br><br>
-          <input type="button" onclick="suggestSubmit()" value="確認">
-          <input type="button" onclick="cancelSubmit()" value="取消">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="feedback" class="modal modal2">
-    <div class="modal-content mc-background">
-      <span class="close" onclick="closeFeedback()">&times;</span>
-      <p class="ctitle" style="font-size: 16px;padding-left: 15px;">審查結果說明</p>
-      <p id="fbResult" style="font-size: 15px;"></p>
-    </div>
-  </div>
-
   <div class="header">
     <div class="language">
       <table>
@@ -314,9 +193,128 @@
       <div id="suggestResult">
       </div>
     </div>
-
-
   </div>
+
+  <!--Modal-->
+  <div id="suggestModal" class="modal" data-id="">
+    <div class="modal-content">
+      <div class="close-row">
+        <span class="close" onclick="closeModal()">&times;</span>
+      </div>
+      <div class="modalhead">
+        <table class="tables">
+          <tr>
+            <td>
+              <p class="td1 rmspace" id="ftws"></p>
+            </td>
+            <td>
+              <p class="td2 td3 rmspace" id="ctws"></p>
+            </td>
+          </tr>
+        </table>
+        <table class="tables">
+          <tr>
+            <td>
+              <p class="tdf rmspace" id="fexam"></p>
+            </td>
+            <td>
+              <p class="td2 tdc rmspace" id="cexam"></p>
+            </td>
+          </tr>
+        </table>
+        <table class="tables bottomhead1">
+          <tr>
+            <td>
+              <p class="tds rmspace">分類：</p>
+            </td>
+            <td>
+              <p class="tds rmspace" id="category"></p>
+            </td>
+          </tr>
+        </table>
+        <table class="tables bottomhead2">
+          <tr>
+            <td>
+              <p class="tds rmspace">級別：</p>
+            </td>
+            <td>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div style="text-align: center;">
+        <p class="modaltitle">您的建議</p>
+      </div>
+      <div class="modalbody">
+        <table class="ctables">
+          <tr>
+            <td class="c1 ctitle">
+              詞彙
+            </td>
+            <td class="c2">
+              <p class="td2 rmspace" id="ftws1"></p>
+            </td>
+            <td class="c2">
+              <p class="td2 tdc rmspace" id="ctws1"></p>
+            </td>
+          </tr>
+          <tr>
+            <td class="c1"></td>
+            <td class="c2">
+              <textarea class="tx1" id="textftws" name="textftws" cols="20" rows="3"></textarea>
+            </td>
+            <td class="c2">
+              <textarea class="tx1" id="textctws" name="textctws" cols="20" rows="3"></textarea>
+            </td>
+          </tr>
+            <td class="c1 ctitle secrow">
+              例句
+            </td>
+            <td class="c2 secrow">
+              <p class="td2 rmspace" id="fexam1"></p>
+            </td>
+            <td class="c2 secrow">
+              <p class="td2 tdc rmspace" id="cexam1"></p>
+            </td>
+          </tr>
+          <tr>
+            <td class="c1"></td>
+            <td class="c2">
+              <textarea class="tx1" id="textfexam" name="textfexam" cols="20" rows="3"></textarea>
+            </td>
+            <td class="c2">
+              <textarea class="tx1" id="textcexam" name="textcexam" cols="20" rows="3"></textarea>
+            </td>
+          </tr>
+        </table>
+        <div style="padding-left: 10px; padding-right: 20px;">
+          <p class="ctitle">意見與說明</p>
+          <textarea class="tx1" id="textsuggestion" name="textsuggestion" rows="4"></textarea>
+        </div>
+        <div class="modalfooter">
+          <input type="button" name="submit" value="送出" onclick="confirmChecker()">
+        </div>
+        <div id="confirmModal" class="modal modal1">
+          <div class="modal-content1">
+          <p>確認送出</p>
+          <br><br>
+          <input type="button" onclick="suggestSubmit()" value="確認">
+          <input type="button" onclick="cancelSubmit()" value="取消">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="feedback" class="modal modal2">
+    <div class="modal-content mc-background">
+      <span class="close" onclick="closeFeedback()">&times;</span>
+      <p class="ctitle" style="font-size: 16px;padding-left: 15px;">審查結果說明</p>
+      <p id="fbResult" style="font-size: 15px;"></p>
+    </div>
+  </div>
+
+
   <div style="width: 100%;margin-top: 55px;background-color: #d5dfe3;display: inline-block;padding-bottom: 15px;">
     <table style="width: 30%;float: left;background-color: #d5dfe3;padding-top: 15px;border-spacing: 0;">
       <tr>
@@ -387,5 +385,5 @@
   <!--   Core JS Files   -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-  <script src="/newSentence/main.js"></script>
+  <script src="/newWord/main.js"></script>
 </html>

@@ -9,10 +9,11 @@ database.conn.connect(function(err){
 let login = require('./login');
 let newSentence = require('./newSentence');
 let newSentEnd = require('./newSentEnd');
+let newWord = require('./newWord');
 
 router.use('/', login);
 router.use('/newSentence', newSentence);
 router.use('/newSentEnd', newSentEnd);
-
+router.use('/newWord', newWord);
 
 module.exports = router;
