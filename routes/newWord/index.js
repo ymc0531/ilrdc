@@ -3,65 +3,122 @@ var router = express.Router();
 let database = require('../database/database');
 
 router.get('/', async function(req, res) {
-	res.render('newWord');
+  res.render('newWord');
 });
 
 router.get('/getFamily', async function(req, res) {
-	var qry = `SELECT * FROM family`;
+  var qry = `SELECT * FROM family`;
   database.conn.query(qry, function (err, result) {
-  	res.send(result);
+    res.send(result);
   })
 });
 
 router.get('/getLanguage', async function(req, res) {
-	var qry = `SELECT * FROM language`;
+  var qry = `SELECT * FROM language`;
   database.conn.query(qry, function (err, result) {
-  	res.send(result);
+    res.send(result);
   })
 });
 
 router.get('/getCategory', async function(req, res) {
-	var qry = `SELECT * FROM tow_category`;
+  var qry = `SELECT * FROM nw_category`;
   database.conn.query(qry, function (err, result) {
-  	res.send(result);
+    res.send(result);
   })
 });
 
-router.post('/getSuggest', async function(req, res) {
-  var limit = 0;
-  var {pages, rowPerPage} = req.body;
-  pages = parseInt(pages, 10);
-  rowPerPage = parseInt(rowPerPage, 10);
-  if(pages>0) limit = (pages-1)*rowPerPage;
-	var qry = `SELECT COUNT(*) FROM tow_suggest;SELECT * FROM tow_suggest ORDER BY id ASC LIMIT ${limit},${rowPerPage}`;
+router.get('/getSetting', async function(req, res) {
+  var qry = `SELECT * FROM nw_setting`;
   database.conn.query(qry, function (err, result) {
-  	res.send(result);
-    //console.log(err);
+    res.send(result);
   })
 });
 
-router.post('/getWords', async function(req, res) {
-	var tmp = ' ';
-	var limit = 0;
-	var {lang, cate, keyword, blurSearch, pages, rowPerPage} = req.body;
-	if(lang&&lang!='全語言') tmp = `${tmp}AND dialect = '${lang}' `;
-	if(cate&&cate!='全分類') tmp = `${tmp}AND category = '${cate}' `;
-	if(keyword&&keyword!='') {
-		if(blurSearch=='false') {
-			tmp = `${tmp}AND (ftws = '${keyword}' OR ctws = '${keyword}') `;
-		}else{
-			tmp = `${tmp}AND (ftws LIKE '%${keyword}%' OR ctws LIKE '%${keyword}%') `;
-		}
-	}
-	if(pages>0) limit = (pages-1)*rowPerPage;
-	var qry = `SELECT COUNT(*) FROM tow_words WHERE 1${tmp};SELECT * FROM tow_words WHERE 1${tmp} ORDER BY id ASC LIMIT ${limit},${rowPerPage}`;
-  database.conn.query(qry, function (err1, result) {
-  	if(err1) console.log(err1);
-  	res.send(result);
+router.post('/getWord', async function(req, res) {
+  var {id} = req.body;
+  var qry = `SELECT * FROM nw_words WHERE id = ${id}`;
+  database.conn.query(qry, function (err, result) {
+    res.send(result);
   })
 });
 
-router.post('/wordsDownload', async function(req, res) {
+router.post('/getFeWord', async function(req, res) {
+  var tmp = '';
+  var {keyword, lang, cate, page} = req.body;
+  if(lang&&lang!='全語言') tmp = `${tmp}AND dialect = '${lang}' `;
+  if(cate&&cate!='全分類') tmp = `${tmp}AND subcate = '${cate}' `;
+  if(keyword&&keyword!='') tmp = `${tmp}AND (ch = '${keyword}' OR ab = '${keyword}') `;
+  page = (parseInt(page, 10)-1)*50;
+
+  var qry = `
+              SELECT COUNT(*) FROM nw_words 
+              WHERE season = (SELECT first_edition_year FROM nw_setting)
+              AND checked = 0
+              ${tmp};
+              SELECT * FROM nw_words 
+              WHERE season = (SELECT first_edition_year FROM nw_setting)
+              AND checked = 0
+              ${tmp}
+              ORDER BY cate, subcate, language, ch
+              LIMIT ${page}, 50
+            `;
+  database.conn.query(qry, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.post('/getLcWord', async function(req, res) {
+  var tmp = '';
+  var {keyword, lang, cate, page} = req.body;
+  if(lang&&lang!='全語言') tmp = `${tmp}AND dialect = '${lang}' `;
+  if(cate&&cate!='全分類') tmp = `${tmp}AND subcate = '${cate}' `;
+  if(keyword&&keyword!='') tmp = `${tmp}AND (ch = '${keyword}' OR ab = '${keyword}') `;
+  page = (parseInt(page, 10)-1)*50;
+
+  var qry = `
+              SELECT COUNT(*) FROM nw_words 
+              WHERE season = (SELECT latest_checked_year FROM nw_setting)
+              AND checked = 1
+              ${tmp};
+              SELECT * FROM nw_words 
+              WHERE season = (SELECT latest_checked_year FROM nw_setting)
+              AND checked = 1
+              ${tmp}
+              ORDER BY cate, subcate, language, ch
+              LIMIT ${page}, 50
+            `;
+  database.conn.query(qry, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.post('/getPyWord', async function(req, res) {
+  var tmp = '';
+  var {keyword, lang, cate, page} = req.body;
+  if(lang&&lang!='全語言') tmp = `${tmp}AND dialect = '${lang}' `;
+  if(cate&&cate!='全分類') tmp = `${tmp}AND subcate = '${cate}' `;
+  if(keyword&&keyword!='') tmp = `${tmp}AND (ch = '${keyword}' OR ab = '${keyword}') `;
+  page = (parseInt(page, 10)-1)*50;
+
+  var qry = `
+              SELECT COUNT(*) FROM nw_words 
+              WHERE season <= (SELECT past_year_from FROM nw_setting)
+              AND checked = 1
+              ${tmp};
+              SELECT * FROM nw_words 
+              WHERE season <= (SELECT past_year_from FROM nw_setting)
+              AND checked = 1
+              ${tmp}
+              ORDER BY season DESC, cate, subcate, language, ch
+              LIMIT ${page}, 50
+            `;
+  database.conn.query(qry, function (err, result) {
+    if(err) console.log(err);
+    res.send(result);
+  })
+});
+
+router.post('/download', async function(req, res) {
   var {lang, cate} = req.body;
   if(lang!='全語言'){
     lang = `AND dialect = '${lang}'`;
@@ -69,32 +126,55 @@ router.post('/wordsDownload', async function(req, res) {
     lang = '';
   }
   if(cate!='全分類'){
-    cate = `AND category = '${cate}'`;
+    cate = `AND subcate = '${cate}'`;
   }else{
     cate = '';
   }
   var qry = `
-              SELECT dialect, category, ftws, ctws, fexam, cexam, memo 
-              FROM tow_words
+              SELECT season, language, dialect, cate, subcate, ab, ch, ab_example, ch_example, example_type, remark 
+              FROM nw_words
               WHERE 1
               ${lang}
               ${cate}
+              ORDER BY cate, subcate, language, ch
             `;
   database.conn.query(qry, function (err, result) {
     res.send(result);
   })
 });
 
-router.put('/suggest', async function(req, res) {
-	var {words_id, ftws, ctws, fexam, cexam, suggestion} = req.body;
-	var qry = `
-							INSERT INTO 
-							tow_suggest (words_id, ftws, ctws, fexam, cexam, suggestion) 
-						 	VALUES 
-						 	('${words_id}', '${ftws}', '${ctws}', '${fexam}', '${cexam}', '${suggestion}')
-						`;
+router.post('/suggest', async function(req, res) {
+  var {page} = req.body;
+  page = (parseInt(page, 10)-1)*50;
+
+  var qry = `
+              SELECT COUNT(*) FROM nw_suggest;
+              SELECT * FROM nw_suggest 
+              ORDER BY id 
+              LIMIT ${page}, 50
+            `;
   database.conn.query(qry, function (err, result) {
-  	res.send(result);
+    if(err) console.log(err);
+    res.send(result);
+  })
+});
+
+router.put('/suggest', async function(req, res) {
+  var {id, season, dialect, ab, ch, cate, subcate, suggestion, event} = req.body;
+  if(event=='1'){
+    event = '初版詞彙';
+  }else{
+    event = '推薦新詞';
+  }
+  var qry = `
+              INSERT INTO 
+              nw_suggest (word_id, season, dialect, ab, ch, cate, subcate, suggestion, event) 
+              VALUES 
+              (${id}, ${season}, '${dialect}', '${ab}', '${ch}', '${cate}', '${subcate}', '${suggestion}', '${event}')
+            `;
+  database.conn.query(qry, function (err, result) {
+    if(err) console.log(err);
+    res.send(result);
   })
 });
 

@@ -8,24 +8,39 @@
   <link rel="stylesheet" href="/newWord/main.css">
 </head>
 <body>
-  <div class="header">
+  <div class="header" data-test="">
+    <div class="sb1">
+      <div class="sb4">
+        <div class="title-left">
+          現代族語詞彙
+        </div>
+        <div class="sb2">
+          <input type="text" class="sb3" id="keyword" placeholder="請輸入族語或中文">
+          <div class="icon-box">
+            <i class="material-icons" onclick="searchWord()">search</i>
+          </div>
+        </div>
+      </div>
+      <div class="sb4">
+        <div class="title-left">
+        </div>
+        <div class="sb5">
+          <p class="symbol" onclick="insSymbol('^')">^</p>
+          <p class="symbol" onclick="insSymbol('é')">é</p>
+          <p class="symbol" onclick="insSymbol('ṟ')">ṟ</p>
+          <p class="symbol" onclick="insSymbol('ɨ')">ɨ</p>
+          <p class="symbol" onclick="insSymbol('ʉ')">ʉ</p>
+          <p class="symbol" onclick="insSymbol('’')">’</p>
+        </div>
+      </div>
+    </div>
     <div class="language">
-      <table>
-        <tr>
-          <td class="beginRow">
-            目前語言：
-          </td>
-          <td>
-            <input class="currlang" type="text" name="currlang" id="currlang" value="全語言" readonly>
-          </td>
-          <td>
-            <input class="switch" type="button" onclick="selectAllLang()" value="全語言">
-          </td>
-          <td>
-            <input class="switch" type="button" onclick="showLang()" value="切換">
-          </td>
-        </tr>
-      </table>
+      <div class="beginRow">
+        目前語言：
+      </div>
+      <input class="currlang" type="text" id="currlang" value="全語言" readonly>
+      <input class="switch" type="button" onclick="selectAllLang()" value="全語言">
+      <input class="switch" type="button" onclick="showLang()" value="切換">
     </div>
     <div class="langbox">
       <div class="langtype1" id="langtype">
@@ -37,213 +52,275 @@
         
       </div>
     </div>
-    <div class="language1">
-      <table>
-        <tr>
-          <td class="beginRow">
-            目前分類：
-          </td>
-          <td>
-            <input class="currcate" type="text" name="currcate" id="currcate" value="全分類" readonly>
-          </td>
-          <td>
-            <input class="switch" type="button" onclick="selectAllCate()" value="全分類">
-          </td>
-          <td>
-            <input class="switch" type="button" onclick="showCate()" value="切換">
-          </td>
-        </tr>
-      </table>
+    <div class="category">
+      <div class="beginRow">
+        目前分類：
+      </div>
+      <input class="currcate" type="text" id="currcate" value="全分類" readonly>
+      <input class="switch" type="button" onclick="selectAllCate()" value="全分類">
+      <input class="switch" type="button" onclick="showCate()" value="切換">
     </div>
 
     <div class="cate" id="cate">
-      <table style="width: 100%">
-      </table>
-    </div>      
 
-    <br>
-    <div class="sb1">
-      <div class="sb4">
-        <div class="sb2">
-          <input type="text" class="sb3" id="keyword" name="keyword">
-          <i class="material-icons" style="vertical-align: middle;cursor: pointer;" onclick="searchSub()">search</i>
-        </div>
-        <div class="sb5">
-          <p class="symbol" onclick="insSymbol('^')">^</p>
-          <p class="symbol" onclick="insSymbol('é')">é</p>
-          <p class="symbol" onclick="insSymbol('ṟ')">ṟ</p>
-          <p class="symbol" onclick="insSymbol('ɨ')">ɨ</p>
-          <p class="symbol" onclick="insSymbol('ʉ')">ʉ</p>
-          <p class="symbol" onclick="insSymbol('’')">’</p>
-          <input type="checkbox" id="blurSearch" value="ok">模糊搜尋
-        </div>
-      </div>
     </div>
   </div>
 
   <div class="content">
-    <input class="learn l1 float" type="button" onclick="showLearn()" value="學習" id="lbtn">
-    <input class="learn l2 float" type="button" onclick="showDownload()" value="下載" id="dbtn">
-    <input class="learn l2" type="button" onclick="showSuggest()" value="意見回饋列表" id="sbtn">
-    <br>
+    <div class="page-title" data-act-page="1">
+      <input class="learn act-btn" type="button" onclick="showPage(1)" value="本年度初版詞彙" id="btn1">
+      <input class="learn" type="button" onclick="showPage(2)" value="本年度推薦新詞" id="btn2">
+      <input class="learn" type="button" onclick="showPage(3)" value="歷年度推薦新詞" id="btn3">
+      <input class="learn" type="button" onclick="showPage(4)" value="下載" id="btn4">
+      <input class="learn" type="button" onclick="showPage(5)" value="意見回饋列表" id="btn5">
+    </div>
 
-    <div id="learn">
+    <div id="page-1">
       <div class="title">
-        <p id="title-p"></p>
-        <div class="select01">
-          <i class="material-icons prev" onclick="prevpage()">navigate_before</i>第
-          <select id="page1" onchange="changepage()">
-          </select>頁
-          <i class="material-icons next" onclick="nextpage()">navigate_next</i>
-        </div>
-        <div class="select02">每頁顯示
-          <select id="rowPerPage" onchange="changeRowPerPage()">
-            <option value="10">10</option>
-            <option value="25" selected>25</option>
-            <option value="50">50</option>
-          </select>筆
-        </div>
+        <p class="title-row-1"></p>
+        <p class="title-row-2"></p>
       </div>
-      <div style="background-color: #dcc9cb">
-        <table style="width: 100%;font-size: 20px;text-align: center;" id="ltab">
+      <div class="select01">
+        <i class="material-icons prev" onclick="prevpage(1)">navigate_before</i>第
+        <select id="pages-1" onchange="changepage(1)">
+        </select>頁
+        <i class="material-icons next" onclick="nextpage(1)">navigate_next</i>
+      </div>
+      <div class="page-content">
+        <table>
           <tr>
-            <td style="width: 10%;">
-              語言別
+            <td style="width: 5%;">
+              序
             </td>
             <td style="width: 10%;">
-              序號
-            </td>
-            <td style="width: 20%;">
-              詞彙
-            </td>
-            <td style="width: 40%;">
-              例句
+              主類別
             </td>
             <td style="width: 10%;">
-              級別
+              次類別
+            </td>
+            <td style="width: 6%;">
+              年度
             </td>
             <td style="width: 10%;">
-              意見回饋
+              方言別
+            </td>
+            <td style="width: 15%;">
+              族語
+            </td>
+            <td style="width: 10%;">
+              中文
+            </td>
+            <td style="width: 14%;">
+              語意
+            </td>
+            <td style="width: 14%;">
+              創詞說明
+            </td>
+            <td style="width: 6%;">
+              建議
             </td>
           </tr>
         </table>
-      </div>
-      <div id="wordsResult">
-      </div>
-    </div>
-
-    <div class="divhide" id="download">
-      <div class="title" style="height: 28px;">
-      </div>
-      <div>
-        <div class="rmspace dlcontent">
-          <p></p>詞表下載
-          <i class="material-icons dlbtn" id="cmd">vertical_align_bottom</i>
-        </div>
+        <div class="page-content-1"></div>
       </div>
     </div>
 
-    <div class="divhide" id="suggest">
-      <div class="title" style="height: 28px;">
-        <p id="title-p"></p>
-        <div class="select01">
-          <i class="material-icons prev" onclick="prevpage2()">navigate_before</i>第
-          <select id="page2" onchange="changepage2()">
-          </select>頁
-          <i class="material-icons next" onclick="nextpage2()">navigate_next</i>
-        </div>
-        <div class="select02">每頁顯示
-          <select id="rowPerPage2" onchange="changeRowPerPage2()">
-            <option value="10">10</option>
-            <option value="25" selected>25</option>
-            <option value="50">50</option>
-          </select>筆
-        </div>
+    <div class="divhide" id="page-2">
+      <div class="title">
+        <p class="title-row-1"></p>
+        <p class="title-row-2"></p>
       </div>
-      <div style="background-color: #dcc9cb">
-        <table style="width: 100%;font-size: 20px;text-align: center;">
+      <div class="select01">
+        <i class="material-icons prev" onclick="prevpage(2)">navigate_before</i>第
+        <select id="pages-2" onchange="changepage(2)">
+        </select>頁
+        <i class="material-icons next" onclick="nextpage(2)">navigate_next</i>
+      </div>
+      <div class="page-content">
+        <table>
           <tr>
             <td style="width: 5%;">
-              序號
+              序
             </td>
             <td style="width: 10%;">
-              回饋日期
+              主類別
             </td>
             <td style="width: 10%;">
-              詞彙
+              次類別
             </td>
-            <td style="width: 25%;">
-              例句
-            </td>
-            <td style="width: 5%;">
-              級別
-            </td>
-            <td style="width: 25%;">
-              意見回饋
+            <td style="width: 6%;">
+              年度
             </td>
             <td style="width: 10%;">
-              回饋者
+              方言別
+            </td>
+            <td style="width: 15%;">
+              族語
             </td>
             <td style="width: 10%;">
-              處理情形
+              中文
+            </td>
+            <td style="width: 14%;">
+              語意
+            </td>
+            <td style="width: 14%;">
+              創詞說明
+            </td>
+            <td style="width: 6%;">
+              建議
             </td>
           </tr>
         </table>
-      </div>
-      <div id="suggestResult">
+        <div class="page-content-1"></div>
       </div>
     </div>
+
+    <div class="divhide" id="page-3">
+      <div class="title">
+        <p class="title-row-1"></p>
+        <p class="title-row-2"></p>
+      </div>
+      <div class="select01">
+        <i class="material-icons prev" onclick="prevpage(3)">navigate_before</i>第
+        <select id="pages-3" onchange="changepage(3)">
+        </select>頁
+        <i class="material-icons next" onclick="nextpage(3)">navigate_next</i>
+      </div>
+      <div class="page-content">
+        <table>
+          <tr>
+            <td style="width: 5%;">
+              序
+            </td>
+            <td style="width: 7%;">
+              年度
+            </td>
+            <td style="width: 16%;">
+              方言別
+            </td>
+            <td style="width: 30%;">
+              族語詞彙
+            </td>
+            <td style="width: 30%;">
+              中文詞彙
+            </td>
+            <td style="width: 6%;">
+              音檔
+            </td>
+            <td style="width: 6%;">
+              建議
+            </td>
+          </tr>
+        </table>
+        <div class="page-content-1"></div>
+      </div>
+    </div>
+
+    <div class="divhide" id="page-4">
+      <div class="rmspace dlcontent">
+        <p></p>詞表下載
+        <i class="material-icons dlbtn" onclick="download()">vertical_align_bottom</i>
+      </div>
+    </div>
+
+    <div class="divhide" id="page-5">
+      <div class="title">
+        <p class="title-row-1"></p>
+        <p class="title-row-2"></p>
+      </div>
+      <div class="select01">
+        <i class="material-icons prev" onclick="prevpage(5)">navigate_before</i>第
+        <select id="pages-5" onchange="changepage(5)">
+        </select>頁
+        <i class="material-icons next" onclick="nextpage(5)">navigate_next</i>
+      </div>
+      <div class="page-content">
+        <table>
+          <tr>
+            <td style="width: 4%;">
+              序
+            </td>
+            <td style="width: 12%;">
+              日期
+            </td>
+            <td style="width: 2%;">
+              項目
+            </td>
+            <td style="width: 2%;">
+              主類別
+            </td>
+            <td style="width: 2%;">
+              次類別
+            </td>
+            <td style="width: 5%;">
+              年度
+            </td>
+            <td style="width: 10%;">
+              方言別
+            </td>
+            <td style="width: 16%;">
+              族語
+            </td>
+            <td style="width: 10%;">
+              中文
+            </td>
+            <td style="width: 15%;">
+              建議內容
+            </td>
+            <td style="width: 8%;">
+              意見回饋
+            </td>
+            <td style="width: 15%;">
+              回覆
+            </td>
+          </tr>
+        </table>
+        <div class="page-content-1"></div>
+      </div>
+    </div>
+      
   </div>
 
   <!--Modal-->
-  <div id="suggestModal" class="modal" data-id="">
+  <div id="suggestModal" class="modal" data-id="" data-season="">
     <div class="modal-content">
       <div class="close-row">
-        <span class="close" onclick="closeModal()">&times;</span>
+        <span class="close" onclick="closeModal('suggestModal')">&times;</span>
       </div>
       <div class="modalhead">
         <table class="tables">
           <tr>
-            <td>
-              <p class="td1 rmspace" id="ftws"></p>
+            <td style="width: 60%">
+              <p class="td1 rmspace" id="s_ab"></p>
             </td>
-            <td>
-              <p class="td2 td3 rmspace" id="ctws"></p>
-            </td>
-          </tr>
-        </table>
-        <table class="tables">
-          <tr>
-            <td>
-              <p class="tdf rmspace" id="fexam"></p>
-            </td>
-            <td>
-              <p class="td2 tdc rmspace" id="cexam"></p>
+            <td style="width: 40%">
+              <p class="td1 td2 rmspace" id="s_ch"></p>
             </td>
           </tr>
         </table>
         <table class="tables bottomhead1">
           <tr>
             <td>
-              <p class="tds rmspace">分類：</p>
-            </td>
-            <td>
-              <p class="tds rmspace" id="category"></p>
+              <div class="flex-row">
+                主類：<p class="modaltitle" id="s_cate"></p>
+              </div>
             </td>
           </tr>
-        </table>
-        <table class="tables bottomhead2">
           <tr>
             <td>
-              <p class="tds rmspace">級別：</p>
+              <div class="flex-row">
+                次類：<p class="modaltitle" id="s_subcate"></p>
+              </div>
             </td>
+          </tr>
+          <tr>
             <td>
+              <div class="flex-row">
+                語別：<p class="modaltitle" id="s_dialect"></p>
+              </div>
             </td>
           </tr>
         </table>
-      </div>
-      <div style="text-align: center;">
-        <p class="modaltitle">您的建議</p>
       </div>
       <div class="modalbody">
         <table class="ctables">
@@ -252,44 +329,44 @@
               詞彙
             </td>
             <td class="c2">
-              <p class="td2 rmspace" id="ftws1"></p>
+              <p class="td2 rmspace" id="s_ab_1"></p>
             </td>
             <td class="c2">
-              <p class="td2 tdc rmspace" id="ctws1"></p>
+              <p class="td2 tdc rmspace" id="s_ch_1"></p>
             </td>
           </tr>
           <tr>
             <td class="c1"></td>
             <td class="c2">
-              <textarea class="tx1" id="textftws" name="textftws" cols="20" rows="3"></textarea>
+              <textarea class="tx1" id="s_ab_2" cols="20" rows="3"></textarea>
             </td>
             <td class="c2">
-              <textarea class="tx1" id="textctws" name="textctws" cols="20" rows="3"></textarea>
+              <textarea class="tx1" id="s_ch_2" cols="20" rows="3"></textarea>
             </td>
           </tr>
             <td class="c1 ctitle secrow">
               例句
             </td>
             <td class="c2 secrow">
-              <p class="td2 rmspace" id="fexam1"></p>
+              <p class="td2 rmspace" id="s_ab_ex"></p>
             </td>
             <td class="c2 secrow">
-              <p class="td2 tdc rmspace" id="cexam1"></p>
+              <p class="td2 tdc rmspace" id="s_ch_ex"></p>
             </td>
           </tr>
           <tr>
             <td class="c1"></td>
             <td class="c2">
-              <textarea class="tx1" id="textfexam" name="textfexam" cols="20" rows="3"></textarea>
+              <textarea class="tx1" id="s_ab_ex_1" cols="20" rows="3"></textarea>
             </td>
             <td class="c2">
-              <textarea class="tx1" id="textcexam" name="textcexam" cols="20" rows="3"></textarea>
+              <textarea class="tx1" id="s_ch_ex_1" cols="20" rows="3"></textarea>
             </td>
           </tr>
         </table>
         <div style="padding-left: 10px; padding-right: 20px;">
           <p class="ctitle">意見與說明</p>
-          <textarea class="tx1" id="textsuggestion" name="textsuggestion" rows="4"></textarea>
+          <textarea class="tx1" id="textsuggestion" rows="4"></textarea>
         </div>
         <div class="modalfooter">
           <input type="button" name="submit" value="送出" onclick="confirmChecker()">
@@ -314,72 +391,6 @@
     </div>
   </div>
 
-
-  <div style="width: 100%;margin-top: 55px;background-color: #d5dfe3;display: inline-block;padding-bottom: 15px;">
-    <table style="width: 30%;float: left;background-color: #d5dfe3;padding-top: 15px;border-spacing: 0;">
-      <tr>
-        <td style="margin-top: 0px;margin-bottom: 0px;padding-left: 40px;font-size: 14px;color: #595757;">
-          原住民族語言研究發展中心
-        </td>
-      </tr>
-      <tr>
-        <td style="margin-top: 0px;margin-bottom: 0px;padding-left: 40px;padding-right: 35px;font-size: 15px;color: #595757;">
-          Indigenous Languages Research<br>and Development Center
-        </td>
-      </tr>
-    </table>
-    <table style="width: 40%;float: left;background-color: #d5dfe3;padding-top: 15px;border-spacing: 0;">
-      <tr>
-        <td width="50px" style="padding-left: 65px;font-size: 14px;color: #595757;">
-          地址：
-        </td>
-        <td style="font-size: 14px;color: #595757;">
-          10093台北市中正區羅斯福路一段63號 8F-10F
-        </td>
-      </tr>
-      <tr>
-        <td width="50px" style="padding-left: 65px;font-size: 14px;color: #595757;">
-          電話：
-        </td>
-        <td style="font-size: 15px;color: #595757;">
-          (02) 2341-8508
-        </td>
-      </tr>
-      <tr>
-        <td width="50px" style="padding-left: 65px;font-size: 14px;color: #595757;">
-          傳真：
-        </td>
-        <td style="font-size: 15px;color: #595757;">
-          (02) 2341-8256
-        </td>
-      </tr>
-      <tr>
-        <td width="50px" style="padding-left: 65px;font-size: 14px;color: #595757;">
-          郵箱：
-        </td>
-        <td style="font-size: 15px;color: #595757;">
-          ilrdc63@gmail.com
-        </td>
-      </tr>
-    </table>
-    <table style="width: 30%;padding-top: 15px;border-spacing: 0;">
-      <tr>
-        <td style="margin-top: 0px;margin-bottom: 0px;padding-left: 70px;font-size: 14px;color: #595757;">
-          原住民族委員會&copy; 版權所有
-        </td>
-      </tr>
-      <tr>
-        <td style="margin-top: 0px;margin-bottom: 0px;padding-left: 70px;padding-right: 25px;font-size: 15px;color: #595757;">
-          Copyright &copy; 2018 Council of Indigenous Peoples.
-        </td>
-      </tr>
-      <tr>
-        <td style="margin-top: 0px;margin-bottom: 0px;padding-left: 70px;font-size: 15px;color: #595757;">
-          All Right Reserved.
-        </td>
-      </tr>
-    </table>
-  </div>
 </body>
 
   <!--   Core JS Files   -->
