@@ -8,7 +8,7 @@ $(document).ready(function() {
   initSuggest();
   updateDownload();
 
-  test();
+  //test();
 });
 
 function test(){
