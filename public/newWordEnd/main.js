@@ -15,7 +15,7 @@ $(document).ready(function(){
     $('#confirmModal').css('display', 'flex');
   });
 
-  test();
+  //test();
 })
 
 initYear();
