@@ -339,14 +339,14 @@ function editFeWord(id) {
     $('#fe-cate').html(result[0].cate);
     $('#fe-subcate').html(result[0].subcate);
     $('#fe-dialect').html(result[0].dialect);
-    $('#fe-ab').html(result[0].ab);
-    $('#fe-mean').html(result[0].mean);
-    $('#fe-description').html(result[0].description);
+    $('#fe-ab').val(result[0].ab);
+    $('#fe-mean').val(result[0].mean);
+    $('#fe-description').val(result[0].description);
     $('#fe-word_formation').val(result[0].word_formation);
-    $('#fe-ab_example').html(result[0].ab_example);
-    $('#fe-ch_example').html(result[0].ch_example);
+    $('#fe-ab_example').val(result[0].ab_example);
+    $('#fe-ch_example').val(result[0].ch_example);
     $('#fe-example_type').val(result[0].example_type);
-    $('#fe-remark').html(result[0].remark);
+    $('#fe-remark').val(result[0].remark);
     showPage(1,2);
   })()
 }
@@ -461,14 +461,14 @@ function editLcWord(id) {
     $('#lc-cate').html(result[0].cate);
     $('#lc-subcate').html(result[0].subcate);
     $('#lc-dialect').html(result[0].dialect);
-    $('#lc-ab').html(result[0].ab);
-    $('#lc-mean').html(result[0].mean);
-    $('#lc-description').html(result[0].description);
+    $('#lc-ab').val(result[0].ab);
+    $('#lc-mean').val(result[0].mean);
+    $('#lc-description').val(result[0].description);
     $('#lc-word_formation').val(result[0].word_formation);
-    $('#lc-ab_example').html(result[0].ab_example);
-    $('#lc-ch_example').html(result[0].ch_example);
+    $('#lc-ab_example').val(result[0].ab_example);
+    $('#lc-ch_example').val(result[0].ch_example);
     $('#lc-example_type').val(result[0].example_type);
-    $('#lc-remark').html(result[0].remark);
+    $('#lc-remark').val(result[0].remark);
     showPage(2,2);
   })()
 }
@@ -558,8 +558,8 @@ function editArticle(id) {
     $('#ar-sid').html(result[0].sid);
     $('#ar-paragraph').html(result[0].paragraph);
     $('#ar-dialect').html(result[0].dialect);
-    $('#ar-ch_content').html(result[0].ch_content);
-    $('#ar-ab_content').html(result[0].ab_content);
+    $('#ar-ch_content').val(result[0].ch_content);
+    $('#ar-ab_content').val(result[0].ab_content);
     let ch_keyword = result[0].ch_keyword.split('*');
     let ab_keyword = result[0].ab_keyword.split('*');
     for(let i=ab_keyword.length;i<ch_keyword.length;i++) {
@@ -690,7 +690,7 @@ function editArReview(id) {
     $('#arr-paragraph').html(result[0].paragraph);
     $('#arr-ch').html(result[0].ch_content);
     $('#arr-ab').html(result[0].ab_content);
-    $('#arr-a1').html(result[0].a1);
+    $('#arr-a1').val(result[0].a1);
     showPage(5,2);
   })()
 }
