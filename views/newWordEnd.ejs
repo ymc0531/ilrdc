@@ -1,0 +1,979 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>創詞後台</title>
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/newWordEnd/main.css">
+</head>
+<body>
+	<i class="material-icons sidebar-icon" onclick="sidebarToggle()">subject</i>
+   <div id="sidebar" data-current-btn="btn1">
+  	<input id="btn1" class="sidebarBtn" type="button" onclick="show('1')" value="建修新詞與例句">
+		<input id="btn2" class="sidebarBtn" type="button" onclick="show('2')" value="修訂推薦新詞">
+		<input id="btn3" class="sidebarBtn" type="button" onclick="show('3')" value="建置文章">
+		<input id="btn4" class="sidebarBtn" type="button" onclick="show('4')" value="審查新詞">
+		<input id="btn5" class="sidebarBtn" type="button" onclick="show('5')" value="審查文章">
+		<input id="btn6" class="sidebarBtn" type="button" onclick="show('6')" value="意見回饋">
+	</div>
+	<div id="content" data-current-content="1">
+
+		<!---------page 1------------>
+
+		<div class="hide" id="1">
+			<div class="page-title-1">
+				建修新詞與例句
+			</div>
+			<div class="flex">
+				<select class="year" id="year-1" onchange="changeYear(1)">
+				</select>
+				<p>年</p>
+			</div>
+			<div class="page-title" data-act-page="1">
+	      <input class="learn act-btn btn1" type="button" onclick="showPage(1,1)" value="已建新詞">
+	      <input class="learn btn2" type="button" onclick="showPage(1,2)" value="建修表單">
+	    </div>
+	    <div class="page-1">
+	    	<div class="sTitle">
+	        <div class="select01">
+	          <i class="material-icons prev" onclick="prevpage(1)">navigate_before</i>第
+	          <select id="pages-1" onchange="changepage(1)">
+	          </select>頁
+	          <i class="material-icons next" onclick="nextpage(1)">navigate_next</i>
+	        </div>
+				</div>
+	    	<table class="workTable">
+					<tr class="wt-1st-row">
+						<td style="width: 2%">
+							<p class="nm">序</p>
+						</td>
+						<td style="width: 6%">
+							<p class="nm">主類別</p>
+						</td>
+						<td style="width: 8%">
+							<p class="nm">次類別</p>
+						</td>
+						<td style="width: 6%">
+							<p class="nm">方言別</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">族語</p>
+						</td>
+						<td style="width: 2%">
+							<p class="nm">試聽</p>
+						</td>
+						<td style="width: 8%">
+							<p class="nm">中文</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">語意</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">註解</p>
+						</td>
+						<td style="width: 8%">
+							<p class="nm">構詞法</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">例句</p>
+						</td>
+						<td style="width: 2%">
+							<p class="nm">試聽</p>
+						</td>
+						<td style="width: 8%">
+							<p class="nm">句型</p>
+						</td>
+						<td style="width: 8%">
+							<p class="nm">備註</p>
+						</td>
+						<td style="width: 2%">
+							<p class="nm">編輯</p>
+						</td>
+					</tr>
+				</table>
+				<table class="workTable-edit">	
+				</table>
+	    </div>
+	    <div class="page-2">
+	    	<div class="sTitle">
+	        &nbsp;
+				</div>
+				<div class="flex-row">
+					<p>中文</p>
+					:<p id="fe-ch" class="fr-p" data-id=""></p>
+				</div>
+				<div class="flex-row">
+					<p>主類別</p>
+					:<p id="fe-cate" class="fr-p"></p>
+				</div>
+				<div class="flex-row">
+					<p>次類別</p>
+					:<p id="fe-subcate" class="fr-p"></p>
+				</div>
+				<div class="flex-row">
+					<p>方言別</p>
+					:<p id="fe-dialect" class="fr-p"></p>
+				</div>
+				<div class="flex-row">
+					<p>族語</p>
+					:<textarea id="fe-ab"></textarea>
+				</div>
+				<div class="flex-row">
+					<p>語意</p>
+					:<textarea id="fe-mean"></textarea>
+				</div>
+				<div class="flex-row">
+					<p>創詞說明</p>
+					:<textarea id="fe-description"></textarea>
+				</div>
+				<div class="flex-row">
+					<p>構詞法</p>
+					:<select id="fe-word_formation">
+						<option>語意延伸</option>
+						<option>重疊</option>
+						<option>衍生</option>
+						<option>名物化</option>
+						<option>意譯</option>
+						<option>音譯</option>
+					</select>
+				</div>
+				<div class="flex-row">
+					<p>族語例句</p>
+					:<textarea id="fe-ab_example"></textarea>
+				</div>
+				<div class="flex-row">
+					<p>中文例句</p>
+					:<textarea id="fe-ch_example"></textarea>
+				</div>
+				<div class="flex-row">
+					<p>句型</p>
+					:<select id="fe-example_type">
+						<option>直斂句</option>
+						<option>疑問句</option>
+						<option>祈使句</option>
+						<option>存在句/所有句/方位句</option>
+						<option>主題句</option>
+						<option>否定句</option>
+						<option>補斂結構</option>
+						<option>修飾結構</option>
+						<option>並列結構</option>
+						<option>反身與交互結構</option>
+					</select>
+				</div>
+				<div class="flex-row">
+					<p>備註</p>
+					:<textarea id="fe-remark"></textarea>
+				</div>
+				<div class="cfm-row">
+					<button onclick="showConfirmModal('1')">送出</button>
+				</div>
+	    </div>
+		</div>
+
+		<!---------page 2------------>
+
+		<div class="hide" id="2">
+			<div class="page-title-1">
+				修訂推薦新詞
+			</div>
+			<div class="flex">
+				<select class="year" id="year-2" onchange="changeYear(2)">
+				</select>
+				<p>年</p>
+			</div>
+			<div class="page-title" data-act-page="1">
+	      <input class="learn act-btn btn1" type="button" onclick="showPage(2,1)" value="推薦新詞">
+	      <input class="learn btn2" type="button" onclick="showPage(2,2)" value="修訂表單">
+	    </div>
+	    <div class="page-1">
+	    	<div class="sTitle">
+	        <div class="select01">
+	          <i class="material-icons prev" onclick="prevpage(2)">navigate_before</i>第
+	          <select id="pages-2" onchange="changepage(2)">
+	          </select>頁
+	          <i class="material-icons next" onclick="nextpage(2)">navigate_next</i>
+	        </div>
+				</div>
+	    	<table class="workTable">
+					<tr class="wt-1st-row">
+						<td style="width: 2%">
+							<p class="nm">序</p>
+						</td>
+						<td style="width: 6%">
+							<p class="nm">主類別</p>
+						</td>
+						<td style="width: 8%">
+							<p class="nm">次類別</p>
+						</td>
+						<td style="width: 6%">
+							<p class="nm">方言別</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">族語</p>
+						</td>
+						<td style="width: 2%">
+							<p class="nm">試聽</p>
+						</td>
+						<td style="width: 8%">
+							<p class="nm">中文</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">語意</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">註解</p>
+						</td>
+						<td style="width: 8%">
+							<p class="nm">構詞法</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">例句</p>
+						</td>
+						<td style="width: 2%">
+							<p class="nm">試聽</p>
+						</td>
+						<td style="width: 8%">
+							<p class="nm">句型</p>
+						</td>
+						<td style="width: 8%">
+							<p class="nm">備註</p>
+						</td>
+						<td style="width: 2%">
+							<p class="nm">編輯</p>
+						</td>
+					</tr>
+				</table>
+				<table class="workTable-edit">	
+				</table>
+	    </div>
+	    <div class="page-2">
+	    	<div class="sTitle">
+	        &nbsp;
+				</div>
+				<div class="flex-row">
+					<p>中文</p>
+					:<p id="lc-ch" class="fr-p" data-id=""></p>
+				</div>
+				<div class="flex-row">
+					<p>主類別</p>
+					:<p id="lc-cate" class="fr-p"></p>
+				</div>
+				<div class="flex-row">
+					<p>次類別</p>
+					:<p id="lc-subcate" class="fr-p"></p>
+				</div>
+				<div class="flex-row">
+					<p>方言別</p>
+					:<p id="lc-dialect" class="fr-p"></p>
+				</div>
+				<div class="flex-row">
+					<p>族語</p>
+					:<textarea id="lc-ab"></textarea>
+				</div>
+				<div class="flex-row">
+					<p>語意</p>
+					:<textarea id="lc-mean"></textarea>
+				</div>
+				<div class="flex-row">
+					<p>創詞說明</p>
+					:<textarea id="lc-description"></textarea>
+				</div>
+				<div class="flex-row">
+					<p>構詞法</p>
+					:<select id="lc-word_formation">
+						<option>語意延伸</option>
+						<option>重疊</option>
+						<option>衍生</option>
+						<option>名物化</option>
+						<option>意譯</option>
+						<option>音譯</option>
+					</select>
+				</div>
+				<div class="flex-row">
+					<p>族語例句</p>
+					:<textarea id="lc-ab_example"></textarea>
+				</div>
+				<div class="flex-row">
+					<p>中文例句</p>
+					:<textarea id="lc-ch_example"></textarea>
+				</div>
+				<div class="flex-row">
+					<p>句型</p>
+					:<select id="lc-example_type">
+						<option>直斂句</option>
+						<option>疑問句</option>
+						<option>祈使句</option>
+						<option>存在句/所有句/方位句</option>
+						<option>主題句</option>
+						<option>否定句</option>
+						<option>補斂結構</option>
+						<option>修飾結構</option>
+						<option>並列結構</option>
+						<option>反身與交互結構</option>
+					</select>
+				</div>
+				<div class="flex-row">
+					<p>備註</p>
+					:<textarea id="lc-remark"></textarea>
+				</div>
+				<div class="cfm-row">
+					<button onclick="showConfirmModal('2')">送出</button>
+				</div>
+	    </div>
+		</div>
+
+		<!---------page 3------------>
+
+		<div class="hide" id="3">
+			<div class="page-title-1">
+				建置文章
+			</div>
+			<div class="flex">
+				<select class="year" id="year-3" onchange="changeYear(3)">
+				</select>
+				<p>年 -- </p>
+				<select class="year" id="s-article" onchange="changeArticle(1)">
+				</select>
+			</div>
+			<div class="page-title" data-act-page="1">
+	      <input class="learn act-btn btn1" type="button" onclick="showPage(3,1)" value="已建文章">
+	      <input class="learn btn2" type="button" onclick="showPage(3,2)" value="建修表單">
+	    </div>
+	    <div class="page-1">
+	    	<div class="sTitle">
+	        <div class="select01">
+	          <i class="material-icons prev" onclick="prevpage(3)">navigate_before</i>第
+	          <select id="pages-3" onchange="changepage(3)">
+	          </select>頁
+	          <i class="material-icons next" onclick="nextpage(3)">navigate_next</i>
+	        </div>
+				</div>
+	    	<table class="workTable-2">
+					<tr class="wt-1st-row-1">
+						<td style="width: 5%">
+							<p class="nm">文章</p>
+						</td>
+						<td style="width: 5%">
+							<p class="nm">段落</p>
+						</td>
+						<td style="width: 40%">
+							<p class="nm">中文</p>
+						</td>
+						<td style="width: 40%">
+							<p class="nm">族語</p>
+						</td>
+						<td style="width: 5%">
+							<p class="nm">試聽</p>
+						</td>
+						<td style="width: 5%">
+							<p class="nm">編輯</p>
+						</td>
+					</tr>
+					<tbody class="workTable-edit-1">
+						
+					</tbody>
+				</table>
+	    </div>
+	    <div class="page-2">
+	    	<div class="sTitle">
+	        &nbsp;
+				</div>
+				<div class="flex-row">
+					<p>文章</p>
+					:<p id="ar-sid" class="fr-p" data-id=""></p>
+				</div>
+				<div class="flex-row">
+					<p>段落</p>
+					:<p id="ar-paragraph" class="fr-p"></p>
+				</div>
+				<div class="flex-row">
+					<p>方言</p>
+					:<p id="ar-dialect" class="fr-p"></p>
+				</div>
+				<div class="flex-row">
+					<p>中文</p>
+					:<textarea id="ar-ch_content" disabled></textarea>
+				</div>
+				<div class="flex-row">
+					<p>族語</p>
+					:<textarea id="ar-ab_content"></textarea>
+				</div>
+				<div class="flex-row">
+					<p>文章中新詞</p>
+					:<table class="kw-table">
+						<tr>
+							<td>
+								中文
+							</td>
+							<td>
+								族語
+							</td>
+						</tr>
+						<tbody class="kw-table-content">
+						</tbody>
+					</table>
+				</div>
+				<div class="cfm-row">
+					<button onclick="showConfirmModal('3')">送出</button>
+				</div>
+	    </div>
+		</div>
+
+		<!---------page 4------------>
+
+		<div class="hide" id="4">
+			<div class="page-title-1">
+				審查新詞
+			</div>
+			<div class="flex">
+				<select class="year" id="year-4" onchange="changeYear(4)">
+				</select>
+				<p>年</p>
+			</div>
+			<div class="page-title" data-act-page="1">
+	      <input class="learn act-btn btn1" type="button" onclick="showPage(4,1)" value="已建新詞">
+	      <input class="learn btn2" type="button" onclick="showPage(4,2)" value="建修表單">
+	    </div>
+	    <div class="page-1">
+	    	<div class="sTitle">
+	        <div class="select01">
+	          <i class="material-icons prev" onclick="prevpage(4)">navigate_before</i>第
+	          <select id="pages-4" onchange="changepage(4)">
+	          </select>頁
+	          <i class="material-icons next" onclick="nextpage(4)">navigate_next</i>
+	        </div>
+				</div>
+	    	<table class="workTable">
+					<tr class="wt-1st-row">
+						<td style="width: 2%">
+							<p class="nm">序</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">主類別</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">次類別</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">方言別</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">族語</p>
+						</td>
+						<td style="width: 5%">
+							<p class="nm">試聽</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">中文</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">語意</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">註解</p>
+						</td>
+						<td style="width: 5%">
+							<p class="nm">試聽</p>
+						</td>
+						<td style="width: 5%">
+							<p class="nm">編輯</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">狀態</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">確認</p>
+						</td>
+					</tr>
+				</table>
+				<table class="workTable-edit">	
+				</table>
+	    </div>
+	    <div class="page-2">
+	    	<div class="sTitle">
+	        &nbsp;
+				</div>
+				<div class="flex-row border-1">
+					<table class="fe-table">
+						<tr>
+							<td>
+								表單號
+							</td>
+							<td>
+								<div class="div-flex">
+									：<p id="fer-id" class="fr-p" data-id=""></p>
+								</div>
+							</td>
+							<td>
+								來源
+							</td>
+							<td>
+								<div class="div-flex">
+									：<p id="fer-season" class="fr-p"></p>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								族語別
+							</td>
+							<td>
+								<div class="div-flex">
+									：<p id="fer-language" class="fr-p"></p>
+								</div>
+							</td>
+							<td>
+								方言別
+							</td>
+							<td>
+								<div class="div-flex">
+									：<p id="fer-dialect" class="fr-p"></p>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								主類別
+							</td>
+							<td>
+								<div class="div-flex">
+									：<p id="fer-cate" class="fr-p"></p>
+								</div>
+							</td>
+							<td>
+								次類別
+							</td>
+							<td>
+								<div class="div-flex">
+									：<p id="fer-subcate" class="fr-p"></p>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="border-1">
+					<div class="flex-row">
+						<p>中文</p>
+						:<p id="fer-ch" class="fr-p"></p>
+					</div>
+					<div class="flex-row">
+						<p>族語</p>
+						:<p id="fer-ab" class="fr-p"></p>
+					</div>
+					<div class="flex-row">
+						<p>審查意見</p>
+						:<textarea id="a1"></textarea>
+					</div>
+				</div>
+				<div class="border-1">
+					<div class="flex-row">
+						<p>語意</p>
+						:<p id="fer-mean" class="fr-p"></p>
+					</div>
+					<div class="flex-row">
+						<p>審查意見</p>
+						:<textarea id="a2"></textarea>
+					</div>
+				</div>
+				<div class="border-1">
+					<div class="flex-row">
+						<p>創詞說明</p>
+						:<p id="fer-description" class="fr-p"></p>
+					</div>
+					<div class="flex-row">
+						<p>審查意見</p>
+						:<textarea id="a3"></textarea>
+					</div>
+				</div>
+				<div class="border-1">
+					<div class="flex-row">
+						<p>構詞法</p>
+						:<p id="fer-word_formation" class="fr-p"></p>
+					</div>
+					<div class="flex-row">
+						<p>審查意見</p>
+						:<textarea id="a4"></textarea>
+					</div>
+				</div>
+				<div class="border-1">
+					<div class="flex-row">
+						<p>中文例句</p>
+						:<p id="fer-ch_example" class="fr-p"></p>
+					</div>
+					<div class="flex-row">
+						<p>族語例句</p>
+						:<p id="fer-ab_example" class="fr-p"></p>
+					</div>
+					<div class="flex-row">
+						<p>審查意見</p>
+						:<textarea id="a5"></textarea>
+					</div>
+				</div>
+				<div class="border-1">
+					<div class="flex-row">
+						<p>句型</p>
+						:<p id="fer-example_type" class="fr-p"></p>
+					</div>
+					<div class="flex-row">
+						<p>審查意見</p>
+						:<textarea id="a6"></textarea>
+					</div>
+				</div>
+				<div class="border-1">
+					<div class="flex-row">
+						<p>備註</p>
+						:<p id="fer-remark" class="fr-p"></p>
+					</div>
+					<div class="flex-row">
+						<p>審查意見</p>
+						:<textarea id="a7"></textarea>
+					</div>
+				</div>
+				<div class="cfm-row">
+					<button onclick="showConfirmModal('4')">送出</button>
+				</div>
+	    </div>
+		</div>
+
+		<!---------page 5------------>
+
+		<div class="hide" id="5">
+			<div class="page-title-1">
+				審查文章
+			</div>
+			<div class="flex">
+				<select class="year" id="year-5" onchange="changeYear(5)">
+				</select>
+				<p>年 -- </p>
+				<select class="year" id="s-article-1" onchange="changeArticle(2)">
+				</select>
+			</div>
+			<div class="page-title" data-act-page="1">
+	      <input class="learn act-btn btn1" type="button" onclick="showPage(5,1)" value="已建文章">
+	      <input class="learn btn2" type="button" onclick="showPage(5,2)" value="建修表單">
+	    </div>
+	    <div class="page-1">
+	    	<div class="sTitle">
+	        <div class="select01">
+	          <i class="material-icons prev" onclick="prevpage(5)">navigate_before</i>第
+	          <select id="pages-5" onchange="changepage(5)">
+	          </select>頁
+	          <i class="material-icons next" onclick="nextpage(5)">navigate_next</i>
+	        </div>
+				</div>
+	    	<table class="workTable-2">
+					<tr class="wt-1st-row-1">
+						<td style="width: 5%">
+							<p class="nm">文章</p>
+						</td>
+						<td style="width: 5%">
+							<p class="nm">段落</p>
+						</td>
+						<td style="width: 32%">
+							<p class="nm">中文</p>
+						</td>
+						<td style="width: 32%">
+							<p class="nm">族語</p>
+						</td>
+						<td style="width: 5%">
+							<p class="nm">試聽</p>
+						</td>
+						<td style="width: 5%">
+							<p class="nm">編輯</p>
+						</td>
+						<td style="width: 10%">
+							<p class="nm">狀態</p>
+						</td>
+						<td style="width: 6%">
+							<p class="nm">確認</p>
+						</td>
+					</tr>
+					<tbody class="workTable-edit-1">
+						
+					</tbody>
+				</table>
+	    </div>
+	    <div class="page-2">
+	    	<div class="sTitle">
+	        &nbsp;
+				</div>
+				<div class="flex-row border-1">
+					<table class="fe-table">
+						<tr>
+							<td>
+								表單號
+							</td>
+							<td>
+								<div class="div-flex">
+									：<p id="arr-id" class="fr-p" data-id=""></p>
+								</div>
+							</td>
+							<td>
+								來源
+							</td>
+							<td>
+								<div class="div-flex">
+									：<p id="arr-season" class="fr-p"></p>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								族語別
+							</td>
+							<td>
+								<div class="div-flex">
+									：<p id="arr-language" class="fr-p"></p>
+								</div>
+							</td>
+							<td>
+								方言別
+							</td>
+							<td>
+								<div class="div-flex">
+									：<p id="arr-dialect" class="fr-p"></p>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								主題
+							</td>
+							<td>
+								<div class="div-flex">
+									：<p id="arr-name" class="fr-p"></p>
+								</div>
+							</td>
+							<td>
+								類別
+							</td>
+							<td>
+								<div class="div-flex">
+									：<p id="arr-cate" class="fr-p"></p>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								文章
+							</td>
+							<td>
+								<div class="div-flex">
+									：<p id="arr-sid" class="fr-p"></p>
+								</div>
+							</td>
+							<td>
+								段落
+							</td>
+							<td>
+								<div class="div-flex">
+									：<p id="arr-paragraph" class="fr-p"></p>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="border-1">
+					<div class="flex-row">
+						<p>中文</p>
+						:<p id="arr-ch" class="fr-p width40"></p>
+					</div>
+					<div class="flex-row">
+						<p>族語</p>
+						:<p id="arr-ab" class="fr-p width40"></p>
+					</div>
+					<div class="flex-row">
+						<p>審查意見</p>
+						:<textarea id="arr-a1"></textarea>
+					</div>
+					<div class="cfm-row">
+						<button onclick="showConfirmModal('5')">送出</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!---------page 6------------>
+
+		<div class="hide pbtm" id="6">
+			<div class="page-title-1">
+				意見回饋
+			</div>
+			<div class="sTitle">
+        <div class="select01">
+          <i class="material-icons prev" onclick="prevpage(6)">navigate_before</i>第
+          <select id="pages-6" onchange="changepage(6)">
+          </select>頁
+          <i class="material-icons next" onclick="nextpage(6)">navigate_next</i>
+        </div>
+			</div>
+			<table class="workTable">
+				<tr class="wt-1st-row">
+					<td style="width: 4%">
+						<p class="nm">序</p>
+					</td>
+					<td style="width: 10%">
+						<p class="nm">日期</p>
+					</td>
+					<td style="width: 5%">
+						<p class="nm">項目</p>
+					</td>
+					<td style="width: 5%">
+						<p class="nm">主類別</p>
+					</td>
+					<td style="width: 5%">
+						<p class="nm">次類別</p>
+					</td>
+					<td style="width: 5%">
+						<p class="nm">年度</p>
+					</td>
+					<td style="width: 5%">
+						<p class="nm">方言別</p>
+					</td>
+					<td style="width: 14%">
+						<p class="nm">族語</p>
+					</td>
+					<td style="width: 12%">
+						<p class="nm">中文</p>
+					</td>
+					<td style="width: 12%">
+						<p class="nm">建議內容</p>
+					</td>
+					<td style="width: 6%">
+						<p class="nm">回饋者</p>
+					</td>
+					<td style="width: 12%">
+						<p class="nm">回覆</p>
+					</td>
+					<td style="width: 5%">
+						<p class="nm"></p>
+					</td>
+				</tr>
+			</table>
+			<table class="workTable-edit">	
+			</table>
+		</div>
+	</div>
+
+
+	<!-- modal -->
+	<div id="confirmModal" class="modal" data-id="">
+    <div class="modal-content">
+	    <p>確認送出</p>
+	    <br><br>
+	    <button onclick="modalConfirm()">確認</button>
+	    <button onclick="modalCancel()">取消</button>
+    </div>
+  </div>
+  <div id="confirmModal3" class="modal modal1" data-id="" data-sid="" data-pw="">
+    <div class="modal-content1">
+	    <p>確認送出</p>
+	    <br><br>
+	    <input type="button" onclick="allDataSubmit()" value="確認">
+	    <input type="button" onclick="allDataCancel()" value="取消">
+    </div>
+  </div>
+  <div id="deleteModal" class="modal modal1" data-id="" data-mode="">
+    <div class="modal-content1">
+	    <p>確認刪除</p>
+	    <br><br>
+	    <input type="button" onclick="deleteConfirm()" value="確認">
+	    <input type="button" onclick="deleteCancel()" value="取消">
+    </div>
+  </div>
+  <div id="addOperatorModal" class="modal modal1">
+    <div class="modal-content2">
+    	<span onclick="closeAddOperator()">&times;</span>
+    	<div class="modal-row">
+    		族別：
+    		<select onchange="initAddOperatorDialect()" id="a-o-family">
+    			<option></option>
+    		</select>
+    	</div>
+    	<br>
+    	<div class="modal-row">
+    		方言：
+    		<select id="a-o-dialect">
+    			
+    		</select>
+    	</div>
+    	<br>
+    	<br>
+    	<div>
+    		<input type="button" onclick="addOppConfirm()" value="確認">
+	    	<input type="button" onclick="addOppCancel()" value="取消">
+    	</div>
+    </div>
+  </div>
+  <div id="statusModal" class="modal modal1">
+    <div class="modal-content2">
+    	<span onclick="closeStatusModal()">&times;</span>
+    	<div class="modal-row">
+    		完成度：
+    		<input type="text" id="status">%
+    	</div>
+    	<br>
+    	<br>
+    	<div>
+    		<input type="button" onclick="addOppConfirm()" value="確認">
+	    	<input type="button" onclick="addOppCancel()" value="取消">
+    	</div>
+    </div>
+  </div>
+  <div id="applyOperatorModal" class="modal modal1" data-id="">
+    <div class="modal-content2 width50">
+    	<div class="sec-content">
+	    	<span onclick="closeApplyOperator()">&times;</span>
+	    	<div class="modal-title">
+	    	</div>
+	    	<div class="sb4">
+		    	<div class="sb3">
+		        <input type="text" class="sb2 font15vw" id="operatorSearch" placeholder="會員ID（身分證）、姓名">
+		        <i class="material-icons font2vw" onclick="operatorSearch()">search</i>
+		      </div>
+	      </div>
+	      <div class="applyOp-content">
+	      	<p>搜尋結果</p>
+	      	<table class="workTable">
+	      		<tr class="wt-1st-row">
+							<td style="width: 10%">
+								<p class="nm">序號</p>
+							</td>
+							<td style="width: 15%">
+								<p class="nm">姓名</p>
+							</td>
+							<td style="width: 15%">
+								<p class="nm">族名</p>
+							</td>
+							<td style="width: 15%">
+								<p class="nm">方言別</p>
+							</td>
+							<td style="width: 20%">
+								<p class="nm">地區</p>
+							</td>
+							<td style="width: 10%">
+								<p class="nm">部落</p>
+							</td>
+							<td style="width: 15%">
+								<p class="nm">指派</p>
+							</td>
+						</tr>
+	      	</table>
+	      	<div>
+		      	<table id="applyOppTable">
+		      		
+		      	</table>
+	      	</div>
+	      </div>
+	    </div>
+    </div>
+  </div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="/newWordEnd/main.js" type="text/javascript"></script>
+
+</html>

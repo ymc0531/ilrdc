@@ -8,6 +8,9 @@ $(document).ready(function() {
   initSuggest();
   updateDownload();
 
+  $('#btn5').click(function() {
+    initSuggest();
+  })
   //test();
 });
 

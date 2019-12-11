@@ -84,10 +84,11 @@ router.post('/login', async function(req, res) {
               WHERE username = '${username}' 
               AND password = '${password}'
               AND privilege = ${privilege}
+              AND status = 1
             `
   database.conn.query(qry, function (err, result) {
     if(result.length>0){
-      let token = jwt.sign({id: result[0].id, username: result[0].username, privilege: result[0].privilege},
+      let token = jwt.sign({id: result[0].id, username: result[0].username, name: result[0].name_zh, privilege: result[0].privilege},
         config.secret,
         { 
           expiresIn: '24h'
