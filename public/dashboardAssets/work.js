@@ -386,7 +386,7 @@ function nwSettingPage () {
   let currpage = $('.content').attr('data-current-page');
   $(`#${currpage}`).css('display', 'none');
   $('.content').attr('data-current-page', 'nw-setting-page');
-  $('.navbar-brand').html('資料上傳');
+  $('.navbar-brand').html('新詞設定');
   $('#nw-setting-page').css('display', 'block');
 };
 
@@ -589,5 +589,96 @@ async function createUserAjax(data) {
   }
 }
 
+function towCsv() {
+  //let result = [{sid: '編號', dialect: '方言', cate: '分類', snum: 'snum', ftws: '族語詞彙', ctws: '中文詞彙', fexam: '族語例句', cexam: '中文例句', LanLevelE: '初級', LanLevelM: '中級', LanLevelMH: '中高級', LanLevelH: '高級', memo: '備註'}, {sid: '18-010040000', dialect: '南勢阿美', cate: '生活用語', snum: '01-00', ftws: 'test', ctws: '測試', fexam: 'test example', cexam: '測試例句', LanLevelE: '0', LanLevelM: '1', LanLevelMH: '0', LanLevelH: '0', memo: ''}];
+  //JSONToCSVConvertor(result, '詞表', false);
+  window.open('https://drive.google.com/file/d/1WbHwhC9Dwy-ko7HAb8l2ninR5dh61EM_/view?usp=sharing');
+
+}
+
+function nwCsv() {
+  window.open('https://drive.google.com/open?id=1b_R_567eSna7JRyalf39k73PmR2VYVXd');
+}
+
+function arCsv() {
+  //let result = [{season: '108', language: '阿美', dialect: '南勢阿美', cate: '生活用語', subcate: '數字計量', ch: '我們', ab: 'kita', mean: '我們的意思', description: '我們', word_formation: '構詞法', ch_example: '中文例句', ab_example: '族語例句', example_type: '句型', remark: '備註'}, {season: '年度', language: '語言', dialect: '方言', cate: '主分類', subcate: '次分類', ch: '中文詞彙', ab: '族語詞彙', mean: '語意', description: '創詞說明', word_formation: '重疊', ch_example: '我們一起', ab_example: 'kita semua', example_type: '祈使句', remark: ''}];
+  //JSONToCSVConvertor(result, '新詞', false);
+  window.open('https://drive.google.com/open?id=1lKnt6rA4Ni-Fur4gt7jijKC1a0az_tkx');
+}
+
+function usrCsv() {
+  window.open('https://drive.google.com/open?id=19Ax-uqflY4Jl_9SQHrFgJG4YwuRvMrrv');
+}
+
+
+
+function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
+  var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+    
+  var CSV = '';    
+
+  //This condition will generate the Label/Header
+  if (ShowLabel) {
+    var row = "";
+    
+    //This loop will extract the label from 1st index of on array
+    for (var index in arrData[0]) {
+      
+      //Now convert each value to string and comma-seprated
+      row += index + ',';
+    }
+
+    row = row.slice(0, -1);
+    
+    //append Label row with line break
+    CSV += row + '\r\n';
+  }
+  
+  //1st loop is to extract each row
+  for (var i = 0; i < arrData.length; i++) {
+    var row = "";
+    
+    //2nd loop will extract each column and convert it in string comma-seprated
+    for (var index in arrData[i]) {
+      row += '"' + arrData[i][index] + '",';
+    }
+
+    row.slice(0, row.length - 1);
+    
+    //add a line break after each row
+    CSV += row + '\r\n';
+  }
+
+  if (CSV == '') {        
+    alert("Invalid data");
+    return;
+  }   
+  
+  //Generate a file name
+  var fileName = "";
+  //this will remove the blank-spaces from the title and replace it with an underscore
+  fileName += ReportTitle.replace(/ /g,"_");   
+  
+  //Initialize file format you want csv or xls
+  var uri = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURI(CSV);
+  
+  // Now the little tricky part.
+  // you can use either>> window.open(uri);
+  // but this will not work in some browsers
+  // or you will not get the correct file extension    
+  
+  //this trick will generate a temp <a /> tag
+  var link = document.createElement("a");    
+  link.href = uri;
+  
+  //set the visibility hidden so it will not effect on your web-layout
+  link.style = "visibility:hidden";
+  link.download = fileName + ".csv";
+  
+  //this part will append the anchor tag and remove it after automatic click
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 
 

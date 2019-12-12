@@ -242,16 +242,20 @@ router.post('/articlesName', async function(req, res) {
   })
 });
 
-router.put('/changeWordStatus', async function(req, res) {
+router.put('/changeWordStatus', middleware.checkToken, async function(req, res) {
   let {id, checked} = req.body;
   let qry = `
               UPDATE nw_words
               SET checked = ${checked}
               WHERE id = ${id}
             `;
-  database.conn.query(qry, function (err, result) {
-    res.send(result);
-  })
+  if(req.decoded.privilege>1) {
+    database.conn.query(qry, function (err, result) {
+      res.send(result);
+    })
+  }else{
+    res.send(false);
+  }
 });
 
 router.put('/arReview', async function(req, res) {

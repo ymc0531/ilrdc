@@ -311,7 +311,11 @@ function approve(val, id, check) {
     if($(val).prop('checked')) checked = 1;
     let data = {id: id, checked: checked};
     (async () => {
-      await changeWordStatusAjax(data);
+      let result = await changeWordStatusAjax(data);
+      if(!result) {
+        $(val).prop('checked', false);
+        alert('無權限使用此功能。');
+      }
     })()
   }else{
     $(val).prop('checked', false);
