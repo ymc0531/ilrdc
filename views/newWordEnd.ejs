@@ -60,7 +60,7 @@
 						<td style="width: 10%">
 							<p class="nm">族語</p>
 						</td>
-						<td style="width: 2%">
+						<td style="width: 3%">
 							<p class="nm">試聽</p>
 						</td>
 						<td style="width: 8%">
@@ -78,16 +78,16 @@
 						<td style="width: 10%">
 							<p class="nm">例句</p>
 						</td>
-						<td style="width: 2%">
+						<td style="width: 3%">
 							<p class="nm">試聽</p>
 						</td>
-						<td style="width: 8%">
+						<td style="width: 5%">
 							<p class="nm">句型</p>
 						</td>
 						<td style="width: 8%">
 							<p class="nm">備註</p>
 						</td>
-						<td style="width: 2%">
+						<td style="width: 3%">
 							<p class="nm">編輯</p>
 						</td>
 					</tr>
@@ -97,7 +97,9 @@
 	    </div>
 	    <div class="page-2">
 	    	<div class="sTitle">
-	        &nbsp;
+	        <span>
+	        	<button onclick="playArAudio('/audio/newWord/test.wav')">重整錄音</button>
+	        </span>
 				</div>
 				<div class="flex-row">
 					<p>中文</p>
@@ -116,8 +118,9 @@
 					:<p id="fe-dialect" class="fr-p"></p>
 				</div>
 				<div class="flex-row">
-					<p>族語</p>
+					<p class="flex-p">族語<span class="arAudio-btn"></span></p>
 					:<textarea id="fe-ab"></textarea>
+					<button class="record-btn" onclick="openRecorder('word')">錄音</button>
 				</div>
 				<div class="flex-row">
 					<p>語意</p>
@@ -139,8 +142,10 @@
 					</select>
 				</div>
 				<div class="flex-row">
-					<p>族語例句</p>
+					<p class="flex-p">族語例句<span class="arAudio-btn-ex"></span></p>
 					:<textarea id="fe-ab_example"></textarea>
+					<button class="record-btn" onclick="openRecorder('ex')">錄音</button>
+
 				</div>
 				<div class="flex-row">
 					<p>中文例句</p>
@@ -212,7 +217,7 @@
 						<td style="width: 10%">
 							<p class="nm">族語</p>
 						</td>
-						<td style="width: 2%">
+						<td style="width: 3%">
 							<p class="nm">試聽</p>
 						</td>
 						<td style="width: 8%">
@@ -230,16 +235,16 @@
 						<td style="width: 10%">
 							<p class="nm">例句</p>
 						</td>
-						<td style="width: 2%">
+						<td style="width: 3%">
 							<p class="nm">試聽</p>
 						</td>
-						<td style="width: 8%">
+						<td style="width: 5%">
 							<p class="nm">句型</p>
 						</td>
 						<td style="width: 8%">
 							<p class="nm">備註</p>
 						</td>
-						<td style="width: 2%">
+						<td style="width: 3%">
 							<p class="nm">編輯</p>
 						</td>
 					</tr>
@@ -249,7 +254,9 @@
 	    </div>
 	    <div class="page-2">
 	    	<div class="sTitle">
-	        &nbsp;
+	        <span>
+	        	<button onclick="playArAudio('/audio/newWord/test.wav')">重整錄音</button>
+	        </span>
 				</div>
 				<div class="flex-row">
 					<p>中文</p>
@@ -268,8 +275,9 @@
 					:<p id="lc-dialect" class="fr-p"></p>
 				</div>
 				<div class="flex-row">
-					<p>族語</p>
+					<p class="flex-p">族語<span class="arAudio-btn"></span></p>
 					:<textarea id="lc-ab"></textarea>
+					<button class="record-btn" onclick="openRecorder('word-2')">錄音</button>
 				</div>
 				<div class="flex-row">
 					<p>語意</p>
@@ -291,8 +299,9 @@
 					</select>
 				</div>
 				<div class="flex-row">
-					<p>族語例句</p>
+					<p class="flex-p">族語例句<span class="arAudio-btn-ex"></span></p>
 					:<textarea id="lc-ab_example"></textarea>
+					<button class="record-btn" onclick="openRecorder('ex-2')">錄音</button>
 				</div>
 				<div class="flex-row">
 					<p>中文例句</p>
@@ -396,8 +405,9 @@
 					:<textarea id="ar-ch_content" disabled></textarea>
 				</div>
 				<div class="flex-row">
-					<p>族語</p>
+					<p class="flex-p">族語<span class="arAudio-btn"></span></p>
 					:<textarea id="ar-ab_content"></textarea>
+					<button class="record-btn" onclick="openRecorder('ar')">錄音</button>
 				</div>
 				<div class="flex-row">
 					<p>文章中新詞</p>
@@ -558,7 +568,7 @@
 						:<p id="fer-ch" class="fr-p"></p>
 					</div>
 					<div class="flex-row">
-						<p>族語</p>
+						<p class="flex-p">族語<span class="arAudio-btn"></span></p>
 						:<p id="fer-ab" class="fr-p"></p>
 					</div>
 					<div class="flex-row">
@@ -602,7 +612,7 @@
 						:<p id="fer-ch_example" class="fr-p"></p>
 					</div>
 					<div class="flex-row">
-						<p>族語例句</p>
+						<p class="flex-p">族語例句<span class="arAudio-btn-ex"></span></p>
 						:<p id="fer-ab_example" class="fr-p"></p>
 					</div>
 					<div class="flex-row">
@@ -780,7 +790,7 @@
 						:<p id="arr-ch" class="fr-p width40"></p>
 					</div>
 					<div class="flex-row">
-						<p>族語</p>
+						<p class="flex-p">族語<span class="arAudio-btn"></span></p>
 						:<p id="arr-ab" class="fr-p width40"></p>
 					</div>
 					<div class="flex-row">
@@ -866,114 +876,32 @@
 	    <button onclick="modalCancel()">取消</button>
     </div>
   </div>
-  <div id="confirmModal3" class="modal modal1" data-id="" data-sid="" data-pw="">
-    <div class="modal-content1">
-	    <p>確認送出</p>
-	    <br><br>
-	    <input type="button" onclick="allDataSubmit()" value="確認">
-	    <input type="button" onclick="allDataCancel()" value="取消">
-    </div>
-  </div>
-  <div id="deleteModal" class="modal modal1" data-id="" data-mode="">
-    <div class="modal-content1">
-	    <p>確認刪除</p>
-	    <br><br>
-	    <input type="button" onclick="deleteConfirm()" value="確認">
-	    <input type="button" onclick="deleteCancel()" value="取消">
-    </div>
-  </div>
-  <div id="addOperatorModal" class="modal modal1">
-    <div class="modal-content2">
-    	<span onclick="closeAddOperator()">&times;</span>
-    	<div class="modal-row">
-    		族別：
-    		<select onchange="initAddOperatorDialect()" id="a-o-family">
-    			<option></option>
-    		</select>
+  <div id="recorderModal" class="modal" data-id="" data-type="">
+    <div class="modal-content-1">
+    	<div class="closex">
+    		<span onclick="closeRecorder()">&times;</span>
     	</div>
-    	<br>
-    	<div class="modal-row">
-    		方言：
-    		<select id="a-o-dialect">
-    			
-    		</select>
-    	</div>
-    	<br>
-    	<br>
-    	<div>
-    		<input type="button" onclick="addOppConfirm()" value="確認">
-	    	<input type="button" onclick="addOppCancel()" value="取消">
-    	</div>
-    </div>
-  </div>
-  <div id="statusModal" class="modal modal1">
-    <div class="modal-content2">
-    	<span onclick="closeStatusModal()">&times;</span>
-    	<div class="modal-row">
-    		完成度：
-    		<input type="text" id="status">%
-    	</div>
-    	<br>
-    	<br>
-    	<div>
-    		<input type="button" onclick="addOppConfirm()" value="確認">
-	    	<input type="button" onclick="addOppCancel()" value="取消">
-    	</div>
-    </div>
-  </div>
-  <div id="applyOperatorModal" class="modal modal1" data-id="">
-    <div class="modal-content2 width50">
-    	<div class="sec-content">
-	    	<span onclick="closeApplyOperator()">&times;</span>
-	    	<div class="modal-title">
-	    	</div>
-	    	<div class="sb4">
-		    	<div class="sb3">
-		        <input type="text" class="sb2 font15vw" id="operatorSearch" placeholder="會員ID（身分證）、姓名">
-		        <i class="material-icons font2vw" onclick="operatorSearch()">search</i>
-		      </div>
-	      </div>
-	      <div class="applyOp-content">
-	      	<p>搜尋結果</p>
-	      	<table class="workTable">
-	      		<tr class="wt-1st-row">
-							<td style="width: 10%">
-								<p class="nm">序號</p>
-							</td>
-							<td style="width: 15%">
-								<p class="nm">姓名</p>
-							</td>
-							<td style="width: 15%">
-								<p class="nm">族名</p>
-							</td>
-							<td style="width: 15%">
-								<p class="nm">方言別</p>
-							</td>
-							<td style="width: 20%">
-								<p class="nm">地區</p>
-							</td>
-							<td style="width: 10%">
-								<p class="nm">部落</p>
-							</td>
-							<td style="width: 15%">
-								<p class="nm">指派</p>
-							</td>
-						</tr>
-	      	</table>
-	      	<div>
-		      	<table id="applyOppTable">
-		      		
-		      	</table>
-	      	</div>
-	      </div>
+	    <div id="controls">
+	     <button id="recordButton">開始</button>
+	     <button id="pauseButton" disabled>暫停</button>
+	     <button id="stopButton" disabled>結束</button>
 	    </div>
+	    <div id="formats">開始錄音</div>
+	    <h3>錄音紀錄</h3>
+	    <div id="recordingsList"></div>
+	    <div id="upload"></div>
     </div>
   </div>
 
+  <audio id="arAudio">
+	  <source src="" type="audio/wav">
+	</audio>
+  
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+<script src="/js/recorder.js" type="text/javascript"></script>
 <script src="/newWordEnd/main.js" type="text/javascript"></script>
-
 </html>

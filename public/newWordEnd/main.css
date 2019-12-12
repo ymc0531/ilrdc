@@ -258,6 +258,12 @@ textarea {
   width: 25%;
   padding: 15px;
 }
+.modal-content-1 {
+  border-radius: 10px;
+  background-color: white;
+  min-width: 50%;
+  padding: 15px;
+}
 .width50 {
   min-height: 420px;
   height: 60% !important;
@@ -287,6 +293,13 @@ textarea {
   align-items: center;
   justify-content: center;
   padding: 2px 0 2px 0;
+}
+.sTitle span button {
+  font-size: 1.5vw;
+  background-color: white;
+}
+.sTitle span button:hover {
+  background-color: #E1E0E0;
 }
 .sTitle1 {
   padding-left: 10px;
@@ -375,6 +388,17 @@ textarea {
   border-radius: 3px;
   border-color: green;
 }
+.record-btn {
+  margin-left: 2vw;
+  border-radius: 0.5vw;
+  font-size: 1.7vw;
+  background-color: white;
+  border-style: solid;
+  border-width: 0.1vw;
+}
+.record-btn:hover {
+  background-color: #E1E0E0;
+}
 .delete-btn {
   color: red;
   cursor: pointer;
@@ -387,6 +411,9 @@ textarea {
 }
 .edit-icon {
   font-size: 1.5vw;
+}
+.edit-icon {
+  font-size: 2.2vw;
 }
 .cfm-row {
   display: flex;
@@ -691,4 +718,47 @@ textarea {
 
 .width40 {
   width: 40vw !important;
+}
+
+#controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1vw;
+}
+
+#controls button {
+  font-size: 1.7vw;
+  border-style: solid;
+  border-width: 0.1vw;
+  border-radius: 0.5vw;
+  margin: 0 1vw 0 1vw;
+}
+
+#formats {
+  text-align: center;
+}
+
+#recordingsList {
+  list-style: none;
+  list-style-type: none;
+}
+
+#upload {
+  margin-top: 1vw;
+}
+
+.closex {
+  font-size: 2vw;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.arAudio-btn {
+  font-size: 2vw;
+  margin-left: 1vw;
+}
+
+.flex-p {
+  display: flex;
 }

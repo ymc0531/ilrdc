@@ -24,7 +24,7 @@ initArName1();
 
 function test() {
   $('#1').css('display', 'none');
-  $('#6').css('display', 'block');
+  $('#2').css('display', 'block');
 }
 
 function initYear() {
@@ -78,12 +78,13 @@ async function getArNameAjax(data) {
 }
 
 function initFeReview() {
-  let check, str;
+  let check, str, isAudio, isAudioEx;
   let year = $('#year-4').val();
   let page = $('#pages-4').val();
   if(!page) page = 1;
   let data = {year: year, page: page};
   (async () => {
+    let audioFile = await getAudioFileAjax();
     let result = await getFeReviewsAjax(data);
     let tpage = Math.ceil(result[0][0]['COUNT(*)']/50);
 
@@ -95,6 +96,14 @@ function initFeReview() {
 
     $('#4 .workTable-edit').html('');    
     for(let i=0;i<result[1].length;i++){
+      isAudio = '';
+      isAudioEx = '';
+      if(audioFile.find(x => x == `word-${result[1][i].id}.wav`)) {
+        isAudio = `<i class="material-icons edit-icon" onclick="playAudio('word-${result[1][i].id}.wav')">volume_up</i>`;
+      }
+      if(audioFile.find(x => x == `ex-${result[1][i].id}.wav`)){
+        isAudioEx = `<i class="material-icons edit-icon" onclick="playAudio('ex-${result[1][i].id}.wav')">volume_up</i>`;
+      }
       check = 0;
       if(result[1][i].a1&&result[1][i].a1!='') check++;
       if(result[1][i].a2&&result[1][i].a2!='') check++;
@@ -124,7 +133,7 @@ function initFeReview() {
             <p class="nm">${result[1][i].ab}</p>
           </td>
           <td style="width: 5%">
-            <i class="material-icons edit-icon" onclick="">volume_up</i>
+            ${isAudio}
           </td>
           <td style="width: 10%">
             <p class="nm">${result[1][i].ch}</p>
@@ -136,7 +145,7 @@ function initFeReview() {
             <p class="nm">${result[1][i].description}</p>
           </td>
           <td style="width: 5%">
-            <i class="material-icons edit-icon" onclick="">volume_up</i>
+            ${isAudioEx}
           </td>
           <td style="width: 5%">
             <i class="material-icons edit-icon" onclick="editFeReview(${result[1][i].id})">border_color</i>
@@ -169,11 +178,13 @@ async function getFeReviewsAjax(data) {
 }
 
 function initFeWord() {
+  let isAudio, isAudioEx;
   let year = $('#year-1').val();
   let page = $('#pages-1').val();
   if(!page) page = 1;
   let data = {year: year, page: page};
   (async () => {
+    let audioFile = await getAudioFileAjax();
     let result = await getFeWordsAjax(data);
     let tpage = Math.ceil(result[0][0]['COUNT(*)']/50);
 
@@ -185,6 +196,14 @@ function initFeWord() {
 
     $('#1 .workTable-edit').html('');    
     for(let i=0;i<result[1].length;i++){
+      isAudio = '';
+      isAudioEx = '';
+      if(audioFile.find(x => x == `word-${result[1][i].id}.wav`)) {
+        isAudio = `<i class="material-icons edit-icon" onclick="playAudio('word-${result[1][i].id}.wav')">volume_up</i>`;
+      }
+      if(audioFile.find(x => x == `ex-${result[1][i].id}.wav`)){
+        isAudioEx = `<i class="material-icons edit-icon" onclick="playAudio('ex-${result[1][i].id}.wav')">volume_up</i>`;
+      }
       $('#1 .workTable-edit').append(`
         <tr>
           <td style="width: 2%">
@@ -202,8 +221,8 @@ function initFeWord() {
           <td style="width: 10%">
             <p class="nm">${result[1][i].ab}</p>
           </td>
-          <td style="width: 2%">
-            <i class="material-icons edit-icon" onclick="">volume_up</i>
+          <td style="width: 3%">
+            ${isAudio}
           </td>
           <td style="width: 8%">
             <p class="nm">${result[1][i].ch}</p>
@@ -221,16 +240,16 @@ function initFeWord() {
             <p class="nm">${result[1][i].ab_example}</p>
             <p class="nm">${result[1][i].ch_example}</p>
           </td>
-          <td style="width: 2%">
-            <i class="material-icons edit-icon" onclick="">volume_up</i>
+          <td style="width: 3%">
+            ${isAudioEx}
           </td>
-          <td style="width: 8%">
+          <td style="width: 5%">
             <p class="nm">${result[1][i].example_type}</p>
           </td>
           <td style="width: 8%">
             <p class="nm">${result[1][i].remark}</p>
           </td>
-          <td style="width: 2%">
+          <td style="width: 3%">
             <i class="material-icons edit-icon" onclick="editFeWord(${result[1][i].id})">border_color</i>
           </td>
         </tr>
@@ -285,7 +304,11 @@ async function changeWordStatusAjax(data) {
 
 function editFeReview(id) {
   let data = {id: id};
+  let data1 = {name: `word-${id}`};
+  let data2 = {name: `ex-${id}`};
   (async () => {
+    let audio = await getAudioAjax(data1);
+    let audioEx = await getAudioAjax(data2);
     let result = await getFeReviewAjax(data);
     console.log(result);
     $('#fer-id').attr('data-id', result[0].id);
@@ -311,6 +334,16 @@ function editFeReview(id) {
     $('#a5').val(result[0].a5);
     $('#a6').val(result[0].a6);
     $('#a7').val(result[0].a7);
+    $('#4 .arAudio-btn').html('');
+    if(audio&&audio!='') {
+      audio = `/audio/newWord/${audio}`;
+      $('#4 .arAudio-btn').html(`<i class="material-icons edit-icon-1" onclick="playArAudio('${audio}')">volume_up</i>`);
+    }
+    $('#4 .arAudio-btn-ex').html('');
+    if(audioEx&&audioEx!='') {
+      audioEx = `/audio/newWord/${audioEx}`;
+      $('#4 .arAudio-btn-ex').html(`<i class="material-icons edit-icon-1" onclick="playArAudio('${audioEx}')">volume_up</i>`);
+    }
     showPage(4,2);
   })()
 }
@@ -332,7 +365,11 @@ async function getFeReviewAjax(data) {
 
 function editFeWord(id) {
   let data = {id: id};
+  let data1 = {name: `word-${id}`};
+  let data2 = {name: `ex-${id}`};
   (async () => {
+    let audio = await getAudioAjax(data1);
+    let audioEx = await getAudioAjax(data2);
     let result = await getFeWordAjax(data);
     $('#fe-ch').attr('data-id', result[0].id);
     $('#fe-ch').html(result[0].ch);
@@ -347,6 +384,16 @@ function editFeWord(id) {
     $('#fe-ch_example').val(result[0].ch_example);
     $('#fe-example_type').val(result[0].example_type);
     $('#fe-remark').val(result[0].remark);
+    $('#1 .arAudio-btn').html('');
+    if(audio&&audio!='') {
+      audio = `/audio/newWord/${audio}`;
+      $('#1 .arAudio-btn').html(`<i class="material-icons edit-icon-1" onclick="playArAudio('${audio}')">volume_up</i>`);
+    }
+    $('#1 .arAudio-btn-ex').html('');
+    if(audioEx&&audioEx!='') {
+      audioEx = `/audio/newWord/${audioEx}`;
+      $('#1 .arAudio-btn-ex').html(`<i class="material-icons edit-icon-1" onclick="playArAudio('${audioEx}')">volume_up</i>`);
+    }
     showPage(1,2);
   })()
 }
@@ -367,11 +414,13 @@ async function getFeWordAjax(data) {
 }
 
 function initLcWord() {
+  let isAudio, isAudioEx;
   let year = $('#year-2').val();
   let page = $('#pages-2').val();
   if(!page) page = 1;
   let data = {year: year, page: page};
   (async () => {
+    let audioFile = await getAudioFileAjax();
     let result = await getLcWordsAjax(data);
     let tpage = Math.ceil(result[0][0]['COUNT(*)']/50);
 
@@ -383,6 +432,14 @@ function initLcWord() {
 
     $('#2 .workTable-edit').html('');    
     for(let i=0;i<result[1].length;i++){
+      isAudio = '';
+      isAudioEx = '';
+      if(audioFile.find(x => x == `word-${result[1][i].id}.wav`)) {
+        isAudio = `<i class="material-icons edit-icon" onclick="playAudio('word-${result[1][i].id}.wav')">volume_up</i>`;
+      }
+      if(audioFile.find(x => x == `ex-${result[1][i].id}.wav`)){
+        isAudioEx = `<i class="material-icons edit-icon" onclick="playAudio('ex-${result[1][i].id}.wav')">volume_up</i>`;
+      }
       $('#2 .workTable-edit').append(`
         <tr>
           <td style="width: 2%">
@@ -400,8 +457,8 @@ function initLcWord() {
             <td style="width: 10%">
               <p class="nm">${result[1][i].ab}</p>
             </td>
-            <td style="width: 2%">
-              <i class="material-icons edit-icon" onclick="">volume_up</i>
+            <td style="width: 3%">
+              ${isAudio}
             </td>
             <td style="width: 8%">
               <p class="nm">${result[1][i].ch}</p>
@@ -419,16 +476,16 @@ function initLcWord() {
               <p class="nm">${result[1][i].ab_example}</p>
               <p class="nm">${result[1][i].ch_example}</p>
             </td>
-            <td style="width: 2%">
-              <i class="material-icons edit-icon" onclick="">volume_up</i>
+            <td style="width: 3%">
+              ${isAudioEx}
             </td>
-            <td style="width: 8%">
+            <td style="width: 5%">
               <p class="nm">${result[1][i].example_type}</p>
             </td>
             <td style="width: 8%">
               <p class="nm">${result[1][i].remark}</p>
             </td>
-            <td style="width: 2%">
+            <td style="width: 3%">
               <i class="material-icons edit-icon" onclick="editLcWord(${result[1][i].id})">border_color</i>
             </td>
         </tr>
@@ -454,7 +511,11 @@ async function getLcWordsAjax(data) {
 
 function editLcWord(id) {
   let data = {id: id};
+  let data1 = {name: `word-${id}`};
+  let data2 = {name: `ex-${id}`};
   (async () => {
+    let audio = await getAudioAjax(data1);
+    let audioEx = await getAudioAjax(data2);
     let result = await getLcWordAjax(data);
     $('#lc-ch').attr('data-id', result[0].id);
     $('#lc-ch').html(result[0].ch);
@@ -469,6 +530,16 @@ function editLcWord(id) {
     $('#lc-ch_example').val(result[0].ch_example);
     $('#lc-example_type').val(result[0].example_type);
     $('#lc-remark').val(result[0].remark);
+    $('#2 .arAudio-btn').html('');
+    if(audio&&audio!='') {
+      audio = `/audio/newWord/${audio}`;
+      $('#2 .arAudio-btn').html(`<i class="material-icons edit-icon-1" onclick="playArAudio('${audio}')">volume_up</i>`);
+    }
+    $('#2 .arAudio-btn-ex').html('');
+    if(audioEx&&audioEx!='') {
+      audioEx = `/audio/newWord/${audioEx}`;
+      $('#2 .arAudio-btn-ex').html(`<i class="material-icons edit-icon-1" onclick="playArAudio('${audioEx}')">volume_up</i>`);
+    }
     showPage(2,2);
   })()
 }
@@ -489,6 +560,7 @@ async function getLcWordAjax(data) {
 }
 
 function initArticle() {
+  let isAudio;
   let year = $('#year-3').val();
   let page = $('#pages-3').val();
   let selector = document.getElementById('s-article');
@@ -497,6 +569,7 @@ function initArticle() {
     if(!page) page = 1;
     let data = {year: year, page: page, name: name};
     (async () => {
+      let audioFile = await getAudioFileAjax();
       let result = await getArticlesAjax(data);
       let tpage = Math.ceil(result[0][0]['COUNT(*)']/50);
 
@@ -508,6 +581,10 @@ function initArticle() {
 
       $('#3 .workTable-edit-1').html('');    
       for(let i=0;i<result[1].length;i++){
+        isAudio = '';
+        if(audioFile.find(x => x == `ar-${result[1][i].id}.wav`)) {
+          isAudio = `<i class="material-icons edit-icon" onclick="playAudio('ar-${result[1][i].id}.wav')">volume_up</i>`;
+        }
         $('#3 .workTable-edit-1').append(`
           <tr class="wt-row">
             <td style="width: 5%">
@@ -523,7 +600,7 @@ function initArticle() {
               <p class="nm">${result[1][i].ab_content}</p>
             </td>
             <td style="width: 5%">
-              <i class="material-icons edit-icon" onclick="">volume_up</i>
+              ${isAudio}
             </td>
             <td style="width: 5%">
               <i class="material-icons edit-icon" onclick="editArticle(${result[1][i].id})">border_color</i>
@@ -552,7 +629,9 @@ async function getArticlesAjax(data) {
 
 function editArticle(id) {
   let data = {id: id};
+  let data1 = {name: `ar-${id}`};
   (async () => {
+    let audio = await getAudioAjax(data1);
     let result = await getArticleAjax(data);
     $('#ar-sid').attr('data-id', result[0].id);
     $('#ar-sid').html(result[0].sid);
@@ -580,8 +659,50 @@ function editArticle(id) {
         `);
       }
     }
+    $('#3 .arAudio-btn').html('');
+    if(audio&&audio!='') {
+      audio = `/audio/newWord/${audio}`;
+      $('#3 .arAudio-btn').html(`<i class="material-icons edit-icon-1" onclick="playArAudio('${audio}')">volume_up</i>`);
+    }
     showPage(3,2);
   })()
+}
+
+function playArAudio(file) {
+  console.log(file);
+  $('#arAudio').find('source').prop('src', file);
+  x = document.getElementById('arAudio');
+  x.load();
+  x.play();
+}
+
+async function getAudioAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newWordEnd/file',
+      type: 'POST',
+      data: data
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+async function getAudioFileAjax() {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newWordEnd/files',
+      type: 'GET'
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 }
 
 async function getArticleAjax(data) {
@@ -600,7 +721,7 @@ async function getArticleAjax(data) {
 }
 
 function initArReview() {
-  let check, str, checkbox;
+  let check, str, checkbox, isAudio;
   let year = $('#year-5').val();
   let page = $('#pages-5').val();
   let selector = document.getElementById('s-article-1');
@@ -609,6 +730,7 @@ function initArReview() {
     if(!page) page = 1;
     let data = {year: year, page: page, name: name};
     (async () => {
+      let audioFile = await getAudioFileAjax();
       let result = await getArReviewsAjax(data);
       let tpage = Math.ceil(result[0][0]['COUNT(*)']/50);
 
@@ -620,6 +742,10 @@ function initArReview() {
 
       $('#5 .workTable-edit-1').html('');    
       for(let i=0;i<result[1].length;i++){
+        isAudio = '';
+        if(audioFile.find(x => x == `ar-${result[1][i].id}.wav`)) {
+          isAudio = `<i class="material-icons edit-icon" onclick="playAudio('ar-${result[1][i].id}.wav')">volume_up</i>`;
+        }
         check = 0;
         if(result[1][i].a1&&result[1][i].a1!='') check++;
         //check = Math.ceil((100/7)*check);
@@ -642,7 +768,7 @@ function initArReview() {
               <p class="nm">${result[1][i].ab_content}</p>
             </td>
             <td style="width: 5%">
-              <i class="material-icons edit-icon" onclick="">volume_up</i>
+              ${isAudio}
             </td>
             <td style="width: 5%">
               <i class="material-icons edit-icon" onclick="editArReview(${result[1][i].id})">border_color</i>
@@ -677,7 +803,9 @@ async function getArReviewsAjax(data) {
 
 function editArReview(id) {
   let data = {id: id};
+  let data1 = {name: `ar-${id}`};
   (async () => {
+    let audio = await getAudioAjax(data1);
     let result = await getArReviewAjax(data);
     $('#arr-id').attr('data-id', result[0].id);
     $('#arr-id').html(result[0].id);
@@ -691,6 +819,11 @@ function editArReview(id) {
     $('#arr-ch').html(result[0].ch_content);
     $('#arr-ab').html(result[0].ab_content);
     $('#arr-a1').val(result[0].a1);
+    $('#5 .arAudio-btn').html('');
+    if(audio&&audio!='') {
+      audio = `/audio/newWord/${audio}`;
+      $('#5 .arAudio-btn').html(`<i class="material-icons edit-icon-1" onclick="playArAudio('${audio}')">volume_up</i>`);
+    }
     showPage(5,2);
   })()
 }
@@ -1195,6 +1328,69 @@ function show(id) {
       $('#6').css('display', 'block');
       break;
   }
+}
+
+function openRecorder(type) {
+  switch(type) {
+    case 'word':
+      $('#recorderModal').attr('data-type', type);
+      $('#recorderModal').attr('data-id', `${type}-${$('#fe-ch').attr('data-id')}`);
+      break;
+    case 'ex':
+      $('#recorderModal').attr('data-type', type);
+      $('#recorderModal').attr('data-id', `${type}-${$('#fe-ch').attr('data-id')}`);
+      break;
+    case 'word-2':
+      $('#recorderModal').attr('data-type', type);
+      $('#recorderModal').attr('data-id', `word-${$('#lc-ch').attr('data-id')}`);
+      break;
+    case 'ex-2':
+      $('#recorderModal').attr('data-type', type);
+      $('#recorderModal').attr('data-id', `ex-${$('#lc-ch').attr('data-id')}`);
+      break;
+    case 'ar':
+      $('#recorderModal').attr('data-type', type);
+      $('#recorderModal').attr('data-id', `${type}-${$('#ar-sid').attr('data-id')}`);
+      break;
+  }
+  $('#recorderModal').css('display', 'flex');
+}
+
+function closeRecorder() {
+  let type = $('#recorderModal').attr('data-type');
+  switch(type) {
+    case 'word':
+      initFeWord();
+      editFeWord(parseInt($('#fe-ch').attr('data-id'), 10));
+      break;
+    case 'ex':
+      initFeWord();
+      editFeWord(parseInt($('#fe-ch').attr('data-id'), 10));
+      break;
+    case 'word-2':
+      initLcWord();
+      editLcWord(parseInt($('#lc-ch').attr('data-id'), 10));
+      break;
+    case 'ex-2':
+      initLcWord();
+      editLcWord(parseInt($('#lc-ch').attr('data-id'), 10));
+      break;
+    case 'ar':
+      initArticle();
+      editArticle(parseInt($('#ar-sid').attr('data-id'), 10));
+      break;
+  }
+  $('#recorderModal').attr('data-id', '');
+  $('#recorderModal').css('display', 'none');
+}
+
+function playAudio(file) {
+  let x = document.getElementById('arAudio');
+  $('#arAudio').find('source').prop('src', '');
+  x.load();
+  $('#arAudio').find('source').prop('src', `/audio/newWord/${file}`);
+  x.load();
+  x.play();
 }
 
 //---------------------------------------------------

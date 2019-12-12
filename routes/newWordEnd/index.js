@@ -1,10 +1,20 @@
 let express = require('express');
 let router = express.Router();
 let database = require('../database/database');
+const fs = require('fs');
+const multer  = require('multer');
+const upload = multer();
 
 router.get('/', async function(req, res) {
 	res.render('newWordEnd');
 });
+
+router.get('/test', async function(req, res) {
+  let a = getAudioFile();
+  console.log(a);
+  res.render('index1');
+});
+
 
 router.get('/getFamily', async function(req, res) {
   let qry = `SELECT * FROM family`;
@@ -350,6 +360,49 @@ router.put('/feedback', async function(req, res) {
   database.conn.query(qry, function (err, result) {
   	res.send(result);
   })
+});
+
+router.post('/saveAudio', upload.single('audio_data'), async function(req, res) {
+  let path = '';
+  let tmppath = __dirname.split('/');
+  tmppath.pop();
+  tmppath.pop();
+  for(let i=0;i<tmppath.length;i++){
+    path += tmppath[i] + '/';
+  }
+  let uploadLocation = path + 'public/audio/newWord/' + req.file.originalname + '.wav';
+  fs.writeFileSync(uploadLocation, Buffer.from(new Uint8Array(req.file.buffer))); // write the blob to the server as a file
+  res.sendStatus(200);
+});
+
+router.post('/file', async function(req, res) {
+  let {name} = req.body;
+  let path = '';
+  let tmppath = __dirname.split('/');
+  tmppath.pop();
+  tmppath.pop();
+  for(let i=0;i<tmppath.length;i++){
+    path += tmppath[i] + '/';
+  }
+  path += 'public/audio/newWord'
+  fs.readdir(path, function(err, items) {
+    let find = items.find(x => x == `${name}.wav`);
+    res.send(find);
+  });
+});
+
+router.get('/files', async function(req, res) {
+  let path = '';
+  let tmppath = __dirname.split('/');
+  tmppath.pop();
+  tmppath.pop();
+  for(let i=0;i<tmppath.length;i++){
+    path += tmppath[i] + '/';
+  }
+  path += 'public/audio/newWord'
+  fs.readdir(path, function(err, items) {
+    res.send(items);
+  });
 });
 
 module.exports = router;
