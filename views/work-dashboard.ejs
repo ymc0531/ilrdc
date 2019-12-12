@@ -20,6 +20,8 @@
   <!--  Light Bootstrap Table core CSS    -->
   <link href="/dashboardAssets/css/light-bootstrap-dashboard.css?v=1.4.0" rel="stylesheet"/>
 
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
   <!--     Fonts and icons     -->
   <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
   <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
@@ -57,6 +59,18 @@
         <button class="button-nav" onclick="websitePage()">
         <i class="pe-7s-graph"></i>
         <p class="nav-sidebar-text">資訊網站</p>
+        </button>
+      </li>
+      <li id="sb_upload-page">
+        <button class="button-nav" onclick="uploadPage()">
+        <i class="pe-7s-upload"></i>
+        <p class="nav-sidebar-text">資料上傳</p>
+        </button>
+      </li>
+      <li id="sb_users-page">
+        <button class="button-nav" onclick="usersPage()">
+        <i class="pe-7s-users"></i>
+        <p class="nav-sidebar-text">帳戶資訊</p>
         </button>
       </li>
       <li>
@@ -98,6 +112,7 @@
 
   
   <div class="content" data-current-page="system-page">
+    
     <div id="system-page">
       <div class="container-fluid">
         <div class="row">
@@ -110,6 +125,7 @@
         </div>
       </div>
     </div>
+
     <div id="website-page">
       <div class="container-fluid">
         <div class="row">
@@ -119,6 +135,172 @@
         </div>
       </div>
     </div>
+
+    <div id="upload-page">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="card">
+              <div class="header">
+                <h5 class="title">選擇系統</h5>
+              </div>
+              <div class="content">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <select id="system" class="form-control">
+                        <option value="1">詞表</option>
+                        <option value="2">新詞</option>
+                        <option value="3">文章</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <button onclick="chooseFile()" class="form-control choose-btn">
+                        選擇檔案<input class="ins-btn" type="text" disabled placeholder="未選擇">
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <form id="csv_data">
+                  <input type="file" id="file" name="csvFile" style="visibility: hidden;" onchange="changeFile()">
+                </form>
+                <button onclick="uploadToDb()" class="btn btn-info btn-fill pull-left">上傳</button>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="users-page">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="card own-card">
+              <div class="sTitle">
+                <div class="title-col">
+                  <select id="acc_type" onchange="changeType()">
+                    <option>全部</option>
+                    <option>一般</option>
+                    <option>機關</option>
+                    <option>工作</option>
+                    <option>黑名單</option>
+                  </select>
+                </div>
+                <div class="title-col-1">
+                  <input type="text" style="visibility: hidden;">
+                </div>
+                <div class="select01">
+                  <i class="material-icons prev" onclick="prevpage(1)">navigate_before</i>第
+                  <select id="page1" onchange="changepage(1)">
+                  </select>頁
+                  <i class="material-icons next" onclick="nextpage(1)">navigate_next</i>
+                </div>
+              </div>
+              <table class="workTable">
+                <tr class="wt-1st-row">
+                  <td style="width: 10%">
+                    <p class="nm">序號</p>
+                  </td>
+                  <td style="width: 20%">
+                    <p class="nm">帳號</p>
+                  </td>
+                  <td style="width: 20%">
+                    <p class="nm">身分證號</p>
+                  </td>
+                  <td style="width: 20%">
+                    <p class="nm">中文名</p>
+                  </td>
+                  <td style="width: 20%">
+                    <p class="nm">族語名</p>
+                  </td>
+                  <td style="width: 10%">
+                    <p class="nm">狀態</p>
+                  </td>
+                </tr>
+              </table>
+              <table id="workTable">
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-8">
+            <div class="card">
+              <div class="header">
+                <h5 class="title">新增帳號</h5>
+              </div>
+              <div class="content">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>類型</label>
+                      <select id="n_type" class="form-control">
+                        <option>一般</option>
+                        <option>機關</option>
+                        <option>工作</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>帳號</label>
+                      <input id="n_username" type="text" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>密碼</label>
+                      <input id="n_password" type="text" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <button onclick="createUser()" class="btn btn-info btn-fill pull-left">新增</button>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-8">
+            <div class="card">
+              <div class="header">
+                <h5 class="title">新增帳號（上傳）</h5>
+              </div>
+              <div class="content">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <button onclick="chooseFile1()" class="form-control choose-btn">
+                        選擇檔案<input class="ins-btn-1" type="text" disabled placeholder="未選擇">
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <form id="csv_data_1">
+                  <input type="file" id="file_1" name="csvFile" style="visibility: hidden;" onchange="changeFile1()">
+                </form>
+                <button onclick="uploadToDb1()" class="btn btn-info btn-fill pull-left">上傳</button>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <div id="profile-page">
       <div class="container-fluid">
         <div class="row">

@@ -1,20 +1,17 @@
 let express = require('express');
 let router = express.Router();
 let database = require('../database/database');
+let middleware = require('../middleware');
 const fs = require('fs');
 const multer  = require('multer');
 const upload = multer();
 
-router.get('/', async function(req, res) {
-	res.render('newWordEnd');
+router.get('/', middleware.checkToken, async function(req, res) {
+  if(req.decoded.privilege<1)
+    res.sendStatus(401)
+	else
+    res.render('newWordEnd');
 });
-
-router.get('/test', async function(req, res) {
-  let a = getAudioFile();
-  console.log(a);
-  res.render('index1');
-});
-
 
 router.get('/getFamily', async function(req, res) {
   let qry = `SELECT * FROM family`;
@@ -176,7 +173,7 @@ router.post('/lcWords', async function(req, res) {
               SELECT * FROM nw_words 
               WHERE season = ${year}
               AND checked = 1 
-              ORDER BY language, ab
+              ORDER BY id ASC
               LIMIT ${page}, 50
             `;
   database.conn.query(qry, function (err, result) {

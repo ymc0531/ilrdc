@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 let database = require('../database/database');
+const fs = require('fs');
 
 router.get('/', async function(req, res) {
   res.render('newWord');
@@ -109,7 +110,7 @@ router.post('/getPyWord', async function(req, res) {
               WHERE season <= (SELECT past_year_from FROM nw_setting)
               AND checked = 1
               ${tmp}
-              ORDER BY season DESC, cate, subcate, language, ch
+              ORDER BY season DESC, id ASC
               LIMIT ${page}, 50
             `;
   database.conn.query(qry, function (err, result) {
@@ -176,6 +177,20 @@ router.put('/suggest', async function(req, res) {
     if(err) console.log(err);
     res.send(result);
   })
+});
+
+router.get('/files', async function(req, res) {
+  let path = '';
+  let tmppath = __dirname.split('/');
+  tmppath.pop();
+  tmppath.pop();
+  for(let i=0;i<tmppath.length;i++){
+    path += tmppath[i] + '/';
+  }
+  path += 'public/audio/newWord'
+  fs.readdir(path, function(err, items) {
+    res.send(items);
+  });
 });
 
 module.exports = router;

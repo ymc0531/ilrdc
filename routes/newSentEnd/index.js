@@ -1,9 +1,13 @@
 var express = require('express');
 var router = express.Router();
 let database = require('../database/database');
+let middleware = require('../middleware');
 
-router.get('/', async function(req, res) {
-	res.render('newSentEnd');
+router.get('/', middleware.checkToken, async function(req, res) {
+	if(req.decoded.privilege<1)
+    res.sendStatus(401)
+  else
+    res.render('newSentEnd');
 });
 
 router.get('/getFamily', async function(req, res) {

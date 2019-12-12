@@ -1,12 +1,47 @@
 $(document).ready(function() {
   initDialect();
   initUserInfo();
+  initUsers();
   //test();
 })
 
+pageSetting();
+
 function test() {
   $('#system-page').css('display', 'none');
-  $('#profile-page').css('display', 'block');
+  $('#users-page').css('display', 'block');
+}
+
+function pageSetting() {
+  (async () => {
+    let result = await getPrivilegeAjax();
+    switch(result[0].privilege) {
+      case 2:
+        $('#sb_users-page').css('display', 'none');
+        $('#users-page').html('');
+        break;
+      case 1:
+        $('#sb_upload-page').css('display', 'none');
+        $('#sb_users-page').css('display', 'none');
+        $('#upload-page').html('');
+        $('#users-page').html('');
+        break;
+    }
+  })()
+}
+
+async function getPrivilegeAjax() {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/privilege',
+      type: 'GET'
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 }
 
 async function getDialectAjax() {
@@ -148,6 +183,109 @@ function updatePassword() {
   }
 }
 
+function initUsers() {
+  let status;
+  let type = $('#acc_type').val();
+  let page = $('#page1').val();
+  if(!page) page = 1;
+  let data = {page: page, type: type};
+  (async () => {
+    let result = await getUsersAjax(data);
+    let tpage = Math.ceil(result[0][0]['COUNT(*)']/15);
+
+    $('#page1').html('');
+    for(let i=1;i<=tpage;i++){
+      $('#page1').append(`<option>${i}</option>`);
+    }
+    $('#page1').val(page);
+
+    $('#workTable').html('');    
+    for(let i=0;i<result[1].length;i++){
+      status = '';
+      if(result[1][i].status==1) {
+        status = 'checked';
+      }
+      $('#workTable').append(`
+        <tr>
+          <td style="width: 10%">
+            <p class="nm">${i+1}</p>
+          </td>
+          <td style="width: 20%">
+            <p class="nm">${result[1][i].username}</p>
+          </td>
+          <td style="width: 20%">
+            <p class="nm">${result[1][i].identity_num}</p>
+          </td>
+          <td style="width: 20%">
+            <p class="nm">${result[1][i].name_zh}</p>
+          </td>
+          <td style="width: 20%">
+            <p class="nm">${result[1][i].name_ind}</p>
+          </td>
+          <td style="width: 10%">
+            <input type="checkbox" onclick="changeStatus(this, ${result[1][i].id})" ${status} class="nm-1">
+          </td>
+        </tr>
+      `);
+    }
+  })()
+}
+
+async function getUsersAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/users',
+      type: 'POST',
+      data: data,
+      statusCode: {
+        403: function() {
+          console.log('無權限');
+        }
+      }
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+function changeType() {
+  $('#page1').val('1');
+  initUsers();
+}
+
+function changeStatus(val, id) {
+  let status = $(val).prop('checked');
+  status == true ? status = 1: status = 0;
+  let data = {id: id, status: status};
+  (async () => {
+    await changeStatusAjax(data);
+    initUsers();
+  })()
+}
+
+async function changeStatusAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/status',
+      type: 'PUT',
+      data: data,
+      statusCode: {
+        403: function() {
+          console.log('無權限');
+        }
+      }
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
 function showModal(modal) {
   $(`#${modal}`).css('display', 'flex');
 }
@@ -170,6 +308,22 @@ function websitePage () {
   $('.content').attr('data-current-page', 'website-page');
   $('.navbar-brand').html('資訊網站');
   $('#website-page').css('display', 'block');
+};
+
+function uploadPage () {
+  let currpage = $('.content').attr('data-current-page');
+  $(`#${currpage}`).css('display', 'none');
+  $('.content').attr('data-current-page', 'upload-page');
+  $('.navbar-brand').html('資料上傳');
+  $('#upload-page').css('display', 'block');
+};
+
+function usersPage () {
+  let currpage = $('.content').attr('data-current-page');
+  $(`#${currpage}`).css('display', 'none');
+  $('.content').attr('data-current-page', 'users-page');
+  $('.navbar-brand').html('帳戶資訊');
+  $('#users-page').css('display', 'block');
 };
 
 function profilePage () {
@@ -196,3 +350,164 @@ function logout () {
   Cookies.remove('loginToken');
   window.location.href="/";
 }
+
+function changeFile() {
+  let filename = $('#file').val();
+  filename = filename.substr(12, filename.length);
+  $('.ins-btn').val(filename);
+}
+
+function chooseFile() {
+  document.getElementById('file').click();
+}
+
+function changeFile1() {
+  let filename = $('#file_1').val();
+  filename = filename.substr(12, filename.length);
+  $('.ins-btn-1').val(filename);
+}
+
+function chooseFile1() {
+  document.getElementById('file_1').click();
+}
+
+function uploadToDb() {
+  $('#csv_data').submit();  
+}
+
+function uploadToDb1() {
+  $('#csv_data_1').submit();  
+}
+
+$('#csv_data').submit(function(e) {
+  let url;
+  let system = $('#system').val();
+  switch(system) {
+    case '1':
+      url = '/uploadTow';
+      break;
+    case '2':
+      url = '/uploadNw';
+      break;
+    case '3':
+      url = '/uploadAr';
+      break;
+  }
+  $.ajax({
+    url: url,
+    type: "POST",
+    data: new FormData(this),
+    processData: false,
+    contentType: false,
+    statusCode: {
+      200: function() {
+        alert( "上傳成功" );
+      },
+      400: function() {
+        alert( "上傳失敗" );
+      }
+    }
+  });
+
+  return false;
+})
+
+$('#csv_data_1').submit(function(e) {
+  $.ajax({
+    url: '/usersUpload',
+    type: "POST",
+    data: new FormData(this),
+    processData: false,
+    contentType: false,
+    statusCode: {
+      200: function() {
+        initUsers();
+        alert( "上傳成功" );
+      },
+      400: function() {
+        alert( "上傳失敗" );
+      },
+      403: function() {
+        alert( "無權限" );
+      }
+    }
+  });
+
+  return false;
+})
+
+function changepage(num) {
+  switch(num) {
+    case 1:
+      initUsers();
+      break;
+  }
+}
+
+function prevpage(num) {
+  let currpage = parseInt($(`#pages-${num}`).val(), 10);
+  if(currpage>1){
+    $(`#pages-${num}`).val(currpage-1);
+    switch(num){
+      case 1:
+        initUsers();
+        break;
+    }
+  }
+}
+function nextpage(num) {
+  let currpage = parseInt($(`#page${num}`).val(), 10);
+  let maxpage = $(`#page${num}`).children().length;
+  if(currpage < maxpage){
+    $(`#page${num}`).val(currpage+1);
+    switch(num){
+      case 1:
+        initUsers();
+        break;
+    }
+  }
+}
+
+function createUser() {
+  let type = $('#n_type').val();
+  let username = $('#n_username').val();
+  let password = $('#n_password').val();
+  let data = {type: type, username: username, password: password};
+  if(!username||!password||username==''||password=='') {
+    alert('帳號密碼必填。');
+  }else{
+    (async () => {
+      await createUserAjax(data);
+    })()
+  }
+}
+
+async function createUserAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/user',
+      type: 'PUT',
+      data: data,
+      statusCode: {
+        200: function() {
+          initUsers();
+          alert('新增成功');
+        },
+        400: function() {
+          alert('資料錯誤');
+        },
+        403: function() {
+          alert('無權限');
+        }
+      }
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+
+

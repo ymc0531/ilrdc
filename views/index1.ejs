@@ -22,9 +22,27 @@
     <h3>Recordings</h3>
     <ol id="recordingsList"></ol>
 
+    <button onclick="test()" id="click">click</button>
+    <form id="2020data">
+      <input type="file" name="csvFile">
+      <button type="submit" class="btn btn-default">Upload CSV File</button>
+    </form>
     <!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
     <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript">
+$("#2020data").submit(function(e) {
+
+  $.ajax({
+    url: "/uploadNw",
+    type: "POST",
+    data: new FormData(this),
+    processData: false,
+    contentType: false
+  });
+
+  return false;
+});
 
 //webkitURL is deprecated but nevertheless
 URL = window.URL || window.webkitURL;

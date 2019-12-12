@@ -18,6 +18,7 @@ $(document).ready(function(){
   //test();
 })
 
+pageSetting();
 initYear();
 initArName();
 initArName1();
@@ -25,6 +26,37 @@ initArName1();
 function test() {
   $('#1').css('display', 'none');
   $('#2').css('display', 'block');
+}
+
+function pageSetting() {
+  (async () => {
+    let result = await getPrivilegeAjax();
+    switch(result[0].privilege) {
+      case 1:
+        $('#btn1').css('display', 'none');
+        $('#btn2').css('display', 'none');
+        $('#btn3').css('display', 'none');
+        $('#1').html('');
+        $('#2').html('');
+        $('#3').html('');
+        document.getElementById('btn4').click();
+        break;
+    }
+  })()
+}
+
+async function getPrivilegeAjax() {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/privilege',
+      type: 'GET'
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 }
 
 function initYear() {
@@ -1386,8 +1418,6 @@ function closeRecorder() {
 
 function playAudio(file) {
   let x = document.getElementById('arAudio');
-  $('#arAudio').find('source').prop('src', '');
-  x.load();
   $('#arAudio').find('source').prop('src', `/audio/newWord/${file}`);
   x.load();
   x.play();
