@@ -61,6 +61,12 @@
         <p class="nav-sidebar-text">資訊網站</p>
         </button>
       </li>
+      <li id="sb_nw-setting-page">
+        <button class="button-nav" onclick="nwSettingPage()">
+        <i class="pe-7s-settings"></i>
+        <p class="nav-sidebar-text">新詞設定</p>
+        </button>
+      </li>
       <li id="sb_upload-page">
         <button class="button-nav" onclick="uploadPage()">
         <i class="pe-7s-upload"></i>
@@ -132,6 +138,86 @@
           <button class="button button1 button2" onclick="window.open('/newWord')">新詞</button>
           <button class="button button1 button2" onclick="window.open('/newSentence')">詞表</button>
           <button class="button button1 button2" onclick="window.open('http://dailt.ilrdc.tw')">數位族語資料庫</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="nw-setting-page">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="card">
+              <div class="header">
+                <h5 class="title">新詞</h5>
+              </div>
+              <div class="content">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>本年度初版詞彙</label>
+                      <input id="fey" type="number" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>本年度推薦新詞</label>
+                      <input id="lcy" type="number" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>歷年推薦新詞</label>
+                      <input id="pyf" type="number" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>本年度出版詞彙第一段</label>
+                      <textarea id="fey_1" type="text" class="form-control"></textarea>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>本年度初版詞彙第二段</label>
+                      <textarea id="fey_2" type="text" class="form-control"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>本年度推薦新詞第一段</label>
+                      <textarea id="lcy_1" type="text" class="form-control"></textarea>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>本年度推薦新詞第二段</label>
+                      <textarea id="lcy_2" type="text" class="form-control"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>歷年推薦新詞第一段</label>
+                      <textarea id="pyf_1" type="text" class="form-control"></textarea>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>歷年推薦新詞第二段</label>
+                      <textarea id="pyf_2" type="text" class="form-control"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <button onclick="renewSetting()" class="btn btn-info btn-fill pull-right">更新</button>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

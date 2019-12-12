@@ -43,6 +43,27 @@ router.get('/dialect', middleware.checkToken, async function(req, res) {
   });
 });
 
+router.get('/nw_setting', middleware.checkToken, async function(req, res) {
+  let qry = `SELECT * FROM nw_setting`;
+  database.conn.query(qry, function (err, result) {
+    res.send(result);
+  });
+});
+
+router.put('/nw_setting', middleware.checkToken, async function(req, res) {
+  let {fey, fey_1, fey_2, lcy, lcy_1, lcy_2, pyf, pyf_1, pyf_2} = req.body;
+  let qry = `
+            UPDATE nw_setting 
+            SET first_edition_year = '${fey}', latest_checked_year = '${lcy}', past_year_from =  '${pyf}',
+            fey_title_row_1 = '${fey_1}', fey_title_row_2 = '${fey_2}',
+            lcy_title_row_1 = '${lcy_1}', lcy_title_row_2 = '${lcy_2}',
+            py_title_row_1 = '${pyf_1}', py_title_row_2 = '${pyf_2}'
+            `;
+  database.conn.query(qry, function (err, result) {
+    res.send(result);
+  });
+});
+
 router.get('/user-info', middleware.checkToken, async function(req, res) {
   let imp_id = req.decoded.id;
   let qry = `SELECT * FROM users_info WHERE id = ${imp_id}`;

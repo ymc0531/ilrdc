@@ -2,6 +2,7 @@ $(document).ready(function() {
   initDialect();
   initUserInfo();
   initUsers();
+  initSetting();
   //test();
 })
 
@@ -21,8 +22,10 @@ function pageSetting() {
         $('#users-page').html('');
         break;
       case 1:
+        $('#sb_nw-setting-page').css('display', 'none');
         $('#sb_upload-page').css('display', 'none');
         $('#sb_users-page').css('display', 'none');
+        $('#nw-setting-page').html('');
         $('#upload-page').html('');
         $('#users-page').html('');
         break;
@@ -111,6 +114,75 @@ function initDialect() {
       `);
     }
   })()
+}
+
+function initSetting() {
+  (async () => {
+    let result = await getSettingAjax();
+    $('#fey').val(result[0].first_edition_year);
+    $('#fey_1').val(result[0].fey_title_row_1);
+    $('#fey_2').val(result[0].fey_title_row_2);
+    $('#lcy').val(result[0].latest_checked_year);
+    $('#lcy_1').val(result[0].lcy_title_row_1);
+    $('#lcy_2').val(result[0].lcy_title_row_2);
+    $('#pyf').val(result[0].past_year_from);
+    $('#pyf_1').val(result[0].py_title_row_1);
+    $('#pyf_2').val(result[0].py_title_row_2);
+  })()
+}
+
+async function getSettingAjax() {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/nw_setting',
+      type: 'GET'
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+function renewSetting() {
+  let fey = $('#fey').val();
+  let fey_1 = $('#fey_1').val();
+  let fey_2 = $('#fey_2').val();
+  let lcy = $('#lcy').val();
+  let lcy_1 = $('#lcy_1').val();
+  let lcy_2 = $('#lcy_2').val();
+  let pyf = $('#pyf').val();
+  let pyf_1 = $('#pyf_1').val();
+  let pyf_2 = $('#pyf_2').val();
+  let data = {fey: fey, fey_1: fey_1, fey_2: fey_2, lcy: lcy, lcy_1: lcy_1, lcy_2: lcy_2, pyf: pyf, pyf_1: pyf_1, pyf_2: pyf_2};
+  (async () => {
+    await renewSettingAjax(data);
+  })()
+}
+
+async function renewSettingAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/nw_setting',
+      type: 'PUT',
+      data: data,
+      statusCode: {
+        200: function() {
+          initSetting();
+          alert('更改成功');
+        },
+        400: function() {
+          alert('更改失敗');
+        }
+      }
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 }
 
 function initUserInfo() {
@@ -308,6 +380,14 @@ function websitePage () {
   $('.content').attr('data-current-page', 'website-page');
   $('.navbar-brand').html('資訊網站');
   $('#website-page').css('display', 'block');
+};
+
+function nwSettingPage () {
+  let currpage = $('.content').attr('data-current-page');
+  $(`#${currpage}`).css('display', 'none');
+  $('.content').attr('data-current-page', 'nw-setting-page');
+  $('.navbar-brand').html('資料上傳');
+  $('#nw-setting-page').css('display', 'block');
 };
 
 function uploadPage () {

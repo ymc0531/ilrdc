@@ -1,3 +1,7 @@
+textarea {
+  resize: vertical;
+}
+
 .modal {
   display: none; 
   position: fixed; 
@@ -54,6 +58,7 @@
   border-color: #F8F8F8;
 }
 
+#nw-setting-page,
 #users-page,
 #upload-page,
 #profile-page,
