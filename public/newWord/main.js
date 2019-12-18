@@ -452,7 +452,7 @@ function initSuggest() {
     
     $('#page-5 .page-content-1').html('');
     for(let i=0;i<result[1].length;i++){
-      time = result[1][0].create_time.substr(0, 10);
+      time = result[1][i].create_time.substr(0, 10);
       $('#page-5 .page-content-1').append(`
         <table>
           <tr>

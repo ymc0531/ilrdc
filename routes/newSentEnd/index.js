@@ -32,7 +32,7 @@ router.get('/getCategory', async function(req, res) {
 });
 
 router.get('/operator', async function(req, res) {
-  var qry = `SELECT * FROM tow_operator`;
+  var qry = `SELECT * FROM tow_operator WHERE status < 100`;
   database.conn.query(qry, function (err, result) {
     res.send(result);
   })
@@ -62,11 +62,50 @@ router.put('/operator', async function(req, res) {
   })
 });
 
+router.delete('/operator', async function(req, res) {
+  var {id} = req.body;
+  var qry = `
+              DELETE FROM tow_operator
+              WHERE id = ${id}
+            `;
+  database.conn.query(qry, function (err, result) {
+    res.send(result);
+  })
+});
+
 router.put('/updateOperator', async function(req, res) {
-  var {id, sid, pw} = req.body;console.log(pw);
+  var {id, sid, pw} = req.body;
   var qry = `
               UPDATE tow_operator
               SET sid = '${sid}', password = '${pw}'
+              WHERE id = ${id}
+            `;
+  database.conn.query(qry, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.put('/updateOperatorTime', async function(req, res) {
+  var {id} = req.body;
+  let d = new Date();
+  d.setHours(d.getHours() + 8);
+  d = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+  
+  var qry = `
+              UPDATE tow_operator
+              SET last_edit = '${d}'
+              WHERE id = ${id}
+            `;
+  database.conn.query(qry, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.put('/updateProgress', async function(req, res) {
+  var {id, status} = req.body;
+  var qry = `
+              UPDATE tow_operator
+              SET status = '${status}'
               WHERE id = ${id}
             `;
   database.conn.query(qry, function (err, result) {
@@ -88,13 +127,16 @@ router.get('/statusOperator', async function(req, res) {
 router.post('/searchOperator', async function(req, res) {
   var {keyword} = req.body;
   var qry = `
-              SELECT id, name_zh, name_ind, ind_dialect, tribe, current_addr
-              FROM users_info
+              SELECT u.id, u.name_zh, u.name_ind, u.ind_dialect, u.current_addr, t.tribe_zh
+              FROM users u
+              LEFT JOIN tribes t
+              ON u.tribe = t.id
               WHERE name_zh LIKE '%${keyword}%'
               OR name_ind LIKE '%${keyword}%'
               OR identity_num LIKE '%${keyword}%'
+              AND privilege >= 2
             `;
-  database.conn.query(qry, function (err, result) {
+  database.conn1.query(qry, function (err, result) {
     res.send(result);
   })
 });
@@ -256,9 +298,12 @@ router.post('/suggestDownload', async function(req, res) {
 
 router.put('/feedback', async function(req, res) {
 	var {id, fb} = req.body;
+  let d = new Date();
+  d.setHours(d.getHours() + 8);
+  d = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
 	var qry = `
 							UPDATE tow_suggest
-              SET admin_feedback = '${fb}', reply_time = CURRENT_TIMESTAMP
+              SET admin_feedback = '${fb}', reply_time = '${d}'
               WHERE id = ${id}
 						`;
   database.conn.query(qry, function (err, result) {

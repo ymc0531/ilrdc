@@ -151,7 +151,7 @@ router.post('/suggest', async function(req, res) {
   var qry = `
               SELECT COUNT(*) FROM nw_suggest;
               SELECT * FROM nw_suggest 
-              ORDER BY id 
+              ORDER BY id DESC 
               LIMIT ${page}, 50
             `;
   database.conn.query(qry, function (err, result) {

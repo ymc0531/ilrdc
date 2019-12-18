@@ -30,8 +30,39 @@ $(document).ready(function(){
   //test();
 })
 
+pageSetting();
+
 function test() {
   $('#applyOperatorModal').css('display', 'flex');
+}
+
+function pageSetting() {
+  (async () => {
+    let result = await getPrivilegeAjax();
+    switch(result[0].privilege) {
+      case 1:
+        $('#btn2').css('display', 'none');
+        $('#btn3').css('display', 'none');
+        $('#2').html('');
+        $('#3').html('');
+        document.getElementById('btn4').click();
+        break;
+    }
+  })()
+}
+
+async function getPrivilegeAjax() {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/privilege',
+      type: 'GET'
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 }
 
 function initAddOperatorFamily() {
@@ -132,16 +163,24 @@ function initOperator() {
   (async () => {
     let result = await getOperatorAjax();
     let status;
+    let lastEdit;
 
     $('#workTable').html('');    
     for(let i=0;i<result.length;i++){
+      lastEdit = '';
+      if(result[i].last_edit) {
+        lastEdit = `${result[i].last_edit.substr(0,10)}, ${result[i].last_edit.substr(11,5)}`;
+      }
       if(result[i].status==100){
-        status = `<p class="nm done" onclick="">已完成</p>`
+        status = `<p class="nm done" onclick="updateProgress(${result[i].id}, ${result[i].status})">已完成</p>`
       }else{
-        status = `<p class="nm undone" onclick="">未完成 ${result[i].status}%</p>`
+        status = `<p class="nm undone" onclick="updateProgress(${result[i].id}, ${result[i].status})">未完成 ${result[i].status}%</p>`
       }
       $('#workTable').append(`
         <tr>
+          <td style="width: 5%">
+            <a class="delete-btn nm" onclick="deleteOperator('${result[i].id}')">刪除</a>
+          </td>
           <td style="width: 5%">
             <p class="nm">${i+1}</p>
           </td>
@@ -158,18 +197,78 @@ function initOperator() {
             ${status}
           </td>
           <td style="width: 15%">
-            <p class="nm clickable" onclick="goPlatform()">${result[i].dialect}詞表平台</p>
+            <p class="nm clickable" onclick="goPlatform(${result[i].id})">${result[i].dialect}詞表平台</p>
           </td>
           <td style="width: 25%">
-            <p class="nm">${result[i].last_edit}</p>
+            <p class="nm">${lastEdit}</p>
           </td>
-          <td style="width: 10%">
-            <p class="nm clickable" onclick="applyOperator('${result[i].id}','${result[i].dialect}')">編輯</p>
+          <td style="width: 5%">
+            <p class="nm clickable" onclick="applyOperator('${result[i].id}','${result[i].dialect}')">指派</p>
           </td>
         </tr>
       `);
     }
   })()
+}
+
+function deleteOperator(id) {
+  let data = {id: id};
+  if(confirm('確認刪除')) {
+    (async () => {
+      await deleteOperatorAjax(data);
+      initOperator();
+    })()
+  }
+}
+
+async function deleteOperatorAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newSentEnd/operator',
+      type: 'DELETE',
+      data: data
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+function updateProgress(id, status) {
+  $('#statusModal #status').attr('data-id', id);
+  $('#statusModal #status').val(status);
+  $('#statusModal').css('display', 'flex');
+}
+
+function confirmProgress() {
+  let id = $('#statusModal #status').attr('data-id');
+  let status = parseInt($('#statusModal #status').val(), 10);
+  if(status<0) status = 0;
+  if(status>100) status = 100;
+  let data = {id: id, status: status};
+  (async () => {
+    await updateProgressAjax(data);
+    initOperator();
+    initStatusOperator();
+  })()
+  closeModal('statusModal');
+}
+
+async function updateProgressAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newSentEnd/updateProgress',
+      type: 'PUT',
+      data: data
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 }
 
 function initStatusOperator() {
@@ -207,7 +306,7 @@ function initStatusOperator() {
             <input class="nm1" type="text" value="${result[i].password}">
           </td>
           <td style="width: 15%">
-            <p class="nm">${result[i].last_edit}</p>
+            <p class="nm">${result[i].last_edit.substr(0,10)}, ${result[i].last_edit.substr(11,5)}</p>
           </td>
         </tr>
       `);
@@ -305,6 +404,21 @@ async function updateOperatorAjax(data) {
   try {
     result = await $.ajax({
       url: '/newSentEnd/updateOperator',
+      type: 'PUT',
+      data: data
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+async function updateOperatorTimeAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newSentEnd/updateOperatorTime',
       type: 'PUT',
       data: data
     });
@@ -718,7 +832,7 @@ function operatorSearch() {
               <p class="nm">${result[i].current_addr}</p>
             </td>
             <td style="width: 10%">
-              <p class="nm">${result[i].tribe}</p>
+              <p class="nm">${result[i].tribe_zh}</p>
             </td>
             <td style="width: 15%">
               <button class="btn3" onclick="confirmApplyOpp('${result[i].name_zh}')">確認</button>
@@ -1074,8 +1188,15 @@ function openEdit(num) {
   } 
 }
 
-function goPlatform() {
-  window.open('http://tow.ilrdc.tw/login/login.php', '_blank');
+function goPlatform(num) {
+  if(num) {
+    let data = {id: num};
+    (async () => {
+      await updateOperatorTimeAjax(data);
+    })()
+    initOperator();
+  }
+  window.open('http://210.61.46.35:8080/tow.ilrdc.tw/login/login.php', '_blank');
 }
 
 function openAddOperator() {
@@ -1095,6 +1216,10 @@ function applyOperator(id, dialect) {
 
 function closeApplyOperator() {
   $('#applyOperatorModal').css('display', 'none');
+}
+
+function closeModal(modal) {
+  $(`#${modal}`).css('display', 'none');
 }
 
 function suggestDownload() {

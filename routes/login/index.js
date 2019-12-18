@@ -12,6 +12,9 @@ const multer  = require('multer');
 const upload = multer();
 const csvjson=require('csvtojson');
 
+const en_cert = fs.readFileSync('/Users/ymc/Documents/ilrdc/config/private_key.pem');
+const de_cert = fs.readFileSync('/Users/ymc/Documents/ilrdc/config/public_key.pem');
+const sign_options = {algorithm:'RS256', issuer:'ilrdc', audience:'ilrdc', expiresIn:'1d'};
 const SALTROUNDS = 10;
 
 router.get('/', async function(req, res) {
@@ -288,18 +291,24 @@ router.post('/login', async function(req, res) {
               AND privilege ${tmp} ${privilege}
               AND status >= 1
             `;
+  /*let d = new Date();
+  d.setHours(d.getHours() + 8);
+  d = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+  */
   database.conn1.query(qry, function (err, result) {
     if(password&&result&&result.length>0) {
       (async () => {
         const checkedPassword = await checkPassword(password, result[0].password);
         if(checkedPassword){
-          let token = jwt.sign({id: result[0].id, username: result[0].username, name: result[0].name_zh, privilege: result[0].privilege},
-            config.secret,
-            { 
-              expiresIn: '24h'
-            }
+          let token = jwt.sign({id: result[0].id, username: result[0].username, name: result[0].name_zh, privilege: result[0].privilege, for: 'login', status: result[0].status, email: result[0].username},
+            en_cert,
+            sign_options
           );
+          console.log(token);
           res.send(token);
+          qry = `UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ${result[0].id}`
+          database.conn1.query(qry, function (err, result) {
+          });
         }else{
           res.send(false);
         }

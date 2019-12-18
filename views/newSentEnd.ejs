@@ -29,6 +29,9 @@
 			<table class="workTable">
 				<tr class="wt-1st-row">
 					<td style="width: 5%">
+						<p class="nm"></p>
+					</td>
+					<td style="width: 5%">
 						<p class="nm">序號</p>
 					</td>
 					<td style="width: 10%">
@@ -49,7 +52,7 @@
 					<td style="width: 25%">
 						<p class="nm">最新編輯時間</p>
 					</td>
-					<td style="width: 10%">
+					<td style="width: 5%">
 						<p class="nm">操作</p>
 					</td>
 				</tr>
@@ -502,16 +505,15 @@
   </div>
   <div id="statusModal" class="modal modal1">
     <div class="modal-content2">
-    	<span onclick="closeStatusModal()">&times;</span>
     	<div class="modal-row">
     		完成度：
-    		<input type="text" id="status">%
+    		<input type="number" id="status" data-id="">%
     	</div>
     	<br>
     	<br>
     	<div>
-    		<input type="button" onclick="addOppConfirm()" value="確認">
-	    	<input type="button" onclick="addOppCancel()" value="取消">
+    		<input type="button" onclick="confirmProgress()" value="確認">
+	    	<input type="button" onclick="closeModal('statusModal')" value="取消">
     	</div>
     </div>
   </div>
