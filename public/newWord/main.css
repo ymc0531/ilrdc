@@ -3,6 +3,7 @@ textarea {
   color: #ADADAD;
   text-align: left;
   border-radius: 3px;
+  resize: vertical;
 }
 textarea:focus {
   outline: 0;
@@ -11,7 +12,7 @@ body,html {
   padding: 0;
   margin: 0;
   min-width: 700px;
-  padding-bottom: 3vw;
+  height: 100%;
 }
 i {
   cursor: pointer;
@@ -28,6 +29,7 @@ i {
   border-style: none;
   width: 90%;
   margin-left: 5%;
+  min-height: 60%;
 }
 .currlang {
   font-size: 1.7vw;
@@ -272,7 +274,6 @@ i {
 .clickable {
   margin: 0;
   color: blue;
-  text-decoration: underline;
   cursor: pointer;
 }
 .hc-row {
@@ -280,7 +281,7 @@ i {
   border-width: 0.1vw;
   border-top-width: 0;
   padding: 0.5vw;
-
+  background-color: #e7e7e7;
 }
 .hc-row-title {
   font-weight: bold;
@@ -354,6 +355,7 @@ i {
   width: 100%;
 }
 .sb5 {
+  color: white;
   display: flex;
   margin-top: 5px;
   align-items: center;
@@ -808,4 +810,15 @@ cursor: pointer;
 
 #page2 {
   font-size: 18px;
+}
+
+.noResRow {
+  width: 100%;
+  font-size: 1.5vw;
+  text-align: center;
+  color: red;
+}
+
+.sgm {
+  font-size: 16px;
 }

@@ -146,6 +146,8 @@ function initSuggest() {
     var tmp = '';
     var dateObj, month, day, year, newdate, tmpFeedback;
     for(var i=0;i < result[1].length;i++){
+      if(result[1][i].user.substr(0,1)=='*') 
+        result[1][i].user = '***';
       newdate = result[1][i].time.substr(0, 10);
       if(result[1][i].admin_feedback==""){
         tmpFeedback = `<p>審查中</p>`;
@@ -293,13 +295,27 @@ async function wordsDownloadAjax(data) {
 }
 
 async function suggestInsAjax(words_id, ftws, ctws, fexam, cexam, suggestion) {
+  let hideUser = $('#hideUser').prop('checked');
   let result;
-  let data = {words_id: words_id, ftws: ftws, ctws: ctws, fexam: fexam, cexam: cexam, suggestion: suggestion};
+  let data = {words_id: words_id, ftws: ftws, ctws: ctws, fexam: fexam, cexam: cexam, suggestion: suggestion, hideUser: hideUser};
   try {
     result = await $.ajax({
       url: '/newSentence/suggest',
       type: 'PUT',
-      data: data
+      data: data,
+      statusCode: {
+        200: function() {
+          initSuggest();
+        },
+        400: function() {
+          alert('無法提交。');
+        },
+        401: function() {
+          if(confirm('需先登入才可填寫建議。\n是否前往登入？')) {
+            window.open('/');
+          }
+        }
+      }
     });
     return result;
   } catch (error) {
@@ -531,10 +547,10 @@ function closeCate() {
 
 function suggestSubmit() {
   var words_id = $('#suggestModal').attr('data-id');
-  var ftws = $('#textftws').val();
-  var ctws = $('#textctws').val();
-  var fexam = $('#textfexam').val();
-  var cexam = $('#textcexam').val();
+  var ftws = $('#ftws').html();
+  var ctws = $('#ctws').html();
+  var fexam = $('#fexam').html();
+  var cexam = $('#cexam').html();
   var suggestion = $('#textsuggestion').val();
   (async () => {
     await suggestInsAjax(words_id, ftws, ctws, fexam, cexam, suggestion);

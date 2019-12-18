@@ -72,8 +72,8 @@
             <td class="c2">
               <p class="td2 tdc rmspace" id="ctws1"></p>
             </td>
-          </tr>
-          <tr>
+          </tr>  
+          <!--<tr>
             <td class="c1"></td>
             <td class="c2">
               <textarea class="tx1" id="textftws" name="textftws" cols="20" rows="3"></textarea>
@@ -81,7 +81,8 @@
             <td class="c2">
               <textarea class="tx1" id="textctws" name="textctws" cols="20" rows="3"></textarea>
             </td>
-          </tr>
+          </tr>-->
+          <tr>
             <td class="c1 ctitle secrow">
               例句
             </td>
@@ -92,7 +93,7 @@
               <p class="td2 tdc rmspace" id="cexam1"></p>
             </td>
           </tr>
-          <tr>
+          <!--<tr>
             <td class="c1"></td>
             <td class="c2">
               <textarea class="tx1" id="textfexam" name="textfexam" cols="20" rows="3"></textarea>
@@ -100,14 +101,15 @@
             <td class="c2">
               <textarea class="tx1" id="textcexam" name="textcexam" cols="20" rows="3"></textarea>
             </td>
-          </tr>
+          </tr>-->
         </table>
         <div style="padding-left: 10px; padding-right: 20px;">
           <p class="ctitle">意見與說明</p>
           <textarea class="tx1" id="textsuggestion" name="textsuggestion" rows="4"></textarea>
         </div>
-        <div class="modalfooter">
-          <input type="button" name="submit" value="送出" onclick="confirmChecker()">
+        <div class="modalfooter sgm">
+          <input type="checkbox" id="hideUser">隱藏身分&nbsp;&nbsp;
+          <input class="sgm" type="button" name="submit" value="送出" onclick="confirmChecker()">
         </div>
         <div id="confirmModal" class="modal modal1">
           <div class="modal-content1">

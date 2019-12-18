@@ -20,6 +20,22 @@ let checkLogin = (req, res, next) => {
   }
 };
 
+let checkLogin2 = (req, res, next) => {
+  let token = req.cookies.loginToken;
+  if (token) {
+    jwt.verify(token, de_cert, (err, decoded) => {
+      if (err) {
+        next();
+      } else {
+        req.decoded = decoded;
+        next();
+      }
+    });
+  } else {
+    next();
+  }
+};
+
 let checkToken = (req, res, next) => {
   let token = req.cookies.loginToken;
   if (token) {
@@ -54,6 +70,7 @@ let checkPrivilege = (req, res, next) => {
 
 module.exports = {
   checkLogin: checkLogin,
+  checkLogin2: checkLogin2,
   checkToken: checkToken,
   checkPrivilege: checkPrivilege
 }

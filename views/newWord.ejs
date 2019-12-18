@@ -31,6 +31,7 @@
           <p class="symbol" onclick="insSymbol('ɨ')">ɨ</p>
           <p class="symbol" onclick="insSymbol('ʉ')">ʉ</p>
           <p class="symbol" onclick="insSymbol('’')">’</p>
+          <input type="checkbox" id="blurSearch">模糊搜尋
         </div>
       </div>
     </div>
@@ -280,7 +281,6 @@
     </div>
       
   </div>
-
   <!--Modal-->
   <div id="suggestModal" class="modal" data-id="" data-season="">
     <div class="modal-content">
@@ -336,14 +336,6 @@
             </td>
           </tr>
           <tr>
-            <td class="c1"></td>
-            <td class="c2">
-              <textarea class="tx1" id="s_ab_2" cols="20" rows="3"></textarea>
-            </td>
-            <td class="c2">
-              <textarea class="tx1" id="s_ch_2" cols="20" rows="3"></textarea>
-            </td>
-          </tr>
             <td class="c1 ctitle secrow">
               例句
             </td>
@@ -354,22 +346,14 @@
               <p class="td2 tdc rmspace" id="s_ch_ex"></p>
             </td>
           </tr>
-          <tr>
-            <td class="c1"></td>
-            <td class="c2">
-              <textarea class="tx1" id="s_ab_ex_1" cols="20" rows="3"></textarea>
-            </td>
-            <td class="c2">
-              <textarea class="tx1" id="s_ch_ex_1" cols="20" rows="3"></textarea>
-            </td>
-          </tr>
         </table>
         <div style="padding-left: 10px; padding-right: 20px;">
           <p class="ctitle">意見與說明</p>
           <textarea class="tx1" id="textsuggestion" rows="4"></textarea>
         </div>
-        <div class="modalfooter">
-          <input type="button" name="submit" value="送出" onclick="confirmChecker()">
+        <div class="modalfooter sgm">
+          <input type="checkbox" id="hideUser">隱藏身分&nbsp;&nbsp;
+          <input class="sgm" type="button" name="submit" value="送出" onclick="confirmChecker()">
         </div>
         <div id="confirmModal" class="modal modal1">
           <div class="modal-content1">
@@ -396,6 +380,72 @@
     <source src="" type="audio/wav">
   </audio>
 </body>
+
+<div style="width: 100%;margin-top: 55px;background-color: #d5dfe3;display: inline-block;padding-bottom: 15px;">
+    <table style="width: 30%;float: left;background-color: #d5dfe3;padding-top: 15px;border-spacing: 0;">
+      <tr>
+        <td style="margin-top: 0px;margin-bottom: 0px;padding-left: 40px;font-size: 14px;color: #595757;">
+          原住民族語言研究發展中心
+        </td>
+      </tr>
+      <tr>
+        <td style="margin-top: 0px;margin-bottom: 0px;padding-left: 40px;padding-right: 35px;font-size: 15px;color: #595757;">
+          Indigenous Languages Research<br>and Development Center
+        </td>
+      </tr>
+    </table>
+    <table style="width: 40%;float: left;background-color: #d5dfe3;padding-top: 15px;border-spacing: 0;">
+      <tr>
+        <td width="50px" style="padding-left: 65px;font-size: 14px;color: #595757;">
+          地址：
+        </td>
+        <td style="font-size: 14px;color: #595757;">
+          10093台北市中正區羅斯福路一段63號 8F-10F
+        </td>
+      </tr>
+      <tr>
+        <td width="50px" style="padding-left: 65px;font-size: 14px;color: #595757;">
+          電話：
+        </td>
+        <td style="font-size: 15px;color: #595757;">
+          (02) 2341-8508
+        </td>
+      </tr>
+      <tr>
+        <td width="50px" style="padding-left: 65px;font-size: 14px;color: #595757;">
+          傳真：
+        </td>
+        <td style="font-size: 15px;color: #595757;">
+          (02) 2341-8256
+        </td>
+      </tr>
+      <tr>
+        <td width="50px" style="padding-left: 65px;font-size: 14px;color: #595757;">
+          郵箱：
+        </td>
+        <td style="font-size: 15px;color: #595757;">
+          ilrdc63@gmail.com
+        </td>
+      </tr>
+    </table>
+    <table style="width: 30%;padding-top: 15px;border-spacing: 0;">
+      <tr>
+        <td style="margin-top: 0px;margin-bottom: 0px;padding-left: 70px;font-size: 14px;color: #595757;">
+          原住民族委員會&copy; 版權所有
+        </td>
+      </tr>
+      <tr>
+        <td style="margin-top: 0px;margin-bottom: 0px;padding-left: 70px;padding-right: 25px;font-size: 15px;color: #595757;">
+          Copyright &copy; 2018 Council of Indigenous Peoples.
+        </td>
+      </tr>
+      <tr>
+        <td style="margin-top: 0px;margin-bottom: 0px;padding-left: 70px;font-size: 15px;color: #595757;">
+          All Right Reserved.
+        </td>
+      </tr>
+    </table>
+  </div>
 
   <!--   Core JS Files   -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

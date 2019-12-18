@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 let database = require('../database/database');
+let middleware = require('../middleware');
 
 router.get('/', async function(req, res) {
 	res.render('newSentence');
@@ -33,7 +34,7 @@ router.post('/getSuggest', async function(req, res) {
   pages = parseInt(pages, 10);
   rowPerPage = parseInt(rowPerPage, 10);
   if(pages>0) limit = (pages-1)*rowPerPage;
-	var qry = `SELECT COUNT(*) FROM tow_suggest;SELECT * FROM tow_suggest ORDER BY id ASC LIMIT ${limit},${rowPerPage}`;
+	var qry = `SELECT COUNT(*) FROM tow_suggest;SELECT * FROM tow_suggest ORDER BY id DESC LIMIT ${limit},${rowPerPage}`;
   database.conn.query(qry, function (err, result) {
   	res.send(result);
     //console.log(err);
@@ -85,17 +86,30 @@ router.post('/wordsDownload', async function(req, res) {
   })
 });
 
-router.put('/suggest', async function(req, res) {
-	var {words_id, ftws, ctws, fexam, cexam, suggestion} = req.body;
+router.put('/suggest', middleware.checkLogin2, async function(req, res) {
+	let username = '';
+  var {words_id, ftws, ctws, fexam, cexam, suggestion, hideUser} = req.body;
+  if(req.decoded) {
+    username = req.decoded.name;
+    if(req.decoded.name=='') 
+      username = req.decoded.username;
+  }
+  if(hideUser=='true') username = `*${username}`;
+
 	var qry = `
 							INSERT INTO 
-							tow_suggest (words_id, ftws, ctws, fexam, cexam, suggestion) 
+							tow_suggest (words_id, user, ftws, ctws, fexam, cexam, suggestion) 
 						 	VALUES 
-						 	('${words_id}', '${ftws}', '${ctws}', '${fexam}', '${cexam}', '${suggestion}')
+						 	('${words_id}', '${username}', '${ftws}', '${ctws}', '${fexam}', '${cexam}', '${suggestion}')
 						`;
-  database.conn.query(qry, function (err, result) {
-  	res.send(result);
-  })
+  if(req.decoded) {
+    database.conn.query(qry, function (err, result) {
+      if(err) res.sendStatus(400);
+      else res.sendStatus(200);
+    })
+  }else{
+    res.sendStatus(401);
+  }
 });
 
 module.exports = router;

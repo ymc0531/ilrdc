@@ -7,10 +7,6 @@ $(document).ready(function() {
   initPastYearWord();
   initSuggest();
   updateDownload();
-
-  $('#btn5').click(function() {
-    initSuggest();
-  })
   //test();
 });
 
@@ -162,12 +158,13 @@ async function getSettingAjax() {
 
 function initFirstEditionWord() {
   let obj;
+  let blurSearch = $('#blurSearch').prop('checked');
   let keyword = $('#keyword').val();
   let lang = $('#currlang').val();
   let cate = $('#currcate').val();
   let page = $('#pages-1').val();
   if(!page) page = 1;
-  let data = {keyword: keyword, lang: lang, cate: cate, page: page};
+  let data = {keyword: keyword, lang: lang, cate: cate, page: page, blurSearch: blurSearch};
   (async () => {
     let result = await getFeWordAjax(data);
     let tpage = Math.ceil(result[0][0]['COUNT(*)']/50);
@@ -179,6 +176,9 @@ function initFirstEditionWord() {
     $('#pages-1').val(page);
     
     $('#page-1 .page-content-1').html('');
+    if(result[1].length==0) {
+      $('#page-1 .page-content-1').html('<p class="noResRow">查無此資料</p>');
+    }
     for(let i=0;i<result[1].length;i++){
       $('#page-1 .page-content-1').append(`
         <table data-id="${result[1][i].id}">
@@ -237,12 +237,13 @@ async function getFeWordAjax(data) {
 
 function initLatestCheckedWord() {
   let str, obj;
+  let blurSearch = $('#blurSearch').prop('checked');
   let keyword = $('#keyword').val();
   let lang = $('#currlang').val();
   let cate = $('#currcate').val();
   let page = $('#pages-2').val();
   if(!page) page = 1;
-  let data = {keyword: keyword, lang: lang, cate: cate, page: page};
+  let data = {keyword: keyword, lang: lang, cate: cate, page: page, blurSearch: blurSearch};
   (async () => {
     let result = await getLcWordAjax(data);
     let tpage = Math.ceil(result[0][0]['COUNT(*)']/50);
@@ -254,6 +255,9 @@ function initLatestCheckedWord() {
     $('#pages-2').val(page);
     
     $('#page-2 .page-content-1').html('');
+    if(result[1].length==0) {
+      $('#page-2 .page-content-1').html('<p class="noResRow">查無此資料</p>');
+    }
     for(let i=0;i<result[1].length;i++){
       $('#page-2 .page-content-1').append(`
         <table>
@@ -312,12 +316,13 @@ async function getLcWordAjax(data) {
 
 function initPastYearWord() {
   let isAudio, isAudioEx;
+  let blurSearch = $('#blurSearch').prop('checked');
   let keyword = $('#keyword').val();
   let lang = $('#currlang').val();
   let cate = $('#currcate').val();
   let page = $('#pages-3').val();
   if(!page) page = 1;
-  let data = {keyword: keyword, lang: lang, cate: cate, page: page};
+  let data = {keyword: keyword, lang: lang, cate: cate, page: page, blurSearch: blurSearch};
   (async () => {
     let audioFile = await getAudioFileAjax();
     let result = await getPyWordAjax(data);
@@ -330,6 +335,9 @@ function initPastYearWord() {
     $('#pages-3').val(page);
     
     $('#page-3 .page-content-1').html('');
+    if(result[1].length==0) {
+      $('#page-3 .page-content-1').html('<p class="noResRow">查無此資料</p>');
+    }
     for(let i=0;i<result[1].length;i++){
       isAudio = '';
       isAudioEx = '';
@@ -452,6 +460,8 @@ function initSuggest() {
     
     $('#page-5 .page-content-1').html('');
     for(let i=0;i<result[1].length;i++){
+      if(result[1][i].username.substr(0,1)=='*') 
+        result[1][i].username = '***';
       time = result[1][i].create_time.substr(0, 10);
       $('#page-5 .page-content-1').append(`
         <table>
@@ -599,6 +609,7 @@ function confirmChecker(){
 };
 
 function suggestSubmit() {
+  let hideUser = $('#hideUser').prop('checked');
   let id = $('#suggestModal').attr('data-id');
   let season = $('#suggestModal').attr('data-season');
   let event = $('.page-title').attr('data-act-page');
@@ -608,7 +619,7 @@ function suggestSubmit() {
   let cate = $('#s_cate').html();
   let subcate = $('#s_subcate').html();
   let suggestion = $('#textsuggestion').val();
-  let data = {id: id, season: season, dialect: dialect, ab: ab, ch: ch, cate: cate, subcate: subcate, suggestion: suggestion, event: event};
+  let data = {id: id, season: season, dialect: dialect, ab: ab, ch: ch, cate: cate, subcate: subcate, suggestion: suggestion, event: event, hideUser: hideUser};
   (async () => {
     await suggestInsAjax(data);
   })()
@@ -622,7 +633,20 @@ async function suggestInsAjax(data) {
     result = await $.ajax({
       url: '/newWord/suggest',
       type: 'PUT',
-      data: data
+      data: data,
+      statusCode: {
+        200: function() {
+          initSuggest();
+        },
+        400: function() {
+          alert('無法提交。');
+        },
+        401: function() {
+          if(confirm('需先登入才可填寫建議。\n是否前往登入？')) {
+            window.open('/');
+          }
+        }
+      }
     });
     return result;
   } catch (error) {
@@ -766,6 +790,11 @@ async function getWordAjax(data) {
     console.log(error);
     return false;
   }
+}
+
+function insSymbol(a) {
+  var kw = document.getElementById("keyword");
+  kw.value = `${kw.value}${a}`;
 }
 
 function download() {
