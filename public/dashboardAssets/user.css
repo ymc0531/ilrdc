@@ -62,5 +62,8 @@
   cursor: pointer;
 }
 
-
+.chg-pd {
+  padding-left: 0.2vw;
+  padding-right: 0;
+}
 

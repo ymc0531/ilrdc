@@ -51,3 +51,13 @@ $("#password").keypress(function(e) {
       login();
     }
 });
+
+function forgetPw() {
+  window.open('http://210.61.46.35/newPass');
+}
+
+function register() {
+  window.open('http://210.61.46.35/register');
+}
+
+

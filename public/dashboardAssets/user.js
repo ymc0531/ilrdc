@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  initDialect();
+  initLanguage();
   initUserInfo();
   //test();
 })
@@ -9,11 +9,11 @@ function test() {
   $('#profile-page').css('display', 'block');
 }
 
-async function getDialectAjax() {
+async function getLanguageAjax() {
   let result;
   try {
     result = await $.ajax({
-      url: '/dialect',
+      url: '/language',
       type: 'GET'
     });
     return result;
@@ -67,12 +67,22 @@ async function updatePasswordAjax(data) {
   }
 }
 
-function initDialect() {
+function initLanguage() {
   (async () => {
-    let result = await getDialectAjax();
-    for(let i=0;i<result.length;i++){
+    let result = await getLanguageAjax();
+    for(let i=0;i<result[0].length;i++){
+      $('#ethnicity').append(`
+        <option value='${result[0][i].id}'>${result[0][i].ethnicity}</option>
+      `);
+    }
+    for(let i=0;i<result[1].length;i++){
       $('#dialect').append(`
-        <option>${result[i].language}</option>
+        <option value='${result[1][i].id}'>${result[1][i].dialect_zh}</option>
+      `);
+    }
+    for(let i=0;i<result[2].length;i++){
+      $('#tribe').append(`
+        <option value='${result[2][i].id}'>${result[2][i].tribe_zh}</option>
       `);
     }
   })()
@@ -84,7 +94,7 @@ function initUserInfo() {
     $('#username').attr('data-id', result[0].id);
     $('#username').val(result[0].username);
     $('#email').val(result[0].email);
-    $('#birthdate').val(result[0].birthdate);
+    $('#birthdate').val(result[0].birthdate.substr(0,10));
     $('#identity_num').val(result[0].identity_num);
     $('#gender').val(result[0].gender);
     $('#name_zh').val(result[0].name_zh);
@@ -107,13 +117,14 @@ function updateInfo() {
   let gender = $('#gender').val();
   let name_zh = $('#name_zh').val();
   let name_ind = $('#name_ind').val();
+  let ethnicity = $('#ethnicity').val();
   let dialect = $('#dialect').val();
   let tribe = $('#tribe').val();
   let mobile_no = $('#mobile_no').val();
   let office_no = $('#office_no').val();
   let postcode = $('#postcode').val();
   let address = $('#address').val();
-  let data = {id: id, username: username, email: email, birthdate: birthdate, identity_num: identity_num, gender: gender, name_zh: name_zh, name_ind: name_ind, dialect: dialect, tribe: tribe, mobile_no: mobile_no, office_no: office_no, postcode: postcode, address: address};
+  let data = {id: id, username: username, email: email, birthdate: birthdate, identity_num: identity_num, gender: gender, name_zh: name_zh, name_ind: name_ind, ethnicity: ethnicity, dialect: dialect, tribe: tribe, mobile_no: mobile_no, office_no: office_no, postcode: postcode, address: address};
   (async () => {
     let result = await updateUserInfoAjax(data);
     closeModal('confirmModal');

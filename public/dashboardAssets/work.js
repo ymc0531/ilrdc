@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  initDialect();
+  initLanguage();
   initUserInfo();
   initUsers();
   initSetting();
@@ -47,11 +47,11 @@ async function getPrivilegeAjax() {
   }
 }
 
-async function getDialectAjax() {
+async function getLanguageAjax() {
   let result;
   try {
     result = await $.ajax({
-      url: '/dialect',
+      url: '/language',
       type: 'GET'
     });
     return result;
@@ -96,7 +96,18 @@ async function updatePasswordAjax(data) {
     result = await $.ajax({
       url: '/password',
       type: 'PUT',
-      data: data
+      data: data,
+      statusCode: {
+        200: function() {
+          $('#old_pw').val('');
+          $('#new_pw').val('');
+          $('#cfm_new_pw').val('');
+          alert('密碼已更新');
+        },
+        400: function() {
+          alert('舊密碼不正確');
+        }
+      }
     });
     return result;
   } catch (error) {
@@ -105,12 +116,22 @@ async function updatePasswordAjax(data) {
   }
 }
 
-function initDialect() {
+function initLanguage() {
   (async () => {
-    let result = await getDialectAjax();
-    for(let i=0;i<result.length;i++){
+    let result = await getLanguageAjax();
+    for(let i=0;i<result[0].length;i++){
+      $('#ethnicity').append(`
+        <option value='${result[0][i].id}'>${result[0][i].ethnicity}</option>
+      `);
+    }
+    for(let i=0;i<result[1].length;i++){
       $('#dialect').append(`
-        <option>${result[i].language}</option>
+        <option value='${result[1][i].id}'>${result[1][i].dialect_zh}</option>
+      `);
+    }
+    for(let i=0;i<result[2].length;i++){
+      $('#tribe').append(`
+        <option value='${result[2][i].id}'>${result[2][i].tribe_zh}</option>
       `);
     }
   })()
@@ -191,7 +212,7 @@ function initUserInfo() {
     $('#username').attr('data-id', result[0].id);
     $('#username').val(result[0].username);
     $('#email').val(result[0].email);
-    $('#birthdate').val(result[0].birthdate);
+    $('#birthdate').val(result[0].birthdate.substr(0,10));
     $('#identity_num').val(result[0].identity_num);
     $('#gender').val(result[0].gender);
     $('#name_zh').val(result[0].name_zh);
@@ -214,13 +235,14 @@ function updateInfo() {
   let gender = $('#gender').val();
   let name_zh = $('#name_zh').val();
   let name_ind = $('#name_ind').val();
+  let ethnicity = $('#ethnicity').val();
   let dialect = $('#dialect').val();
   let tribe = $('#tribe').val();
   let mobile_no = $('#mobile_no').val();
   let office_no = $('#office_no').val();
   let postcode = $('#postcode').val();
   let address = $('#address').val();
-  let data = {id: id, username: username, email: email, birthdate: birthdate, identity_num: identity_num, gender: gender, name_zh: name_zh, name_ind: name_ind, dialect: dialect, tribe: tribe, mobile_no: mobile_no, office_no: office_no, postcode: postcode, address: address};
+  let data = {id: id, username: username, email: email, birthdate: birthdate, identity_num: identity_num, gender: gender, name_zh: name_zh, name_ind: name_ind, ethnicity: ethnicity, dialect: dialect, tribe: tribe, mobile_no: mobile_no, office_no: office_no, postcode: postcode, address: address};
   (async () => {
     let result = await updateUserInfoAjax(data);
     closeModal('confirmModal');
@@ -243,13 +265,13 @@ function updatePassword() {
   }else{
     (async () => {
       let result = await updatePasswordAjax(data);
-      if(result.changedRows==0) alert('舊密碼不正確。');
+      /*if(!result||result.changedRows==0) alert('舊密碼不正確。');
       else {
         $('#old_pw').val('');
         $('#new_pw').val('');
         $('#cfm_new_pw').val('');
         alert('密碼已更新。');
-      }
+      }*/
       closeModal('confirmModal1');
     })()
   }
@@ -274,27 +296,27 @@ function initUsers() {
     $('#workTable').html('');    
     for(let i=0;i<result[1].length;i++){
       status = '';
-      if(result[1][i].status==1) {
+      if(result[1][i].status>=1) {
         status = 'checked';
       }
       $('#workTable').append(`
         <tr>
-          <td style="width: 10%">
-            <p class="nm">${i+1}</p>
+          <td style="width: 8%">
+            <p class="nm align-center">${i+1}</p>
           </td>
-          <td style="width: 20%">
+          <td style="width: 35%">
             <p class="nm">${result[1][i].username}</p>
           </td>
           <td style="width: 20%">
             <p class="nm">${result[1][i].identity_num}</p>
           </td>
-          <td style="width: 20%">
+          <td style="width: 13%">
             <p class="nm">${result[1][i].name_zh}</p>
           </td>
-          <td style="width: 20%">
+          <td style="width: 16%">
             <p class="nm">${result[1][i].name_ind}</p>
           </td>
-          <td style="width: 10%">
+          <td style="width: 8%" class="align-center">
             <input type="checkbox" onclick="changeStatus(this, ${result[1][i].id})" ${status} class="nm-1">
           </td>
         </tr>
@@ -525,9 +547,9 @@ function changepage(num) {
 }
 
 function prevpage(num) {
-  let currpage = parseInt($(`#pages-${num}`).val(), 10);
+  let currpage = parseInt($(`#page${num}`).val(), 10);
   if(currpage>1){
-    $(`#pages-${num}`).val(currpage-1);
+    $(`#page${num}`).val(currpage-1);
     switch(num){
       case 1:
         initUsers();

@@ -129,7 +129,7 @@
                   <div class="col-md-4">
                     <div class="form-group">
                       <label>生日日期</label>
-                      <input id="birthdate" type="text" class="form-control">
+                      <input id="birthdate" type="date" class="form-control chg-pd">
                     </div>
                   </div>
                   <div class="col-md-4">
@@ -142,9 +142,9 @@
                     <div class="form-group">
                       <label>性別</label>
                       <select id="gender" class="form-control">
+                        <option value="0">女</option>
                         <option value="1">男</option>
-                        <option value="2">女</option>
-                        <option value="3">其他</option>
+                        <option value="2">其他</option>
                       </select>
                     </div>
                   </div>
@@ -166,17 +166,25 @@
                 </div>
 
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>語言別</label>
+                      <select id="ethnicity" class="form-control">
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
                     <div class="form-group">
                       <label>方言別</label>
                       <select id="dialect" class="form-control">
                       </select>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <div class="form-group">
                       <label>部落</label>
-                      <input id="tribe" type="text" class="form-control">
+                      <select id="tribe" class="form-control">
+                      </select>
                     </div>
                   </div>
                 </div>

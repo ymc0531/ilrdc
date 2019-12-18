@@ -4,41 +4,55 @@ let jwt = require('jsonwebtoken');
 let config = require('../config');
 let middleware = require('../middleware');
 let database = require('../database/database');
+let bcrypt = require('bcryptjs');
+let mysql = require('mysql');
 const csv = require('fast-csv');
 const fs = require('fs');
 const multer  = require('multer');
 const upload = multer();
 const csvjson=require('csvtojson');
 
+const SALTROUNDS = 10;
+
 router.get('/', async function(req, res) {
   res.render('index');
 });
 
+router.get('/test', async function(req, res) {
+  const hashedPassword = await hashPassword('12345');
+  console.log(hashedPassword);
+  res.send('ok');
+});
+
 router.get('/user-dashboard', middleware.checkToken, async function(req, res) {
   if(req.decoded.privilege==0)
-    res.render('user-dashboard', {user: req.decoded.username});
+    res.render('user-dashboard', {user: req.decoded.name});
   else
     res.redirect('/work-dashboard');
 });
 
 router.get('/work-dashboard', middleware.checkToken, async function(req, res) {
   if(req.decoded.privilege>0)
-    res.render('work-dashboard', {user: req.decoded.username});
+    res.render('work-dashboard', {user: req.decoded.name});
   else
     res.redirect('/user-dashboard');
 });
 
 router.get('/privilege', middleware.checkToken, async function(req, res) {
   let username = req.decoded.username;
-  let qry = `SELECT privilege FROM users_info WHERE username = '${username}'`;
-  database.conn.query(qry, function (err, result) {
+  let qry = `SELECT privilege FROM users WHERE username = '${username}'`;
+  database.conn1.query(qry, function (err, result) {
     res.send(result);
   });
 });
 
-router.get('/dialect', middleware.checkToken, async function(req, res) {
-  let qry = `SELECT language FROM language`;
-  database.conn.query(qry, function (err, result) {
+router.get('/language', middleware.checkToken, async function(req, res) {
+  let qry = `
+              SELECT id, ethnicity FROM ethnicities;
+              SELECT id, dialect_zh FROM dialects;
+              SELECT id, tribe_zh FROM tribes ORDER BY tribe_zh;
+            `;
+  database.conn1.query(qry, function (err, result) {
     res.send(result);
   });
 });
@@ -66,8 +80,8 @@ router.put('/nw_setting', middleware.checkToken, async function(req, res) {
 
 router.get('/user-info', middleware.checkToken, async function(req, res) {
   let imp_id = req.decoded.id;
-  let qry = `SELECT * FROM users_info WHERE id = ${imp_id}`;
-  database.conn.query(qry, function (err, result) {
+  let qry = `SELECT * FROM users WHERE id = ${imp_id}`;
+  database.conn1.query(qry, function (err, result) {
     if(result) result[0].password = '';
     res.send(result);
   });
@@ -76,20 +90,20 @@ router.get('/user-info', middleware.checkToken, async function(req, res) {
 router.put('/user-info', middleware.checkToken, async function(req, res) {
   let imp_id = req.decoded.id;
   let imp_username = req.decoded.username;
-  let {id, username, email, birthdate, identity_num, gender, name_zh, name_ind, dialect, tribe, mobile_no, office_no, postcode, address} = req.body;
+  let {id, username, email, birthdate, identity_num, gender, name_zh, name_ind, ethnicity, dialect, tribe, mobile_no, office_no, postcode, address} = req.body;
   id = parseInt(id, 10);
   if(imp_id==id&&imp_username==username) {
     let qry = `
-                UPDATE users_info
+                UPDATE users
                 SET email = '${email}', birthdate = '${birthdate}', 
                     identity_num = '${identity_num}', gender = '${gender}', 
                     name_zh = '${name_zh}', name_ind = '${name_ind}', 
-                    ind_dialect = '${dialect}', tribe = '${tribe}', 
+                    ethnicity = '${ethnicity}', ind_dialect = '${dialect}', tribe = '${tribe}', 
                     mobile_no = '${mobile_no}', office_no = '${office_no}', 
                     current_postcode = '${postcode}', current_addr = '${address}'
                 WHERE id = ${imp_id};
               `;
-    database.conn.query(qry, function (err, result) {
+    database.conn1.query(qry, function (err, result) {
       res.send(result);
     });
   }else{
@@ -112,12 +126,12 @@ router.put('/user', middleware.checkToken, async function(req, res) {
       break;
   }
   let qry = `
-              INSERT INTO users_info
-              (username, password, privilege)
-              VALUES ('${username}', '${password}', '${tmp}')
+              INSERT INTO users
+              (username, password, privilege, status)
+              VALUES ('${username}', '${password}', '${tmp}', 1)
             `;
   if(req.decoded.privilege>90) {
-    database.conn.query(qry, function (err, result) {
+    database.conn1.query(qry, function (err, result) {
       if(err) res.sendStatus(400);
       else res.sendStatus(200);
     });
@@ -127,10 +141,9 @@ router.put('/user', middleware.checkToken, async function(req, res) {
 });
 
 router.post('/usersUpload', upload.single('csvFile'), middleware.checkToken, async function(req, res) {
-  let tmprow, qry, row;
+  let tmppw, tmprow, qry, row;
   let colNum;
   let sqlVal = '';
-  console.log(req.file);
   csvjson({
       noheader:true,
       output: "csv"
@@ -141,28 +154,31 @@ router.post('/usersUpload', upload.single('csvFile'), middleware.checkToken, asy
     if(colNum!=2) {
       res.sendStatus(400);
     }else{
-      for(let i=1;i<csvRow.length;i++) {
-        tmprow = csvRow[i];
-        tmprow.push(csvRow[i][1].substr(csvRow[i][1].length-5));
-        row = JSON.stringify(tmprow);
-        sqlVal = `${sqlVal},(${row.substr(1,row.length-2)})`;
-      }
-      sqlVal = sqlVal.substr(1,sqlVal.length);
-      console.log(sqlVal);
-      qry = `
-              INSERT INTO users_info 
-              (username, identity_num, password)
-              VALUES
-              ${sqlVal}
-            `;
-      if(req.decoded.privilege>90) {
-        database.conn.query(qry, function (err, result) {
-          if(err) res.sendStatus(400);
-          else res.sendStatus(200);
-        });
-      }else{
-        res.sendStatus(403);
-      }
+      (async () => {
+        for(let i=1;i<csvRow.length;i++) {
+          tmprow = csvRow[i];
+          tmppw = await hashPassword(csvRow[i][1].substr(csvRow[i][1].length-5));
+          tmprow.push(tmppw);
+          row = JSON.stringify(tmprow);
+          sqlVal = `${sqlVal},(${row.substr(1,row.length-2)}, 1)`;
+        }
+        sqlVal = sqlVal.substr(1,sqlVal.length);
+        qry = `
+                INSERT INTO users 
+                (username, identity_num, password, status)
+                VALUES
+                ${sqlVal}
+              `;
+        console.log(qry);
+        if(req.decoded.privilege>90) {
+          database.conn1.query(qry, function (err, result) {
+            if(err) res.sendStatus(400);
+            else res.sendStatus(200);
+          });
+        }else{
+          res.sendStatus(403);
+        }
+      })()
     }
   })
 });
@@ -190,18 +206,18 @@ router.post('/users', middleware.checkToken, async function(req, res) {
   }
   page = (parseInt(page, 10)-1)*15;
   let qry = `
-              SELECT COUNT(*) FROM users_info
+              SELECT COUNT(*) FROM users
               WHERE 1
               ${tmp};
               SELECT id, username, identity_num, name_zh, name_ind, status
-              FROM users_info
+              FROM users
               WHERE 1
               ${tmp}
               ORDER BY id
               LIMIT ${page}, 15
             `;
   if(req.decoded.privilege>90) {
-    database.conn.query(qry, function (err, result) {
+    database.conn1.query(qry, function (err, result) {
       res.send(result);
     })
   }else{
@@ -212,12 +228,12 @@ router.post('/users', middleware.checkToken, async function(req, res) {
 router.put('/status', middleware.checkToken, async function(req, res) {
   let {id, status} = req.body;
   let qry = `
-              UPDATE users_info 
+              UPDATE users 
               SET status = '${status}'
               WHERE id = ${id}
             `;
   if(req.decoded.privilege>90) {
-    database.conn.query(qry, function (err, result) {
+    database.conn1.query(qry, function (err, result) {
       res.send(result);
     })
   }else{
@@ -228,36 +244,66 @@ router.put('/status', middleware.checkToken, async function(req, res) {
 router.put('/password', middleware.checkToken, async function(req, res) {
   let imp_id = req.decoded.id;
   let {old_pw, new_pw} = req.body;
-  let qry = `
-              UPDATE users_info 
+  /*let qry = `
+              UPDATE users
               SET password = '${new_pw}'
               WHERE id = ${imp_id}
               AND password = '${old_pw}'
+            `;*/
+  let qry = `
+              SELECT password FROM users
+              WHERE id = ${imp_id}
             `;
-  database.conn.query(qry, function (err, result) {
-    res.send(result);
+  database.conn1.query(qry, function (err, result) {
+    if(result&&result.length>0){
+      (async () => {
+        let checked = await checkPassword(old_pw, result[0].password);
+        if(checked) {
+          new_pw = await hashPassword(new_pw);
+          qry = `
+                  UPDATE users
+                  SET password = '${new_pw}'
+                  WHERE id = ${imp_id}
+                `;
+          database.conn1.query(qry, function (err, result) {
+            res.sendStatus(200);
+          });
+        }else{
+          res.sendStatus(400);
+        }
+      })()
+    }else{
+      res.sendStatus(400);
+    }
   });
 });
 
 router.post('/login', async function(req, res) {
+  let tmp = '=';
   let {username, password, privilege} = req.body;
-  if(username=='admin') privilege = 99;
+  if(privilege==2) tmp = '>=';
   let qry = `
-              SELECT * FROM users_info 
-              WHERE username = '${username}' 
-              AND password = '${password}'
-              AND privilege = ${privilege}
-              AND status = 1
-            `
-  database.conn.query(qry, function (err, result) {
-    if(result.length>0){
-      let token = jwt.sign({id: result[0].id, username: result[0].username, name: result[0].name_zh, privilege: result[0].privilege},
-        config.secret,
-        { 
-          expiresIn: '24h'
+              SELECT * FROM users 
+              WHERE username = '${username}'
+              AND privilege ${tmp} ${privilege}
+              AND status >= 1
+            `;
+  database.conn1.query(qry, function (err, result) {
+    if(password&&result&&result.length>0) {
+      (async () => {
+        const checkedPassword = await checkPassword(password, result[0].password);
+        if(checkedPassword){
+          let token = jwt.sign({id: result[0].id, username: result[0].username, name: result[0].name_zh, privilege: result[0].privilege},
+            config.secret,
+            { 
+              expiresIn: '24h'
+            }
+          );
+          res.send(token);
+        }else{
+          res.send(false);
         }
-      );
-      res.send(token);
+      })()
     }else{
       res.send(false);
     }
@@ -362,5 +408,35 @@ router.post('/uploadAr', upload.single('csvFile'), async function(req, res) {
     }
   })
 });
+
+
+async function hashPassword (password) {
+
+  const saltRounds = 10;
+
+  const hashedPassword = await new Promise((resolve, reject) => {
+    bcrypt.hash(password, saltRounds, function(err, hash) {
+      if (err) reject(err);
+      resolve(hash);
+    });
+  });
+
+  return hashedPassword;
+}
+
+async function checkPassword (password, hpassword) {
+
+  const checkedPassword = await new Promise((resolve, reject) => {
+    bcrypt.compare(password, hpassword, function(err, res) {
+        if (err) reject(err);
+        resolve(res);
+    });
+  });
+
+  return checkedPassword;
+}
+
+
+
 
 module.exports = router;

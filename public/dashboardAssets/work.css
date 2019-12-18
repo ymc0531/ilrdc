@@ -114,11 +114,15 @@ textarea {
 .nm {
   margin: 0;
   font-size: 1.5vw;
+  word-break: break-all;
+  padding-left: 0.2vw;
+  padding-right: 0.2vw;
 }
 
 .own-card {
   min-height: 50vw;
   padding: 0.5vw;
+  padding-bottom: 2vw;
 }
 
 .sTitle {
@@ -158,4 +162,13 @@ textarea {
 .title-col-1 input {
   border-radius: 0.5vw;
   width: 80%;
+}
+
+.chg-pd {
+  padding-left: 0.2vw;
+  padding-right: 0;
+}
+
+.align-center {
+  text-align: center;
 }
