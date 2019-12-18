@@ -12,12 +12,12 @@ const multer  = require('multer');
 const upload = multer();
 const csvjson=require('csvtojson');
 
-const en_cert = fs.readFileSync('/Users/ymc/Documents/ilrdc/config/private_key.pem');
-const de_cert = fs.readFileSync('/Users/ymc/Documents/ilrdc/config/public_key.pem');
+const en_cert = fs.readFileSync(`${config.path}/config/private_key.pem`);
+const de_cert = fs.readFileSync(`${config.path}/config/public_key.pem`);
 const sign_options = {algorithm:'RS256', issuer:'ilrdc', audience:'ilrdc', expiresIn:'1d'};
 const SALTROUNDS = 10;
 
-router.get('/', async function(req, res) {
+router.get('/', middleware.checkLogin, async function(req, res) {
   res.render('index');
 });
 
@@ -304,7 +304,6 @@ router.post('/login', async function(req, res) {
             en_cert,
             sign_options
           );
-          console.log(token);
           res.send(token);
           qry = `UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ${result[0].id}`
           database.conn1.query(qry, function (err, result) {

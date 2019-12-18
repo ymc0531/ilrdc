@@ -1,3 +1,3 @@
 module.exports = {
-  secret: 'ilrdcishereandanywhere'
+  path: '/Users/ymc/Documents/ilrdc'
 };

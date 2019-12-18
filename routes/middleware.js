@@ -1,9 +1,9 @@
 let jwt = require('jsonwebtoken');
 const config = require('./config.js');
 const fs = require('fs');
-const en_cert = fs.readFileSync('/var/www/api/config/private_key.pem');
-const de_cert = fs.readFileSync('/var/www/api/config/public_key.pem');
-//Users/ymc/Documents
+const en_cert = fs.readFileSync(`${config.path}/config/private_key.pem`);
+const de_cert = fs.readFileSync(`${config.path}/config/public_key.pem`);
+
 let checkLogin = (req, res, next) => {
   let token = req.cookies.loginToken;
   if (token) {
