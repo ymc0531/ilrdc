@@ -151,7 +151,7 @@ router.post('/download', async function(req, res) {
     cate = '';
   }
   let qry = `
-              SELECT season, language, dialect, cate, subcate, ab, ch, ab_example, ch_example, example_type, remark 
+              SELECT season, language, dialect, cate, subcate, ab, ch, word_formation, ab_example, ch_example, example_type, remark 
               FROM nw_words
               WHERE 1
               ${lang}

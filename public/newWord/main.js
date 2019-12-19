@@ -802,7 +802,7 @@ function download() {
   let cate = $('#currcate').val();
   let data = {lang: lang, cate: cate};
   let result, tmpResult;
-  result = [{season: '年度', language: '語言', dialect: '方言', cate: '主分類', subcate: '次分類', ab: '族語詞彙', ch: '中文詞彙', ab_example: '族語例句', ch_example: '中文例句', example_type: '句型', remark: '備註'}];
+  result = [{season: '年度', language: '語言', dialect: '方言', cate: '主分類', subcate: '次分類', ab: '族語詞彙', ch: '中文詞彙', word_formation: '構詞法', ab_example: '族語例句', ch_example: '中文例句', example_type: '句型', remark: '備註'}];
   if(lang!='全語言'){
     (async () => {
       tmpResult = await wordsDownloadAjax(data);
@@ -883,7 +883,7 @@ function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
   }   
   
   //Generate a file name
-  var fileName = "詞表_";
+  var fileName = "新詞_";
   //this will remove the blank-spaces from the title and replace it with an underscore
   fileName += ReportTitle.replace(/ /g,"_");   
   
