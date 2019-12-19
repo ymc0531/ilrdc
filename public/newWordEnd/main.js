@@ -14,8 +14,6 @@ $(document).ready(function(){
 
 pageSetting();
 initYear();
-initArName();
-initArName1();
 
 function test() {
   $('#1').css('display', 'none');
@@ -31,6 +29,8 @@ function initAll() {
   initSuggest();
   initEthnicity();
   initOperator();
+  initArName();
+  initArName1();
 }
 
 function pageSetting() {
