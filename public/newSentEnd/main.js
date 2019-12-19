@@ -613,6 +613,7 @@ function initSuggest() {
     }
   });
   waitForAll(lang, cate, function() {
+    let level;
     let currpage = $('#page7').val();
     if(!currpage) currpage = 1;
     let rowPerPage = $('#rowPerPage7').val();
@@ -635,11 +636,12 @@ function initSuggest() {
 
       $('#sTable').html('');
       for(let i=0;i<result[1].length;i++){
+        level = getLevel(result[1][i]);
         if(i%2==0) bgColor = `'white'`;
         else bgColor = `#E1E0E0`;
         $('#sTable').append(`
           <tr style="background-color: ${bgColor}">
-            <td class="sTable-td-edit" style="width: 7.5%;">
+            <td style="width: 7.5%;">
               <a class="confirm-btn" onclick="showConfirmModal7('${result[1][i].tsid}', this)">確認</a>&nbsp;/
               <a class="delete-btn" onclick="showDeleteModal7('${result[1][i].tsid}')">刪除</a>
             </td>
@@ -671,7 +673,7 @@ function initSuggest() {
               <p class="nm ta-left">${result[1][i].cexam}</p>
             </td>
             <td style="width: 5%">
-              <p class="nm">?</p>
+              <p class="nm">${level}</p>
             </td>
             <td style="width: 10%">
               <p class="nm ta-left">${result[1][i].suggestion}</p>
@@ -720,6 +722,7 @@ function initWords() {
     }
   });
   waitForAll(lang, cate, function() {
+    let level;
     let currpage = $('#page4').val();
     if(!currpage) currpage = 1;
     let rowPerPage = $('#rowPerPage4').val();
@@ -727,7 +730,6 @@ function initWords() {
     data = {lang: JSON.stringify(langList), cate: JSON.stringify(cateList), keyword: keyword, level: JSON.stringify(levelList), currpage: currpage, rowPerPage: rowPerPage};
     (async () => {
       result = await getWordsAjax(data);
-      
       let page = Math.ceil(parseInt(result[0][0]['COUNT(*)'], 10)/rowPerPage);
       $('#page4').html('');
       
@@ -743,12 +745,13 @@ function initWords() {
 
       $('#wTable').html('');
       for(let i=0;i<result[1].length;i++){
+        level = getLevel(result[1][i]);
         if(i%2==0) bgColor = `'white'`;
         else bgColor = `#E1E0E0`;
         $('#wTable').append(`
           <tr style="background-color: ${bgColor}">
-            <td class="sTable-td-edit" style="width: 7.5%;">
-              <a class="confirm-btn" onclick="showConfirmModal4('${result[1][i].id}', this)">確認</a>&nbsp;/
+            <td style="width: 7.5%;">
+              <a class="confirm-btn" onclick="showEditModal4('${result[1][i].id}')">編輯</a>&nbsp;/
               <a class="delete-btn" onclick="showDeleteModal4('${result[1][i].id}')">刪除</a>
             </td>
             <td style="width: 5%">
@@ -779,7 +782,7 @@ function initWords() {
               <p class="nm ta-left">${result[1][i].cexam}</p>
             </td>
             <td style="width: 5%">
-              <p class="nm">?</p>
+              <p class="nm">${level}</p>
             </td>
             <td>
               <p class="nm ta-left">${result[1][i].memo}</p>
@@ -789,6 +792,81 @@ function initWords() {
       }
     })()
   });
+}
+
+function getLevel(res) {
+  let level = '?';
+  if(res.LanLevelE==1) level = '初級';
+  if(res.LanLevelM==1) level = '中級';
+  if(res.LanLevelMH==1) level = '中高級';
+  if(res.LanLevelH==1) level = '高級';
+  return level;
+}
+
+function showEditModal4(id) {
+  let level = '';
+  let data = {id: id};
+  (async () => {
+    let result = await getWordAjax(data);
+    if(result[0].LanLevelE==1) level = '初級';
+    if(result[0].LanLevelM==1) level = '中級';
+    if(result[0].LanLevelMH==1) level = '中高級';
+    if(result[0].LanLevelH==1) level = '高級';
+    $('#editModal').attr('data-id', result[0].id);
+    $('#edialect').html(result[0].dialect);
+    $('#ecate').html(result[0].category);
+    $('#elevel').val(level);
+    $('#ectws').html(result[0].ctws);
+    $('#eftws').html(result[0].ftws);
+    $('#efex').val(result[0].fexam);
+    $('#ecex').val(result[0].cexam);
+    $('#ememo').val(result[0].memo);
+    $('#editModal').css('display', 'flex');
+  })()
+}
+
+async function getWordAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newSentEnd/getWord',
+      type: 'POST',
+      data: data
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+function editSubmit() {
+  let id = $('#editModal').attr('data-id');
+  let level = $('#elevel').val();
+  let fexam = $('#efex').val();
+  let cexam = $('#ecex').val();
+  let memo = $('#ememo').val();
+  let data = {id: id, level: level, fexam: fexam, cexam: cexam, memo: memo};
+  (async () => {
+    await editWordAjax(data);
+    closeModal('editModal');
+    initWords();
+  })()
+}
+
+async function editWordAjax(data) {
+  let result;
+  try {
+    result = await $.ajax({
+      url: '/newSentEnd/word',
+      type: 'PUT',
+      data: data
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 }
 
 function allDataDownload(dialect) {

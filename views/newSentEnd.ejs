@@ -152,7 +152,7 @@
         </div>
 			</div>
 			<div class="sub-sTitle">
-				<input type="checkbox" id="sEdit" onclick="openEdit(4)" value="ok">編輯
+				<!--<input type="checkbox" id="sEdit" onclick="openEdit(4)" value="ok">編輯-->
 				&nbsp;
 				<div onclick="wordsDownload()">
 					<i class="material-icons">get_app</i>下載
@@ -161,7 +161,7 @@
 			<div>
 				<table class="sTable">
 					<tr style="background-color: #A6A5A5;">
-						<td class="sTable-td-edit" style="width: 7.5%">
+						<td style="width: 7.5%">
 						</td>
 						<td style="width: 5%">
 							<p class="nm">序號</p>
@@ -400,7 +400,7 @@
         </div>
 			</div>
 			<div class="sub-sTitle">
-				<input type="checkbox" id="sEdit" onclick="openEdit(7)" value="ok">編輯
+				<!--<input type="checkbox" id="sEdit" onclick="openEdit(7)" value="ok">編輯-->
 				&nbsp;
 				<div onclick="suggestDownload()">
 					<i class="material-icons">get_app</i>下載
@@ -409,7 +409,7 @@
 			<div>
 				<table class="sTable">
 					<tr style="background-color: #A6A5A5;">
-						<td class="sTable-td-edit" style="width: 7.5%">
+						<td style="width: 7.5%">
 						</td>
 						<td style="width: 5%">
 							<p class="nm">序號</p>
@@ -463,6 +463,7 @@
 	    <input type="button" onclick="suggestCancel()" value="取消">
     </div>
   </div>
+
   <div id="confirmModal3" class="modal modal1" data-id="" data-sid="" data-pw="">
     <div class="modal-content1">
 	    <p>確認送出</p>
@@ -471,6 +472,7 @@
 	    <input type="button" onclick="allDataCancel()" value="取消">
     </div>
   </div>
+
   <div id="deleteModal" class="modal modal1" data-id="" data-mode="">
     <div class="modal-content1">
 	    <p>確認刪除</p>
@@ -479,6 +481,7 @@
 	    <input type="button" onclick="deleteCancel()" value="取消">
     </div>
   </div>
+
   <div id="addOperatorModal" class="modal modal1">
     <div class="modal-content2">
     	<span onclick="closeAddOperator()">&times;</span>
@@ -503,6 +506,7 @@
     	</div>
     </div>
   </div>
+
   <div id="statusModal" class="modal modal1">
     <div class="modal-content2">
     	<div class="modal-row">
@@ -517,6 +521,7 @@
     	</div>
     </div>
   </div>
+
   <div id="applyOperatorModal" class="modal modal1" data-id="">
     <div class="modal-content2 width50">
     	<div class="sec-content">
@@ -562,6 +567,46 @@
 		      	</table>
 	      	</div>
 	      </div>
+	    </div>
+    </div>
+  </div>
+
+  <div id="editModal" class="modal" data-id="">
+    <div class="modal-content1">
+	    <div class="erow">
+	    	方言：<p id="edialect"></p>
+	    </div>
+	    <div class="erow">
+	    	類別：<p id="ecate"></p>
+	    </div>
+	    <div class="erow">
+	    	級別：
+	    	<select id="elevel">
+	    		<option>初級</option>
+	    		<option>中級</option>
+	    		<option>中高級</option>
+	    		<option>高級</option>
+	    	</select>
+	    </div>
+	    <div class="erow">
+	    	族語詞彙：<p id="eftws"></p>
+	    </div>
+	    <div class="erow">
+	    	中文詞彙：<p id="ectws"></p>
+	    </div>
+	    <div class="erow">
+	    	族語例句：<textarea rows="2" id="efex"></textarea>
+	    </div>
+	    <div class="erow">
+	    	中文例句：<textarea rows="2" id="ecex"></textarea>
+	    </div>
+	    <div class="erow">
+	    	備註：<textarea rows="2" id="ememo"></textarea>
+	    </div>
+	    <br><br>
+	    <div class="modal1">
+		    <button onclick="editSubmit()">確認</button>
+		    <button onclick="closeModal('editModal')">取消</button>
 	    </div>
     </div>
   </div>
