@@ -9,7 +9,8 @@
 </head>
 <body>
 	<i class="material-icons sidebar-icon" onclick="sidebarToggle()">subject</i>
-   <div id="sidebar" data-current-btn="btn1">
+   <div id="sidebar" data-current-btn="btn0">
+   	<input id="btn0" class="sidebarBtn" type="button" onclick="show('0')" value="工作分配平台">
   	<input id="btn1" class="sidebarBtn" type="button" onclick="show('1')" value="建修新詞與例句">
 		<input id="btn2" class="sidebarBtn" type="button" onclick="show('2')" value="修訂推薦新詞">
 		<input id="btn3" class="sidebarBtn" type="button" onclick="show('3')" value="建置文章">
@@ -17,7 +18,43 @@
 		<input id="btn5" class="sidebarBtn" type="button" onclick="show('5')" value="審查文章">
 		<input id="btn6" class="sidebarBtn" type="button" onclick="show('6')" value="意見回饋">
 	</div>
-	<div id="content" data-current-content="1">
+	<div id="content" data-current-content="0">
+
+		<!---------page 0------------>
+
+		<div class="hide" id="0">
+			<div class="page-title-1">
+				工作分配平台
+			</div>
+			<div class="add-btn-row">
+				<button onclick="openModal('applyOperatorModal')">新增</button>
+			</div>
+			<table class="workTable-1">
+				<tr>
+					<th rowspan="3" style="width: 3%"></th>
+					<th rowspan="3" style="width: 10%">方言</th>
+					<th rowspan="3" style="width: 10%">ID</th>
+					<th rowspan="3" style="width: 7%">姓名</th>
+					<th rowspan="3" style="width: 10%">電話</th>
+					<th colspan="6" style="width: 60%">指派新詞作業</th>
+				</tr>
+				<tr>
+					<th colspan="2" style="width: 20%">本年度工作</th>
+					<th colspan="2" style="width: 20%">審查</th>
+					<th colspan="2" style="width: 20%">修訂</th>
+				</tr>
+				<tr>
+					<th>新詞</th>
+					<th>文章</th>
+					<th>新詞</th>
+					<th>文章</th>
+					<th>新詞</th>
+					<th>文章</th>
+				</tr>
+			</table>
+			<table id="optrTable" class="workTable-1">
+			</table>
+		</div>
 
 		<!---------page 1------------>
 
@@ -868,6 +905,7 @@
 
 
 	<!-- modal -->
+
 	<div id="confirmModal" class="modal" data-id="">
     <div class="modal-content">
 	    <p>確認送出</p>
@@ -876,6 +914,7 @@
 	    <button onclick="modalCancel()">取消</button>
     </div>
   </div>
+
   <div id="recorderModal" class="modal" data-id="" data-type="">
     <div class="modal-content-1">
     	<div class="closex">
@@ -890,6 +929,61 @@
 	    <h3>錄音紀錄</h3>
 	    <div id="recordingsList"></div>
 	    <div id="upload"></div>
+    </div>
+  </div>
+
+  <div id="applyOperatorModal" class="modal modal1" data-id="">
+    <div class="modal-content2 width50">
+    	<div class="sec-content">
+	    	<span onclick="closeModal('applyOperatorModal')">&times;</span>
+	    	<div class="modal-title-1">
+	    		<select id="aoEthnicity" onchange="initDialect()">
+	    			<option value="">族語(全選)</option>
+	    		</select>
+	    		<select id="aoDialect">
+	    			<option value="">方言(全選)</option>
+	    		</select>
+	    	</div>
+	    	<div class="sb4">
+		    	<div class="sb3">
+		        <input type="text" class="sb2 font15vw" id="operatorSearch" placeholder="會員ID（身分證）、姓名">
+		        <i class="material-icons font2vw" onclick="operatorSearch()">search</i>
+		      </div>
+	      </div>
+	      <div class="applyOp-content">
+	      	<p>搜尋結果</p>
+	      	<table class="workTable">
+	      		<tr class="wt-1st-row-x">
+							<td style="width: 10%">
+								<p class="nm">序號</p>
+							</td>
+							<td style="width: 15%">
+								<p class="nm">姓名</p>
+							</td>
+							<td style="width: 15%">
+								<p class="nm">族名</p>
+							</td>
+							<td style="width: 15%">
+								<p class="nm">方言別</p>
+							</td>
+							<td style="width: 20%">
+								<p class="nm">地區</p>
+							</td>
+							<td style="width: 10%">
+								<p class="nm">部落</p>
+							</td>
+							<td style="width: 15%">
+								<p class="nm">指派</p>
+							</td>
+						</tr>
+	      	</table>
+	      	<div>
+		      	<table id="applyOppTable">
+		      		
+		      	</table>
+	      	</div>
+	      </div>
+	    </div>
     </div>
   </div>
 

@@ -131,9 +131,9 @@ router.post('/searchOperator', async function(req, res) {
               FROM users u
               LEFT JOIN tribes t
               ON u.tribe = t.id
-              WHERE name_zh LIKE '%${keyword}%'
+              WHERE (name_zh LIKE '%${keyword}%'
               OR name_ind LIKE '%${keyword}%'
-              OR identity_num LIKE '%${keyword}%'
+              OR identity_num LIKE '%${keyword}%')
               AND privilege >= 2
             `;
   database.conn1.query(qry, function (err, result) {

@@ -8,9 +8,20 @@ const upload = multer();
 
 router.get('/', middleware.checkToken, async function(req, res) {
   if(req.decoded.privilege<1)
-    res.sendStatus(401)
-	else
-    res.render('newWordEnd');
+    res.status(401).send('沒有權限！');
+	else{
+    let qry = `SELECT nwp_status FROM nw_privilege WHERE user_id = '${req.decoded.id}'`;
+    database.conn1.query(qry, function (err, result) {
+      if(result.length==0)
+        res.status(401).send('沒有權限！');
+      else if(result.length>0) {
+        if(result[0].nwp_status>0)
+          res.render('newWordEnd');
+        else
+          res.status(401).send('沒有權限！');
+      }
+    })
+  }
 });
 
 router.get('/getFamily', async function(req, res) {
@@ -31,6 +42,82 @@ router.get('/getCategory', async function(req, res) {
 	let qry = `SELECT cate FROM tow_category`;
   database.conn.query(qry, function (err, result) {
   	res.send(result);
+  })
+});
+
+router.get('/ethnicity', async function(req, res) {
+  let qry = `SELECT * FROM ethnicities`;
+  database.conn1.query(qry, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.get('/privilege', middleware.checkToken, async function(req, res) {
+  let id = req.decoded.id;
+  let qry = `SELECT * FROM nw_privilege WHERE user_id = '${id}'`;
+  database.conn1.query(qry, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.get('/operator', async function(req, res) {
+  let qry = `
+              SELECT nwp.*, et.ethnicity, dl.dialect_zh, u.identity_num, u.name_zh, u.office_no
+              FROM nw_privilege nwp
+              LEFT JOIN users u
+              ON nwp.user_id = u.id
+              LEFT JOIN ethnicities et
+              ON u.ethnicity = et.id
+              LEFT JOIN dialects dl
+              ON u.ind_dialect = dl.id
+              WHERE nwp.nwp_status<10
+            `;
+  database.conn1.query(qry, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.post('/dialect', async function(req, res) {
+  let {id} = req.body;
+  let qry = `SELECT * FROM dialects WHERE ethnicity_id = '${id}'`;
+  database.conn1.query(qry, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.post('/searchOperator', async function(req, res) {
+  let {ethnicity, dialect, keyword} = req.body;
+  if(ethnicity!='') ethnicity = `AND u.ethnicity = '${ethnicity}'`;
+  if(dialect!='') dialect = `AND u.ind_dialect = '${dialect}'`;
+  let qry = `
+              SELECT u.id, u.name_zh, u.name_ind, dl.dialect_zh, u.current_addr, t.tribe_zh
+              FROM users u
+              LEFT JOIN tribes t
+              ON u.tribe = t.id
+              LEFT JOIN dialects dl
+              ON u.ind_dialect = dl.id
+              WHERE (u.name_zh LIKE '%${keyword}%'
+              OR u.name_ind LIKE '%${keyword}%'
+              OR u.identity_num LIKE '%${keyword}%')
+              AND u.privilege >= 2
+              ${ethnicity}
+              ${dialect}
+            `;
+  database.conn1.query(qry, function (err, result) {
+    res.send(result);
+  })
+});
+
+router.put('/insOperator', async function(req, res) {
+  let {id} = req.body;
+  let qry = `
+              INSERT INTO nw_privilege (user_id) VALUES ('${id}')
+            `;
+  database.conn1.query(qry, function (err, result) {
+    if(err) 
+      res.sendStatus(400);
+    else
+      res.sendStatus(200);
   })
 });
 
@@ -335,7 +422,35 @@ router.put('/changeArticleStatus', async function(req, res) {
   })
 });
 
+router.put('/nwStatus', async function(req, res) {
+  let {id, col, status} = req.body;
+  if(status=='true')
+    status = 1;
+  else
+    status = 0;
+  let qry = `
+              UPDATE nw_privilege
+              SET ${col} = '${status}'
+              WHERE id = '${id}'
+            `;
+  database.conn1.query(qry, function (err, result) {
+    if(err) console.log(err);
+    res.send(result);
+  })
+});
 
+router.put('/nwYear', async function(req, res) {
+  let {id, col, year} = req.body;
+  let qry = `
+              UPDATE nw_privilege
+              SET ${col} = '${year}'
+              WHERE id = '${id}'
+            `;
+  database.conn1.query(qry, function (err, result) {
+    if(err) console.log(err);
+    res.send(result);
+  })
+});
 
 router.post('/suggest', async function(req, res) {
   let {page} = req.body;

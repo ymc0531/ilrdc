@@ -283,18 +283,13 @@ router.put('/password', middleware.checkToken, async function(req, res) {
 
 router.post('/login', async function(req, res) {
   let tmp = '=';
-  let {username, password, privilege} = req.body;
-  if(privilege==2) tmp = '>=';
+  let {username, password} = req.body;
   let qry = `
               SELECT * FROM users 
               WHERE username = '${username}'
-              AND privilege ${tmp} ${privilege}
               AND status >= 1
             `;
-  /*let d = new Date();
-  d.setHours(d.getHours() + 8);
-  d = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
-  */
+
   database.conn1.query(qry, function (err, result) {
     if(password&&result&&result.length>0) {
       (async () => {

@@ -633,6 +633,13 @@ textarea {
   padding: 1vw 0 2vw 0;
 }
 
+.modal-title-1 {
+  width: 100%;
+  font-size: 1.5vw;
+  text-align: left;
+  padding: 1vw 0 1vw 0;
+}
+
 .applyOp-content {
   width: 100%;
   padding-top: 10px;
@@ -761,4 +768,43 @@ textarea {
 
 .flex-p {
   display: flex;
+}
+
+.modal-title-1 select {
+  margin-right: 1vw;
+}
+
+.modal-title-1 select:focus {
+  outline: 0;
+}
+
+.workTable-1 {
+  width: 100%;
+  font-size: 1.5vw;
+  text-align: center;
+  border-spacing: 1px;
+  word-break: break-all;
+}
+
+.workTable-1 th {
+  background-color: rgb(172, 172, 172); 
+  padding-top: 0.2vw;
+  padding-bottom: 0.2vw;
+}
+
+.workTable-1 td {
+  padding-top: 0.5vw;
+  padding-bottom: 0.5vw;
+}
+
+#optrTable {
+  font-size: 1.4vw !important;
+}
+
+.grey {
+  background-color: #D6D6D6;
+}
+
+.white {
+  background-color: white;
 }

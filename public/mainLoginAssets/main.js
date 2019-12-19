@@ -5,16 +5,10 @@ $(document).ready(function(){
 });
 
 function login() {
-  let privilege = 0;
-  $("input[name='usertype[]']").each(function (index, obj) {
-    if(obj.checked){
-      privilege = index;
-    }
-  });
   (async () => {
     let username = $('#username').val();
     let password = $('#password').val();
-    let data = {username: username, password: password, privilege: privilege};
+    let data = {username: username, password: password};
     let result = await loginAjax(data);
     if(result) {
       Cookies.set('loginToken', result);
