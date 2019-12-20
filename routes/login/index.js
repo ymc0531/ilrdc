@@ -116,6 +116,7 @@ router.put('/user-info', middleware.checkToken, async function(req, res) {
 
 router.put('/user', middleware.checkToken, async function(req, res) {
   let {type, username, password} = req.body;
+  password = await hashPassword(password);
   let tmp;
   switch(type) {
     case '一般':
