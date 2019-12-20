@@ -294,11 +294,6 @@
                       <button onclick="arCsv()" class="form-control">文章</button>
                     </div>
                   </div>
-                  <div class="col-md-2">
-                    <div class="form-group">
-                      <button onclick="usrCsv()" class="form-control">帳號</button>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -421,7 +416,16 @@
                 <form id="csv_data_1">
                   <input type="file" id="file_1" name="csvFile" style="visibility: hidden;" onchange="changeFile1()">
                 </form>
-                <button onclick="uploadToDb1()" class="btn btn-info btn-fill pull-left">上傳</button>
+                <div class="row">
+                  <div class="col-md-2">
+                    <button onclick="uploadToDb1()" class="btn btn-info btn-fill pull-left">上傳</button>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <button onclick="usrCsv()" class="form-control">範例下載</button>
+                    </div>
+                  </div>
+                </div>
                 <div class="clearfix"></div>
               </div>
             </div>
